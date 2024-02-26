@@ -1,0 +1,35 @@
+/* 2.12 - Video - Start
+================================================== */
+.mfp-iframe-holder .mfp-content {
+	width: 100%;
+	line-height: 0;
+	max-width: 70%;
+}
+.mfp-container {
+	padding: 0 15px;
+}
+.mfp-bg {
+	opacity: 0.9;
+	background-color: var(--bs-dark);
+}
+@media screen and (max-width: 1199px) {
+	.mfp-iframe-holder .mfp-content {
+		max-width: 100%;
+	}
+}
+
+// Video Wrapper - Start
+.video_wrapper {
+	position: relative;
+	padding: 180px 60px;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-blend-mode: overlay;
+	background-position: center center;
+	border-radius: var(--bs-border-radius);
+	background-color: rgba(13, 13, 13, 0.2);
+}
+// Video Wrapper - End
+
+/* 2.12 - Video - End
+================================================== */

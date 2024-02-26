@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}RendezVous index{% endblock %}
+
+{% block body %}
+<h1>index rendez-vous</h1>
+<div class="flex justify-center items-center h-screen bg-blue-200">
+    <div class="w-full max-w-md bg-gray-200 p-4 rounded-md">
+            <div class="mb-4">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>DateR</th>
+                <th>NomService</th>
+                <th>Statut</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for rendez_vou in rendez_vouses %}
+            <tr>
+                <td>{{ rendez_vou.id }}</td>
+                <td>{{ rendez_vou.dateR ? rendez_vou.dateR|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ rendez_vou.nomService }}</td>
+                <td>{{ rendez_vou.statut ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_rendez_vous_show', {'id': rendez_vou.id}) }}">show</a>
+                    <a href="{{ path('app_rendez_vous_edit', {'id': rendez_vou.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+            </div>
+
+    <a href="{{ path('app_rendez_vous_new') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">Create new</a>
+    </div>
+</div>
+{% endblock %}

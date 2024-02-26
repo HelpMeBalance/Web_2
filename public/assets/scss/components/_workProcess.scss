@@ -1,0 +1,27 @@
+/* 4.06 - Work Process - Start
+================================================== */
+.work_process_item {
+	padding: 40px;
+	transition: var(--bs-transition);
+	box-shadow: var(--bs-box-shadow);
+	background-color: var(--bs-white);
+	border-radius: var(--bs-border-radius);
+	&:hover {
+		transform: translateY(-4px);
+		box-shadow: 0px 8px 30px 0px rgba(43, 171, 160, 0.07);
+	}
+	.serial_number {
+		opacity: 0.3;
+		font-size: 72px;
+		font-weight: 800;
+		line-height: 60px;
+		color: var(--bs-primary);
+	}
+	.item_title {
+		font-size: 22px;
+		line-height: 28px;
+		margin: 25px 0 15px;
+	}
+}
+/* 4.06 - Work Process - End
+================================================== */

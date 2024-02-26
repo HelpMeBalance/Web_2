@@ -1,0 +1,28 @@
+/* 2.08 - Authorbox - Start
+================================================== */
+.author_box {
+  align-items: center;
+  display: inline-flex;
+  .author_box_image {
+    width: 60px;
+    height: 60px;
+    flex: 0 0 60px;
+    margin-right: 20px;
+    border-radius: var(--bs-border-radius-pill);
+  }
+  .author_box_name {
+    line-height: 1;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .author_box_designation {
+    display: block;
+    line-height: 1;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--bs-primary);
+  }
+}
+/* 2.08 - Authorbox - End
+================================================== */

@@ -1,0 +1,227 @@
+{% extends 'frontClient/base.html.twig' %}
+{% block body %}
+ <!-- About Section - Start
+        ================================================== -->
+        <br>
+        <br>
+        <section class="about_section" >
+            <div class="container">
+              <div class="row align-items-center justify-content-lg-between">
+                <div class="col-lg-6 order-lg-last">
+                  <div class="image_widget">
+                    <img
+                    src="{{asset('assets/images/gallery/Doctorg.png')}}"
+                      alt="About Image - HelpMeBalance"
+                    />
+                    {# <div class="image_shape bg_primary_light"></div> #}
+                    {# <div class="about_video_icon">
+                      <a
+                        class="video_play_btn popup_video"
+                        href="https://www.youtube.com/watch?v=7e90gBu4pas"
+                      >
+                        <i class="fa-duotone fa-play"></i>
+                      </a>
+                    </div> #}
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="about_content"style="padding: 30px;">
+                    <div class="section_heading mb-4" >
+                      <h2 class="section_heading_text">
+                        <mark>HelpMeBalance</mark> Guiding You Toward Mental Wellness
+                      </h2>
+                      <p class="section_heading_description mb-0">
+                        Welcome to <b>HelpMeBalance</b>, your <b>trusted companion</b> on the path to <b>mental well-being.</b>
+                         Our platform provides <b>comprehensive</b> support and resources to <b>help you</b> achieve <b>balance </b>and <b>vitality</b> in your life.
+                      </p>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-5 col-sm-6">
+                        <ul class="info_list unordered_list_block">
+                          <li>
+                            <span class="info_icon">
+                              <i class="fa-light fa-circle-check"></i>
+                            </span>
+                            <span class="info_text">Individual Consultations</span>
+                          </li>
+                          <li>
+                            <span class="info_icon">
+                              <i class="fa-light fa-circle-check"></i>
+                            </span>
+                            <span class="info_text">Child Therapy</span>
+                          </li>
+                          <li>
+                            <span class="info_icon">
+                              <i class="fa-light fa-circle-check"></i>
+                            </span>
+                            <span class="info_text">Relaxation Shop</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-md-5 col-sm-6">
+                        <ul class="info_list unordered_list_block">
+                          <li>
+                            <span class="info_icon">
+                              <i class="fa-light fa-circle-check"></i>
+                            </span>
+                            <span class="info_text">Relationship Counseling</span>
+                          </li>
+                          <li>
+                            <span class="info_icon">
+                              <i class="fa-light fa-circle-check"></i>
+                            </span>
+                            <span class="info_text">Mental Health Blog</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="btn_wrap pb-0">
+                        <a class="btn btn-primary" href="{{ path('app_login') }}">
+                            <span class="btn_text" data-text="Help Me Balance">
+                                Start Your Journey
+                            </span>
+                            <span class="btn_icon">
+                            <i class="fa-solid fa-arrow-up-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- About Section - End
+          ================================================== -->
+           <!-- Counter Section - Start
+        ================================================== -->
+        <section class="funfact_section " >
+            <div class="container">
+              <div class="counter_wrapper">
+                <div class="row align-items-center text-center">
+                  <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="counter_item">
+                        <div class="counter_value">
+                          <span class="odometer" data-count="98">0</span>
+                          <span>%</span>
+                        </div>
+                        <p class="counter_title">
+                             Patients <b>Supported</b>
+                        </p>
+                      </div>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="counter_item">
+                        <div class="counter_value">
+                          <span class="odometer" data-count="140">0</span>
+                          <span>+</span>
+                        </div>
+                        <p class="counter_title">
+                            <b>Consultations</b> Provided
+                        </p>
+                      </div>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="counter_item">
+                        <div class="counter_value ">
+                          <span class="odometer" data-count="200">0</span>
+                          <span>+</span>
+                        </div>
+                        <p class="counter_title">
+                          Active Blog <b>Community</b>
+                        </p>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Counter Section - End
+          ================================================== -->
+           <!-- Work Process Section - Start
+        ================================================== -->
+        <section class="work_process_section section_space_lg">
+            <div class="container">
+              <div class="row align-items-center">
+                <div class="col-lg-6 order-lg-last">
+                    <div class="images_group_widget"  >
+                        <ul class="unordered_list">
+                          <li>
+                            
+                            <img
+                              src="{{asset('assets/images/gallery/Doctorb.png')}}"
+                              alt="Help Me Balance"
+                            />
+                            <img
+                              src="{{asset('assets/images/gallery/Doctorg.png')}}"
+                              alt="Help Me Balance"
+                            />
+                          </li>
+                          <li>
+                            <img
+                              src="{{asset('assets/images/gallery/Meditation.png')}}"
+                              alt="Help Me Balance"
+                            />
+                            <img
+                              src="{{asset('assets/images/gallery/Community.png')}}"
+                              alt="Help Me Balance"
+                            />
+                          </li>
+                        </ul>
+                      </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="section_heading">
+                    <h2 class="section_heading_text mb-0">
+                      Stages of consultation with patients on mental health
+                    </h2>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                      <div class="work_process_item">
+                        <div class="serial_number">01</div>
+                        <a class="btn-link item_title" href="{{ path('app_serviceClient') }}">
+                            <span class="btn_text">Get a Consultation</span>
+                            <span class="btn_icon"
+                              ><i class="fa-solid fa-arrow-up-right"></i
+                            ></span>
+                          </a>
+                        <p class="mb-0">
+                            Fill out the <b>form</b> on our website to get a consultation with one of our <b>mental health professionals</b>.
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                      <div class="work_process_item">
+                        <div class="serial_number">02</div>
+                        <h3 class="item_title" >Schedule Timing</h3>
+                        <p class="mb-0">
+                            Our team will contact you to <b>schedule</b> a convenient time for your <b>consultation session</b>.
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                      <div class="work_process_item">
+                        <div class="serial_number">03</div>
+                        <h3 class="item_title ">Conducting Session</h3>
+                        <p class="mb-0">
+                            During the session,<b>our expert</b>  will listen to your concerns and provide <b>guidance</b> and <b>support</b>.
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                      <div class="work_process_item">
+                        <div class="serial_number">04</div>
+                        <h3 class="item_title">Review and Feedback</h3>
+                        <p class="mb-0">
+                            We <b>value</b> your feedback! After the session, we <b>encourage you</b> to <b>share your</b>  thoughts and <b>experiences</b>.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- Work Process Section - End
+          ================================================== -->
+          {% endblock %}

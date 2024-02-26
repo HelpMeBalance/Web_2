@@ -1,0 +1,27 @@
+/* 2.03 - Backtotop Button - Start
+================================================== */
+.backtotop {
+  right: 15px;
+  z-index: 999;
+  bottom: 96px;
+  display: none;
+  position: fixed;
+  .scroll {
+    z-index: 1;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    font-size: 16px;
+    position: relative;
+    align-items: center;
+    color: var(--bs-white);
+    justify-content: center;
+    background-color: var(--bs-secondary);
+    border-radius: var(--bs-border-radius-pill);
+    i {
+      animation: bttIconMover 1s infinite alternate;
+    }
+  }
+}
+/* 2.03 - Backtotop Button - End
+================================================== */

@@ -1,0 +1,35 @@
+/* 2.17 - Pagination Nav - Start
+================================================== */
+.pagination_wrap {
+  padding-top: 50px;
+}
+.pagination_nav {
+  margin: -5px;
+  li {
+    padding: 5px;
+  }
+  a {
+    width: 40px;
+    height: 40px;
+    display: block;
+    font-weight: 500;
+    line-height: 40px;
+    text-align: center;
+    letter-spacing: -1px;
+    color: var(--bs-body-color);
+    font-size: var(--bs-body-font-size);
+    font-family: var(--bs-font-heading);
+    border-radius: var(--bs-border-radius-pill);
+  }
+  li {
+    &:hover,
+    &.active {
+      a {
+        color: var(--bs-white);
+        background-color: var(--bs-primary);
+      }
+    }
+  }
+}
+/* 2.17 - Pagination Nav - End
+================================================== */

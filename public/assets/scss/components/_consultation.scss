@@ -1,0 +1,22 @@
+/* 4.12 - Consultation Form - Start
+================================================== */
+.consultation_form {
+	overflow: hidden;
+	padding: 120px 35px;
+	border-radius: var(--bs-border-radius-xxl);
+	.section_heading {
+		margin-bottom: 30px;
+	}
+	.shape_leaf_1 {
+		top: -90px;
+		right: -110px;
+		max-width: 380px;
+	}
+	.shape_leaf_2 {
+		left: -130px;
+		bottom: -94px;
+		max-width: 390px;
+	}
+}
+/* 4.12 - Consultation Form - End
+================================================== */

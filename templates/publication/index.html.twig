@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Publication index{% endblock %}
+
+{% block body %}
+    <h1>Publication index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id  </th>
+                <th>Titre  </th>
+                <th>Contenu  </th>
+                <th>Likes  </th>
+                <th>Vues  </th>
+                <th>Image  </th>
+                <th>Valide  </th>
+                <th>ComOuvert  </th>
+                <th>ListComs  </th>
+                <th>Anonyme  </th>                
+                <th>DateC  </th>
+                <th>DateM  </th>          
+                <th>actions  </th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for publication in publications %}
+            <tr>
+                <td>{{ publication.id }}</td>
+                <td>{{ publication.titre }}</td>
+                <td>{{ publication.contenu }}</td>
+                <td>{{ publication.likes }}</td>
+                <td>{{ publication.vues }}</td>
+                <td>{{ publication.image }}</td>
+                <td>{{ publication.valide ? 'Yes' : 'No' }}</td>
+                <td>{{ publication.comOuvert ? 'Yes' : 'No' }}</td>
+                <td>{% if(publication.comOuvert) %}<a href="{{ path('app_publication_show_comments', {'id': publication.id}) }}"><strong>show</strong></a> {% else %} None {% endif %}</td>
+                <td>{{ publication.anonyme ? 'Yes' : 'No' }}</td>                
+                <td>{{ publication.dateC ? publication.dateC|date('d-M-y H:i:s') : '' }}</td>
+                <td>{{ publication.dateM ? publication.dateM|date('d-M-y H:i:s') : '' }}</td>                
+                <td>
+                    <a href="{{ path('app_publication_show', {'id': publication.id}) }}"><strong>show</strong></a>
+                    <a href="{{ path('app_publication_edit', {'id': publication.id}) }}"><strong>edit</strong></a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_publication_new') }}"><strong>Create new</strong></a>
+{% endblock %}

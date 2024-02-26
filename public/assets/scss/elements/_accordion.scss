@@ -1,0 +1,39 @@
+/* 2.16 - Accordion - Start
+================================================== */
+.accordion {
+	.accordion-item {
+		border: none;
+		border-radius: 0;
+		border-bottom: 1px solid #E0E4E8;
+		&:not(:last-child) {
+		}
+		.accordion-button {
+			font-size: 24px;
+			font-weight: 700;
+			box-shadow: none;
+			line-height: 30px;
+			padding: 24px 0 23px;
+			color: var(--bs-dark);
+			border-radius: 0 !important;
+			background-color: transparent;
+			&:after {
+				width: auto;
+				height: auto;
+				content: '\2b';
+				background: none;
+				font-family: 'Font Awesome 5 Pro';
+			}
+			&:not(.collapsed) {
+				color: var(--bs-primary);
+				&:after {
+					content: '\f068';
+				}
+			}
+		}
+		.accordion-body {
+			padding: 0 0 22px;
+		}
+	}
+}
+/* 2.16 - Accordion - End
+================================================== */

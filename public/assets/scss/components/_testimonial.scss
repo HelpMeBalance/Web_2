@@ -1,0 +1,30 @@
+/* 4.11 - Testimonial - Start
+================================================== */
+.testimonial_item {
+	position: relative;
+	padding: 60px 60px 53px;
+	box-shadow: var(--bs-box-shadow);
+	transition: var(--bs-transition);
+	background-color: var(--bs-white);
+	border-radius: var(--bs-border-radius);
+	&:hover {
+		transform: translateY(-6px);
+		box-shadow: 0px 8px 18px 0px rgba(43, 171, 160, 0.08);
+	} 
+	.author_box {
+		margin-bottom: 20px;
+	}
+	.rating_star {
+		top: 80px;
+		right: 60px;
+		position: absolute;
+		li {
+			font-size: 16px;
+			&:not(:last-child) {
+				margin-right: 8px;
+			}
+		}
+	}
+}
+/* 4.11 - Testimonial - End
+================================================== */

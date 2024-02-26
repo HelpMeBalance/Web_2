@@ -1,0 +1,48 @@
+/* 2.02 - Template CSS Animations - Start
+================================================== */
+// Decoration Wrapper
+.decoration_wrapper {
+  z-index: 1;
+  position: relative;
+  .decoration_item {
+    z-index: -1;
+    position: absolute;
+  }
+}
+
+// Phone Ringing
+@keyframes phoneRinging {
+  from {
+    transform: rotate3d(0, 0, 1, 0deg);
+  }
+  20%, 32%, 44%, 56%, 68% {
+    transform: rotate3d(0, 0, 1, 0deg);
+  }
+  23%, 35%, 47%, 59%, 71% {
+    transform: rotate3d(0, 0, 1, 15deg);
+  }
+  26%, 38%, 50%, 62%, 74% {
+    transform: rotate3d(0, 0, 1, 0deg);
+  }
+  29%, 41%, 53%, 65%, 77% {
+    transform: rotate3d(0, 0, 1, -15deg);
+  }
+  80% {
+    transform:rotate3d(0, 0, 1, 0deg);
+  }
+}
+
+// Spin Animation
+@keyframes spin {
+  0% {
+    transform:rotate(0deg);
+  }
+  100% {
+    transform:rotate(360deg);
+  }
+}
+.spin_animation {
+  animation: spin 5000ms infinite linear;
+}
+/* 2.02 - Template CSS Animations - End
+================================================== */

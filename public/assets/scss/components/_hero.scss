@@ -1,0 +1,66 @@
+/* 4.01 - Page Hero Section - Start
+================================================== */
+.hero_section {
+	padding: 200px 0 160px;
+	.heading_text {
+		font-size: 54px;
+		font-weight: 800;
+		line-height: 60px;
+		margin-bottom: 20px;
+	}
+	p {
+		max-width: 520px;
+		margin-bottom: 42px;
+		font-size: var(--bs-body-font-size-md);
+		line-height: var(--bs-body-line-height-md);
+	}
+
+	.hero_section_counter {
+		margin-top: 86px;
+	}
+
+	.shape_blur_shadow {
+		top: 30px;
+		left: -200px;
+		width: 640px;
+		height: 640px;
+		opacity: 0.06;
+		filter: blur(67px);
+		background-color: var(--bs-primary);
+		border-radius: var(--bs-border-radius-pill);
+	}
+
+	.shape_leaf {
+		top: 160px;
+		left: -50px;
+	}
+}
+
+.hero_image_wrap {
+	z-index: 1;
+	padding: 60px;
+	position: relative;
+	&:after,
+	&:before {
+		width: 85%;
+		height: 85%;
+		z-index: -1;
+		content: '';
+		position: absolute;
+	}
+	&:before {
+		top: 0;
+		left: 0;
+		background-color: var(--bs-secondary-bg-subtle);
+	}
+	&:after {
+		right: 0;
+		bottom: 0;
+		background-color: #C1E3DE;
+	}
+	img {
+		border-radius: var(--bs-border-radius-xxl);
+	}
+}
+/* 4.01 - Page Hero Section - End
+================================================== */

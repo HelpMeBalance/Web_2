@@ -1,0 +1,116 @@
+/* Table Of Content - start
+================================================== */
+/*
+* Project Name   :  Talking Minds – Psychotherapist Site Template
+* File           :  CSS Base
+* Version        :  1.0.0
+* Last change    :  19 August 2023, Saturday
+* Author         :  Merkulove (https://1.envato.market/tf-merkulove)
+
+==================================================
+
+1 - Template Global Settings
+* - 1.1 - Template Fonts
+* - 1.2 - Template Reset
+
+2 - Template Elements
+* - 2.01 - Template Colors
+* - 2.02 - Template CSS Animations
+* - 2.03 - Backtotop Button
+* - 2.04 - Template Gapping or Spacing
+* - 2.05 - Order & Unorder List
+* - 2.06 - Buttons
+* - 2.07 - Typography
+* - 2.08 - Authorbox
+* - 2.09 - Carousel or Slider
+* - 2.10 - Image
+* - 2.11 - Form
+* - 2.12 - Video
+* - 2.13 - Social Icons
+* - 2.14 - Counter
+* - 2.15 - Rating Star
+* - 2.16 - Accordion
+* - 2.17 - Pagination Nav
+
+3 - Template Parts
+* - 3.01 - Site Header
+* - 3.02 - Site Footer
+* - 3.03 - Page Header, Page Banner, Breadcrumb
+* - 3.04 - Sidebar
+
+4 - Template Components
+* - 4.01 - Page Hero Section
+* - 4.02 - Service
+* - 4.03 - Team
+* - 4.04 - Pricing
+* - 4.05 - Certificate
+* - 4.06 - Work Process
+* - 4.07 - Policy
+* - 4.08 - Gallery
+* - 4.09 - Comment
+* - 4.10 - Blog
+* - 4.11 - Testimonial
+* - 4.12 - Consultation
+
+5 - Template Pages
+* - 5.01 - About Page
+* - 5.02 - All Details Pages
+* - 5.03 - Contact Page
+* - 5.04 - Error Page
+
+*/
+/* Table Of Content - end
+================================================== */
+
+// Template Global Settings
+@import 'variable';
+@import 'fonts';
+@import 'reset';
+
+// Template Elements
+@import 'elements/color';
+@import 'elements/animation';
+@import 'elements/backtotop';
+@import 'elements/space';
+@import 'elements/list';
+@import 'elements/button';
+@import 'elements/typography';
+@import 'elements/authorbox';
+@import 'elements/carousel';
+@import 'elements/image';
+@import 'elements/form';
+@import 'elements/video';
+@import 'elements/social';
+@import 'elements/counter';
+@import 'elements/rating';
+@import 'elements/accordion';
+@import 'elements/pagination';
+
+// Template Parts
+@import 'template-parts/header';
+@import 'template-parts/footer';
+@import 'template-parts/breadcrumb';
+@import 'template-parts/sidebar';
+
+// Template Components
+@import 'components/hero';
+@import 'components/service';
+@import 'components/team';
+@import 'components/pricing';
+@import 'components/certificate';
+@import 'components/workProcess';
+@import 'components/policy';
+@import 'components/gallery';
+@import 'components/comment';
+@import 'components/blog';
+@import 'components/testimonial';
+@import 'components/consultation';
+
+// Template Pages
+@import 'templates/about';
+@import 'templates/details';
+@import 'templates/contact';
+@import 'templates/error';
+
+// Template Responsive For Small Devices
+@import 'responsive';

@@ -1,0 +1,15 @@
+/* 4.05 - Certificate - Start
+================================================== */
+.certificate_image {
+	display: block;
+	overflow: hidden;
+	box-shadow: var(--bs-box-shadow);
+	background-color: var(--bs-white);
+	border-radius: var(--bs-border-radius-sm);
+	&:hover {
+		transform: translateY(-2px);
+		box-shadow: 0px 2px 4px 0px rgba(43, 171, 160, 0.5);
+	}
+}
+/* 4.05 - Certificate - End
+================================================== */

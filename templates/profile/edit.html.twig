@@ -1,0 +1,38 @@
+{% extends 'frontClient/base.html.twig' %}
+
+{% block body %}
+<div class="d-flex justify-content-center items-align-center p-4">
+<div class="card" style="width: 18rem;">
+  <div class="card-body">
+
+{% if profilePictureUrl %}
+    <div class="user-profile-picture">
+        <img src="{{ profilePictureUrl }}" alt="Current Profile Picture" />
+    </div>
+{% else %}
+    <p>No profile picture set.</p>
+{% endif %}
+
+
+
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                <div class="mb-4">
+
+                    {{ form_widget(form.profilePictureFile, {'attr': {'class': 'form-control'}}) }}
+
+                    <label for="firstname" class="text-gray-900 mb-2">First Name : </label>
+                    {{ form_errors(form.firstname) }}
+                    {{ form_widget(form.firstname, {'attr': {'value': app.user.firstname , 'class': 'form-control'}}) }}
+                </div>
+                <div class="mb-4">
+                    <label for="lastname" class="text-gray-900 mb-2">Last Name : </label> 
+                    {{ form_errors(form.lastname) }}
+                    {{ form_widget(form.lastname, {'attr': {'value': app.user.lastname , 'class': 'form-control'}}) }}
+                </div>
+                    <div class="text-red-400">{{ form_errors(form) }}</div>
+                <button type="submit" class="btn btn-primary btn-lg px-4 py-2">Modifier</button>
+            {{ form_end(form) }}
+  </div>
+</div>
+</div>
+{% endblock %}

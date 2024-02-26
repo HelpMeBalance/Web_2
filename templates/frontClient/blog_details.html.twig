@@ -1,0 +1,394 @@
+{% extends 'frontClient/base.html.twig' %}
+{% block pageBannerurlretour %}
+                <li><a href="{{ path('app_blogCatClient', {'cat': cat.id, 'page': 1}) }}">{{cat.nom}}</a></li>
+                <li>{{ title }}</li>
+ {% endblock %}
+{% block body %}
+{% set role = publication.user.roles[0]|lower %}
+
+                      {% if role == 'role_user' %}
+                          {% set designation = 'patient' %}
+                      {% elseif role == 'role_psy' %}
+                          {% set designation = 'psychologist' %}
+                      {% elseif role == 'role_admin' %}
+                          {% set designation = 'administration' %}
+                      {% endif %}
+ <!-- Blog Details Section - Start
+        ================================================== -->
+        <section class="blog_details_section ">
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-8">
+                  <div class="blog_image">
+                    <img
+                    src="{{ asset(publication.image) }}"
+                    alt="HelpMeBalance"
+                    />
+                  </div>
+                  <div class="details_content">
+                    <ul class="post_meta unordered_list mb-4">
+                      <li>
+                        {% if(publication.anonyme)%}
+                        Anonyme
+                        {% else %}
+                        {{publication.user.lastname|capitalize}} {{publication.user.firstname|capitalize}}
+                        {% endif %}
+                      </li>
+                      <li>
+                        {{ designation|capitalize }}
+                      </li>
+                      <li>
+                        
+                        {{ publication.dateM ? publication.dateM|date('j F Y H:i:s')  : '' }} <i class="fa-regular fa-calendar-days"></i> 
+                      </li>
+                      <li>{{ publication.vues }} <i class="fa-solid fa-eye"></i></li>
+                      <li>
+                        {% if publication.comOuvert %}
+                            {% if commentaires|length > 0 %}
+                                {{ commentaires|length }} <i class="fa-solid fa-comment"></i>
+                            {% else %}
+                            <i class="fa-duotone fa-empty-set"></i> Comments
+                            {% endif %}
+                        {% else %}
+                            <i class="fas fa-lock"></i> Comments
+                        {% endif %}
+                    </li>
+                    </ul>
+                    <h3 class="item_title">
+                           <mark>  {{ publication.titre }} <i class="fa-solid fa-pen"></i></mark>
+                      </h3>
+                    <p>
+                        {{ publication.contenu|nl2br}}
+                    </p>
+                    <div class="post_tagsandshare">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <h4 class="wrap_title">Explore Related Topics</h4>
+                          <ul class="post_tags unordered_list">
+                            {% for souscat in souscategoriesundercat %}
+                            <li><a href="{{ path('app_blogSousCatClient', {'souscat': souscat.id, 'page': 1}) }}">{{ souscat.nom }}</a></li>
+                            {% endfor %}
+                          </ul>
+                        </div>
+                        <div class="col-md-6">
+                          <h4 class="wrap_title text-md-end">Share:</h4>
+                          <ul
+                            class="social_links unordered_list justify-content-md-end"
+                          >
+                          <li>
+                            {% set site_url = 'http://127.0.0.1:8000/blogDetails/' ~ publication.id %}
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ site_url|url_encode }}" target="_blank">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        </li>
+                        <li>
+                          <a href="https://twitter.com/share?url={{ site_url|url_encode }}" target="_blank">
+                              <i class="fab fa-twitter"></i>
+                          </a>
+                      </li>
+                      <li>
+                        <a href="mailto:?subject=Check%20out%20this%20article%20on%20mental%20health&body=Hi,%0D%0A%0D%0AI%20thought%20you%20might%20be%20interested%20in%20this%20article%20about%20mental%20health:%0D%0A{{ site_url|url_encode }}" target="_blank">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </li>
+                    
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {% if(publication.commentaires|length >0)%}
+                  <div class="comment_area  pb-0">
+                    <h3 class="comment_area_title">Comments ({{publication.commentaires|length}})</h3>
+                    
+                    <ul class="comment_list_wrap unordered_list_block">
+
+                      {% for commentaire in publication.commentaires|sort((a, b) => b.dateM <=> a.dateM)  %}
+                      {% if (showmore == 0 and loop.index <= 3 ) or showmore==1%}
+                      <li>
+                        <div class="comment_item">
+                          <div class="author_box">
+                            <div class="author_box_image">
+                              <img
+                              src="{{ asset("assets/images/meta/author_image_1.png") }}"
+                                alt="Reviewer Image - Talking Minds - Psychotherapist Site Template"
+                              />
+                            </div>
+                            <div class="author_box_content">
+                              <h3 class="author_box_name"> {% if(commentaire.anonyme)%}
+                              Anonyme
+                              {% else %}
+                              {{commentaire.user.lastname|capitalize}} {{commentaire.user.firstname|capitalize}}
+                              {% endif %}
+                            </h3>
+                              <span class="comment_post_date"> {{commentaire.dateM|date('j F Y H:i:s') }}
+
+                                {% if (commentaire.dateM|date('j F Y H:i:s')!=commentaire.dateC|date('j F Y H:i:s'))%} <mark><b>Updated</b></mark>{% endif %}
+                              </span>
+                            </div>
+                          </div>
+                         
+                          
+                          {% if app.request.attributes.get('idc') and app.request.attributes.get('idc') == commentaire.id %}
+                          {{ form_start(formupdate, {'attr': {'novalidate': 'novalidate'}}) }}
+                          <div class="comment_form pb-0">
+                          <div class="form-group mb-4">
+                            {{ form_widget(formupdate.contenu,{'attr' : {'class' : 'form-control'}})}}
+                            {{ form_errors(formupdate.contenu, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
+
+                          </div>
+                        </div>
+                          <div class="form-check">
+                            {{ form_widget(formupdate.anonyme,{'attr' : {'class' : 'checkbox'}})}}
+                            <label for="input_checkbox">
+                             Post as Anonyme
+                            </label>
+                          </div>
+                          <div >
+                            {{ form_widget(formupdate.User,{'attr' : {'class' : 'd-none'},'value': app.user.id})}}
+                          </div>
+                          <button type="submit" class="btn btn-primary">
+                            <span class="btn_text" data-text="Update Comment">
+                              Update Comment
+                            </span>
+                            <span class="btn_icon">
+                              <i class="fa-solid fa-arrow-up-right"></i>
+                            </span>
+                          </button>
+                          {{ form_end(formupdate) }}
+                        
+
+                          {% else %}
+                          <p class="mb-md-0">
+                            {{commentaire.contenu}}
+                          </p>
+                          {% endif %}
+                          {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and commentaire.user.id== app.user.id %}
+                          <form method="post" action="{{ path('app_commentaire_delete', {'idc': commentaire.id,'idp':publication.id,'showmore':0}) }}" onsubmit="return confirm('Are you sure you want to delete this Comment ?');">
+                            <input  type="hidden" name="_token" value="{{ csrf_token('delete' ~ commentaire.id) }}">
+                            <button class=" btn_reply"><i class="fa-solid fa-trash"></i></button>
+                        </form>
+                        <a style="margin-right: 30px;"class=" btn_reply " href="{{ path('app_blogDetails_commentaire_edit', {'idp':publication.id,'showmore':0,'idc': commentaire.id}) }}">
+                          <i class="fa-solid fa-edit"></i>
+                        </a>          
+                          {% endif %}
+                        </div>
+                        
+                      </li>
+                      {% endif %}
+                      {% endfor %}
+                    </ul>             
+                    
+                  </div>
+                  {% if(showmore ==0)%}
+                  <a class="btn-link col-lg-12 justify-content-center " href="{{ path('app_blogDetails', {'id': publication.id,'showmore':1}) }}">
+                    <span class="btn_text">Show More</span>
+                    <span class="btn_icon"
+                      ><i class="fa-solid fa-arrow-down-left"></i
+                    ></span>
+                  </a>
+                  {% else %}
+                  <a class="btn-link col-lg-12 justify-content-center " href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">
+                    <span class="btn_text">Show Less</span>
+                    <span class="btn_icon"
+                      ><i class="fa-solid fa-arrow-down-left"></i
+                    ></span>
+                  </a>
+                  {% endif %}
+                  {% endif %}
+                  {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and publication.comOuvert and not (app.request.attributes.get('idc'))  %}
+                  {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                  <div class="comment_form pb-0">
+                    <h3 class="comment_area_title">Leave a comment</h3>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="input_name">Name</label>
+                          <input
+                            id="input_name"
+                            class="form-control"
+                            type="text"
+                            name="name"
+                            placeholder="{{ app.user.firstname ~ ' ' ~ app.user.lastname }}"
+                            disabled
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="input_email">Email</label>
+                          <input
+                            id="input_email"
+                            class="form-control"
+                            type="email"
+                            name="email"
+                            placeholder={{ app.user.email }}
+                            disabled
+                          />
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="form-group mb-4">
+                          <label for="input_comment">Comment</label>
+                          {{ form_widget(form.contenu,{'attr' : {'class' : 'form-control','placeholder' : 'Your message'}})}}
+                          {{ form_errors(form.contenu, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
+
+                        </div>
+                      
+                        <div class="form-check">
+                          {{ form_widget(form.anonyme,{'attr' : {'class' : 'checkbox'}})}}
+                          <label for="input_checkbox">
+                           Post as Anonyme
+                          </label>
+                        </div>
+                        <div >
+                          {{ form_widget(form.User,{'attr' : {'class' : 'd-none'},'value': app.user.id})}}
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                          <span class="btn_text" data-text="Post Comment">
+                            Post Comment
+                          </span>
+                          <span class="btn_icon">
+                            <i class="fa-solid fa-arrow-up-right"></i>
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  {{ form_end(form) }}
+                  {% endif %}
+                </div>
+  
+                <div class="col-lg-4">
+                  <aside class="sidebar ps-lg-4">
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED')  %}
+                    <div class="form-group">
+                      <input
+                        id="sidebar_search"
+                        class="form-control"
+                        type="search"
+                        name="search"
+                        placeholder="Share Your Thoughts"
+                        disabled
+                      />        
+                      <a class="btn-link input_icon" href="{{ path('app_chooseCatClient') }}">
+                        <i class="fa-solid fa-pen-line"></i>
+                      </a>            
+                    </div>
+                    {% else %}
+                    <div class="form-group d-flex items-align-center">
+                      <input
+                        id="sidebar_search"
+                        class="form-control"
+                        type="search"
+                        name="search"
+                        placeholder="Login to post"
+                        disabled
+                      />        
+                      <a class="btn-link input_icon" href="{{ path('app_login') }}">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                      </a>            
+                    </div>
+                    {% endif %}
+                    <div class="sidebar_widget">
+                      <h3 class="sidebar_widget_title">
+                        <span class="title_icon">
+                          <img
+                            src="{{asset('assets/images/site_logo/favourite_icon.svg')}}"
+                            alt="help me balance"
+                          />
+                        </span>
+                        <span class="title_text">Categories</span>
+                      </h3>
+                      <ul class="post_category_list unordered_list_block">
+                        {% set sortedCategories = categories|sort((a, b) => (a.publications|length) < (b.publications|length)) %}
+                        {% for categorie in sortedCategories %}
+                        <li  >
+                          <a href="{{ path('app_blogCatClient', {'cat': categorie.id, 'page': 1}) }}" >
+                            <span class="category_name" >{% if categorie.id == cat.id %}<mark>{{categorie.nom }}</mark>{% else %}{{categorie.nom }} {% endif %}</span>                     
+                            {% if categorie.publications|length == 0 %}
+                            <span class="category_counter">New</span> 
+                            {% else %}
+                            <span class="category_counter">{{ categorie.publications|length }}</span>
+                            {% endif %}
+                          </a>
+                        </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                    <div class="sidebar_widget">
+                      <h3 class="sidebar_widget_title">
+                        <span class="title_icon">
+                          <img
+                            src="{{asset('assets/images/site_logo/favourite_icon.svg')}}"
+                            alt="help me balance"
+                          />
+                        </span>
+                        <span class="title_text">Explore More</span>
+                      </h3>
+                      <ul class="reecommended_post_group unordered_list_block">
+                        {% for publication in reccpublications|slice(0, 3) %}
+                        <li>
+                          <div class="blog_item_small">
+                            <div class="blog_image">
+                              <a class="blog_image_wrap" href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">
+                                <img
+                                src="{{ asset(publication.image) }}"
+                                alt="HelpMeBalance"
+                                />
+                              </a>
+                            </div>
+                            <div class="blog_content">
+                              <h3 class="item_title">
+                                <a href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">
+                                    {{ publication.titre }}
+                                </a>
+                              </h3>
+                              <ul class="post_meta unordered_list">
+                                <li>{{ publication.dateM ? publication.dateM|date('j F Y H:i:s')  : '' }}</li>
+                                <li>{{ publication.vues }} <i class="fa-solid fa-eye"></i></li>
+                                <li>
+                                  {% set commentCount = commentaireRepository.findAllUnderPublication(publication)|length %}
+                                  {% if publication.comOuvert %}
+                                      {% if commentCount > 0 %}
+                                          <a href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">{{ commentCount }} <i class="fa-solid fa-comment"></i></a>
+                                      {% else %}
+                                      <i class="fa-duotone fa-empty-set"></i> Com..
+                                      {% endif %}
+                                  {% else %}
+                                      <i class="fas fa-lock"></i> Com..
+                                  {% endif %}
+                              </li>                              </ul>
+                            </div>
+                          </div>
+                        </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                    <div class="sidebar_widget">
+                      <h3 class="sidebar_widget_title">
+                        <span class="title_icon">
+                          <img
+                            src="{{asset('assets/images/site_logo/favourite_icon.svg')}}"
+                            alt="Talking Minds - Psychotherapist Site Template"
+                          />
+                        </span>
+                        <span class="title_text">Explore Related Topics</span>
+                      </h3>
+                      <ul class="post_tags unordered_list">
+                        {% for souscat in souscategories %}
+                        <li><a href="{{ path('app_blogSousCatClient', {'souscat': souscat.id, 'page': 1}) }}">{{ souscat.nom }}</a></li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  </aside>
+                </div>
+              </div>
+            </div>
+          </section>
+          <br>
+          <!-- Blog Details Section - End
+          ================================================== -->  
+
+          
+{% endblock %}

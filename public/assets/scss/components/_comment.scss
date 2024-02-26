@@ -1,0 +1,53 @@
+/* 4.09 - Comment - Start
+================================================== */
+.comment_area_title {
+	font-size: 42px;
+	font-weight: 800;
+	line-height: 50px;
+	margin-bottom: 50px;
+}
+.comment_list_wrap {
+	>li {
+		&:not(:last-child) {
+			margin-bottom: 50px;
+			padding-bottom: 30px;
+			border-bottom: 1px solid var(--bs-border-color);
+		}
+		.comment_list_wrap {
+			margin-top: 20px;
+			padding: 20px 0 0 40px;
+			border-top: 1px solid var(--bs-border-color);
+			>li {
+				&:not(:last-child) {
+					margin-bottom: 20px;
+					padding-bottom: 20px;
+				}
+			}
+			.author_box {
+				margin-bottom: 10px;
+			}
+			p {
+				font-size: 16px;
+				line-height: 26px;
+			}
+		}
+	}
+	.comment_item {
+		position: relative;
+	}
+	.author_box {
+		margin-bottom: 20px;
+	}
+	.comment_post_date {
+		display: block;
+		font-size: 16px;
+		line-height: 26px;
+	}
+	.btn_reply {
+		right: 0;
+		top: 16px;
+		position: absolute;
+	}
+}
+/* 4.09 - Comment - End
+================================================== */

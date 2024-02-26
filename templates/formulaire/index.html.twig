@@ -1,0 +1,44 @@
+{% extends 'frontClient/base.html.twig' %}
+{% block body %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card shadow">
+                    <div class="card-body p-2">
+                        <h3 class="card-title text-center mb-4">Please Send Detail</h3>
+                        <form action="{{ path('app_rendez_vous_quiz', {'idq': 0}) }}">
+                            <button type="submit" class="btn btn-danger btn-lg px-4 py-2">
+                                create
+                            </button>
+                            </br>
+                        </form>
+                        {% for form in formulaires %}
+                            <div class="container mt-5">
+                                <div class="row">
+                                    <div class="col-lg-8 mx-auto">
+                                        <div class="card shadow">
+                                            <div class="card-body p-4">
+                                                {% for question in form.Question %}
+                                                    {{ question.question }}
+                                                {% endfor %}
+                                                {% for reponse in form.Reponse %}
+                                                    <div class="col-lg-8 mx-auto">
+                                                        <div class="card shadow">
+                                                            <div class="card-body p-4">
+                                                                {{ reponse.reponse }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

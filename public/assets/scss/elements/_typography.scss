@@ -1,0 +1,24 @@
+/* 2.07 - Typography - Start
+================================================== */
+.section_heading {
+	margin-bottom: 40px;
+	.section_heading_text {
+		font-size: 42px;
+		font-weight: 800;
+		line-height: 50px;
+		margin-bottom: 15px;
+	}
+	.section_heading_description {
+		font-size: 20px;
+		line-height: 32px;
+	}
+
+	&.text-center {
+		.section_heading_description {
+			margin: auto;
+			max-width: 500px;
+		}
+	}
+}
+/* 2.07 - Typography - End
+================================================== */

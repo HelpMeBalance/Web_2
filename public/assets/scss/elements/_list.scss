@@ -1,0 +1,252 @@
+/* 2.05 - Order & Unorder List - Start
+================================================== */
+
+// List Default Style - Start
+[class*="unordered_list"] {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  >li {
+    float: left;
+    list-style: none;
+    display: inline-block;
+  }
+}
+.unordered_list_block {
+  display: flex;
+  flex-direction: column;
+  >li {
+    width: 100%;
+    display: block;
+  }
+}
+// List Default Style - End
+
+// Icon List - Start
+.info_list {
+  >li {
+    font-weight: 600;
+    line-height: 21px;
+    font-size: var(--bs-body-font-size);
+  }
+  &.unordered_list_block {
+    >li {
+      &:not(:last-child) {
+        margin-bottom: 16px;
+      }
+    }
+  }
+  .info_icon {
+    float: left;
+    width: 21px;
+    margin: 0 8px 0 0;
+    i {
+      color: var(--bs-secondary);
+    }
+  }
+  .info_text {
+    display: table;
+  }
+  a {
+    align-items: center;
+    display: inline-flex;
+    color: var(--bs-body-color);
+    &:hover {
+      color: var(--bs-primary);
+    }
+  }
+}
+// Icon List - End
+
+// Post Category - Start
+.post_category {
+  margin: -3px;
+  >li {
+    margin: 3px;
+  }
+  a {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 18px;
+    padding: 11px 20px;
+    border-radius: 40px;
+    color: var(--bs-white);
+    background-color: var(--bs-secondary);
+    &:hover {
+      background-color: var(--bs-primary);
+    }
+  }
+}
+
+.post_category_list {
+  >li {
+    &:not(:last-child) {
+      margin-bottom: 16px;
+      
+    }
+  }
+  a {
+    display: flex;
+    align-items: center;
+    color: var(--bs-body-color);
+    justify-content: space-between;
+    &:hover {
+      color: var(--bs-secondary);
+    }
+  }
+}
+// Post Category - End
+
+// Popular Tags - Start
+.post_tags {
+  margin: -5px;
+  >li {
+    margin: 5px;
+  }
+  a {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 18px;
+    padding: 11px 20px;
+    border-radius: 40px;
+    color: var(--bs-body-color);
+    border: 1px solid var(--bs-border-color);
+    &:hover {
+      color: var(--bs-white);
+      border-color: var(--bs-primary);
+      background-color: var(--bs-primary);
+    }
+  }
+}
+// Popular Tags - End
+
+// Post Meta - Start
+.post_meta {
+  >li {
+    font-size: 16px;
+    line-height: 26px;
+    position: relative;
+    &:not(:last-child) {
+      margin-right: 15px;
+      padding-right: 14px;
+      &:before {
+        top: 50%;
+        right: 0;
+        width: 1px;
+        content: '';
+        height: 22px;
+        position: absolute;
+        transform: translateY(-50%);
+        background-color: var(--bs-border-color);
+      }
+    }
+    i {
+      color: var(--bs-primary);
+    }
+    >a {
+      display: block;
+      color: var(--bs-body-color);
+      &:hover {
+        color: var(--bs-primary);
+      }
+    }
+  }
+}
+// Post Meta - End
+
+// Contact Info List - Start
+.contact_info_list {
+  margin: -15px;
+  >li {
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    word-break: break-all;
+    &:hover {
+      .item_icon {
+        &:before {
+          top: -4px;
+          left: -4px;
+          right: -4px;
+          bottom: -4px;
+        }
+      }
+    }
+  }
+  .item_icon {
+    z-index: 1;
+    width: 50px;
+    height: 50px;
+    flex: 0 0 50px;
+    font-size: 20px;
+    position: relative;
+    margin-right: 15px;
+    border-radius: 100%;
+    align-items: center;
+    display: inline-flex;
+    color: var(--bs-white);
+    justify-content: center;
+    background-color: var(--bs-secondary);
+    &:before {
+      top: 1px;
+      left: 1px;
+      right: 1px;
+      bottom: 1px;
+      z-index: -1;
+      content: '';
+      position: absolute;
+      border-radius: 100%;
+      animation: spin 5000ms infinite linear;
+      border: 1px dashed var(--bs-secondary);
+    }
+  }
+  .item_title {
+    line-height: 1;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--bs-bodt-color);
+  }
+  .item_info {
+    line-height: 1;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--bs-dark);
+  }
+}
+// Contact Info List - End
+
+// Office Hour List - Start
+.office_hour_list {
+  padding: 53px 60px;
+  border-radius: var(--bs-border-radius-xl);
+  .area_title {
+    font-size: 24px;
+    line-height: 30px;
+    margin-bottom: 28px;
+  }
+  ul {
+    >li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      &:not(:last-child) {
+        margin-bottom: 12px;
+        padding-bottom: 13px;
+        border-bottom: 1px solid #C1E3DE;
+      }
+      span {
+        &:last-child {
+          font-weight: 700;
+        }
+      }
+    }
+  }
+}
+// Office Hour List - End
+/* 2.05 - Order & Unorder List - End
+================================================== */

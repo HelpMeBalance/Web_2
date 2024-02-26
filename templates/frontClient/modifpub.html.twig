@@ -1,0 +1,188 @@
+{% extends 'frontClient/base.html.twig' %}
+{% block pageBannerurlretour %}
+                <li><a href="{{ path('app_blogSousCatClient', {'souscat': souscat.id, 'page': 1}) }}">{{souscat.nom}}</a></li>
+                <li>{{ title }}</li>
+ {% endblock %}
+{% block body %} 
+<!-- Blog Section - Start
+        ================================================== -->
+        <section class="blog_section ">
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-8">
+                  <div class="row">
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED')  %}
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                    <div class="comment_form pb-0">
+                      <h3 class="comment_area_title">Express Yourself</h3>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="input_name">Title</label>
+                            {{ form_widget(form.titre,{'attr' : {'class' : 'form-control'}})}}
+                            {{ form_errors(form.titre, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
+                          </div>
+                        </div>
+                        
+                        <div class="col-12">
+                          <div class="form-group mb-4">
+                            <label for="input_comment">Publication</label>
+                            {{ form_widget(form.contenu,{'attr' : {'class' : 'form-control'}})}}
+                            {{ form_errors(form.contenu, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
+
+                          </div>
+                        
+                          <div class="form-check">
+                            {{ form_widget(form.comOuvert,{'attr' : {'class' : 'checkbox'}})}}
+                            <label for="input_checkbox">
+                                Allow Comments
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            {{ form_widget(form.anonyme,{'attr' : {'class' : 'checkbox'}})}}
+                            <label for="input_checkbox">
+                             Post as Anonyme
+                            </label>
+                          </div>
+                          <div >
+                            {{ form_widget(form.User,{'attr' : {'class' : 'd-none'},'value': app.user.id})}}
+                          </div>
+                          <div >
+                             {{ form_widget(form.Categorie,{'attr' : {'class' : 'd-none'},'value': cat.id})}} 
+                          </div>
+                          <div >
+                            {{ form_widget(form.SousCategorie,{'attr' : {'class' : 'd-none'},'value': souscat.id})}} 
+                         </div>
+                          <button type="submit" class="btn btn-primary">
+                            <span class="btn_text" data-text="Proud of you">
+                              Post Publication
+                            </span>
+                            <span class="btn_icon">
+                              <i class="fa-solid fa-arrow-up-right"></i>
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    {{ form_end(form) }}
+                    {% endif %}
+
+                  </div>
+                </div>
+  
+                <div class="col-lg-4">
+                  <aside class="sidebar ps-lg-4">
+                    <div class="form-group">
+                      <input
+                        id="sidebar_search"
+                        class="form-control"
+                        type="search"
+                        name="search"
+                        placeholder="Search (coming soon)"
+                        disabled
+                      />
+                      <button type="submit" class="input_icon" disabled>
+                        <i class="fa-regular fa-magnifying-glass"></i>
+                      </button>
+                    </div>
+                    <div class="sidebar_widget">
+                      <h3 class="sidebar_widget_title">
+                        <span class="title_icon">
+                          <img
+                            src="{{asset('assets/images/site_logo/favourite_icon.svg')}}"
+                            alt="help me balance"
+                          />
+                        </span>
+                        <span class="title_text">Categories</span>
+                      </h3>
+                      <ul class="post_category_list unordered_list_block">
+                        {% set sortedCategories = categories|sort((a, b) => (a.publications|length) < (b.publications|length)) %}
+                        {% for categorie in sortedCategories %}
+                        <li>
+                          <a href="{{ path('app_blogCatClient', {'cat': categorie.id, 'page': 1}) }}">
+                            <span class="category_name" >{% if categorie.id == cat.id %}<mark>{{categorie.nom }}</mark>{% else %}{{categorie.nom }} {% endif %}</span>                     
+                            {% if categorie.publications|length == 0 %}
+                            <span class="category_counter">New</span>
+                            {% else %}
+                            <span class="category_counter">{{ categorie.publications|length }}</span>
+                            {% endif %}
+                          </a>
+                        </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                    <div class="sidebar_widget">
+                      <h3 class="sidebar_widget_title">
+                        <span class="title_icon">
+                          <img
+                            src="{{asset('assets/images/site_logo/favourite_icon.svg')}}"
+                            alt="help me balance"
+                          />
+                        </span>
+                        <span class="title_text">Explore More</span>
+                      </h3>
+                      <ul class="reecommended_post_group unordered_list_block">
+                        {% for publication in reccpublications|slice(0, 3) %}
+                        <li>
+                          <div class="blog_item_small">
+                            <div class="blog_image">
+                              <a class="blog_image_wrap" href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">
+                                <img
+                                src="{{ asset(publication.image) }}"
+                                alt="HelpMeBalance"
+                                />
+                              </a>
+                            </div>
+                            <div class="blog_content">
+                              <h3 class="item_title">
+                                <a href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">
+                                    {{ publication.titre }}
+                                </a>
+                              </h3>
+                              <ul class="post_meta unordered_list">
+                                <li>{{ publication.dateM ? publication.dateM|date('j F Y H:i:s')  : '' }}</li>
+                                <li>{{ publication.vues }} <i class="fa-solid fa-eye"></i></li>
+                                <li>
+                                  {% set commentCount = commentaireRepository.findAllUnderPublication(publication)|length %}
+                                  {% if publication.comOuvert %}
+                                      {% if commentCount > 0 %}
+                                          <a href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">{{ commentCount }} <i class="fa-solid fa-comment"></i></a>
+                                      {% else %}
+                                      <i class="fa-duotone fa-empty-set"></i> Com..
+                                      {% endif %}
+                                  {% else %}
+                                      <i class="fas fa-lock"></i> Com..
+                                  {% endif %}
+                              </li>                              </ul>
+                            </div>
+                          </div>
+                        </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                    <div class="sidebar_widget">
+                      <h3 class="sidebar_widget_title">
+                        <span class="title_icon">
+                          <img
+                            src="{{asset('assets/images/site_logo/favourite_icon.svg')}}"
+                            alt="Talking Minds - Psychotherapist Site Template"
+                          />
+                        </span>
+                        <span class="title_text">Explore Related Topics</span>
+                      </h3>
+                      <ul class="post_tags unordered_list">
+                        {% for souscat in souscategories %}
+                        <li><a href="{{ path('app_blogSousCatClient', {'souscat': souscat.id, 'page': 1}) }}">{{ souscat.nom }}</a></li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  </aside>
+                </div>
+              </div>
+              <div class="pagination_wrap  section_space_lg col-lg-8">
+            </div>
+            </div>
+          </section>
+          <!-- Blog Section - End
+          ================================================== -->
+{% endblock %}

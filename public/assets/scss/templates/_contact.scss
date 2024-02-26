@@ -1,0 +1,55 @@
+/* 5.03 - Contact Page - Start
+================================================== */
+.contact_info_box {
+	padding: 40px;
+	overflow: hidden;
+	word-break: break-all;
+	transition: var(--bs-transition);
+	border-radius: var(--bs-border-radius);
+	background-color: var(--bs-primary-bg-subtle);
+
+	.item_icon {
+		font-size: 46px;
+		margin-bottom: 38px;
+		color: var(--bs-primary);
+	}
+	.item_title {
+		font-size: 24px;
+		font-weight: 700;
+		line-height: 30px;
+		margin-bottom: 22px;
+	}
+	.info_list > li {
+		color: #51565D;
+		&:not(:last-child) {
+			margin-bottom: 10px;
+		}
+	}
+	&:hover {
+		color: var(--bs-white);
+		background-color: var(--bs-primary);
+		* {
+			color: var(--bs-white);
+			transition: var(--bs-transition);
+		}
+	}
+}
+
+// Map 
+.gmap_canvas.contact_map {
+	iframe {
+		height: 600px;
+	}
+}
+
+// Contact V1 - Start
+.conatiner_box {
+	padding: 100px 60px;
+	border-radius: 24px;
+	background-color: var(--bs-white);
+	border-radius: var(--bs-border-radius);
+	box-shadow: 0px 8px 30px 0px rgba(43, 171, 160, 0.07);
+}
+// Contact V1 - End
+/* 5.03 - Contact Page - End
+================================================== */

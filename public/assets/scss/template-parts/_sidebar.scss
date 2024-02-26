@@ -1,0 +1,28 @@
+/* 3.04 - Sidebar - Start
+================================================== */
+.sidebar {
+	>* {
+		&:not(:last-child) {
+			margin-bottom: 60px;
+		}
+	}
+}
+.sidebar_widget_title {
+	display: flex;
+	align-items: center;
+	margin-bottom: 30px;
+	.title_icon {
+		max-width: 22px;
+		margin-bottom: -2px;
+		img {
+			display: block;
+		}
+	}
+	.title_text {
+		font-size: 24px;
+		line-height: 30px;
+		padding-left: 10px;
+	}
+}
+/* 3.04 - Sidebar - End
+================================================== */

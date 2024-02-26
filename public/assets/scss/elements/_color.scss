@@ -1,0 +1,19 @@
+/* 2.01 - Template Colors - Start
+================================================== */
+.bg_primary {
+	background-color: var(--bs-primary);
+}
+.bg_secondary {
+	background-color: var(--bs-secondary);
+}
+.bg_primary_light {
+	background-color: var(--bs-primary-bg-subtle);
+	&[class*="shape"] {
+		background-color: #C1E3DE;
+	}
+}
+.bg_secondary_light {
+	background-color: var(--bs-secondary-bg-subtle);
+}
+/* 2.01 - Template Colors - End
+================================================== */

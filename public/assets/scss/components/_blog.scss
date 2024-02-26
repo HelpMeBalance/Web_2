@@ -1,0 +1,126 @@
+/* 4.10 - Blog - Start
+================================================== */
+// Blog Item - Start
+.blog_item {
+	overflow: hidden;
+	position: relative;
+	box-shadow: var(--bs-box-shadow);
+	transition: var(--bs-transition);
+	background-color: var(--bs-white);
+	border-radius: var(--bs-border-radius);
+	&:not(:last-child) {
+		margin-bottom: 60px;
+	}
+	&:hover {
+		transform: translateY(-6px);
+		box-shadow: var(--bs-box-shadow-lg);
+	}
+
+	.blog_image_wrap {
+		display: block;
+		overflow: hidden;
+		position: relative;
+		img {
+			width: 100%;
+			display: block;
+			transition: var(--bs-transition);
+		}
+		&:hover {
+			img {
+				transform: scale(1.08);
+			}
+		}
+	}
+
+	.blog_content {
+		z-index: 1;
+		position: relative;
+		padding: 28px 30px 38px;
+	}
+
+	.post_category {
+		left: 30px;
+		top: -70px;
+		position: absolute;
+		a {
+			color: var(--bs-primary);
+			background-color: var(--bs-white);
+			&:hover {
+				color: var(--bs-white);
+				background-color: var(--bs-primary);
+			}
+		}
+	}
+
+	.item_title {
+		font-size: 24px;
+		line-height: 30px;
+		margin: 16px 0 15px;
+		a {
+			color: var(--bs-dark);
+			&:hover {
+				color: var(--bs-primary);
+			}
+		}
+	}
+
+	p {
+		margin-bottom: 23px;
+	}
+}
+// Blog Item - End
+
+// Blog Item Small - Start
+.blog_item_small {
+	display: flex;
+	.blog_image {
+		flex: 0 0 90px;
+		max-width: 90px;
+		margin-right: 20px;
+	}
+	.blog_image_wrap {
+		display: block;
+		overflow: hidden;
+		border-radius: var(--bs-border-radius);
+		img {
+			transition: var(--bs-transition);
+		}
+	}
+	.item_title {
+		font-size: 18px;
+		line-height: 22px;
+		margin-bottom: 10px;
+		a {
+			color: var(--bs-dark);
+			&:hover {
+				color: var(--bs-primary);
+			}
+		}
+	}
+	.post_meta > li {
+		font-size: 14px;
+		line-height: 24px;
+	}
+	.post_meta > li:not(:last-child) {
+		margin-right: 11px;
+		padding-right: 10px;
+	}
+	&:hover {
+		.blog_image_wrap {
+			img {
+				transform: scale(1.08);
+			}
+		}
+	}
+}
+
+.reecommended_post_group {
+	>li {
+		&:not(:last-child) {
+			margin-bottom: 30px;
+		}
+	}
+}
+// Blog Item Small - End
+/* 4.10 - Blog - End
+================================================== */

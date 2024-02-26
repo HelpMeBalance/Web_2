@@ -1,0 +1,29 @@
+/* 4.03 - Team - Start
+================================================== */
+.team_item {
+	overflow: hidden;
+	transition: var(--bs-transition);
+	background-color: var(--bs-white);
+	border-radius: var(--bs-border-radius);
+	box-shadow: 0px 8px 30px 0px rgba(43, 171, 160, 0.07);
+	&:hover {
+		box-shadow: var(--bs-box-shadow);
+	}
+	.team_memder_info {
+		padding: 30px 30px 40px;
+	}
+	.team_memder_designation {
+		font-size: 18px;
+		font-weight: 600;
+		line-height: 28px;
+		margin-bottom: 15px;
+		color: var(--bs-primary);
+	}
+	.team_memder_name {
+		font-size: 24px;
+		line-height: 30px;
+		margin-bottom: 20px;
+	}
+}
+/* 4.03 - Team - End
+================================================== */

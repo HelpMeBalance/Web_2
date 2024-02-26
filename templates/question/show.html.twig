@@ -1,0 +1,60 @@
+{% extends 'frontClient/base.html.twig' %}
+{% block body %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card shadow">
+                    <div class="card-body p-2">
+                        <h3 class="card-title text-center mb-4">{{ question.question }}</h3>
+                        {% for reponse in Listrepons %}
+                            <div class="container mt-5">
+                                <div class="row">
+                                    <div class="col-lg-8 mx-auto">
+                                        <div class="card shadow">
+                                            <div class="card-body p-2">
+                                                <div class="d-flex justify-content-evenly p-5">
+                                                {{ reponse.reponse }}
+                                                <form action="{{ path('app_reponse_edit', {'id': reponse.id, 'idq':question.id}) }}">
+                                                    <button type="submit" class="btn btn-primary btn-lg px-4 py-2">
+                                                        <i class="fa-solid fa-edit"></i>
+                                                    </button></br>
+                                                </form>
+                                                <form action="{{ path('app_reponse_delete', {'id': reponse.id, 'idq':question.id}) }}">
+                                                    <button type="submit" class="btn btn-primary btn-lg px-4 py-2">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button></br>
+                                                </form>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="d-flex justify-content-evenly p-5">
+                            <form action="{{ path('app_question_index') }}">
+                                <button type="submit" class="btn btn-primary btn-lg px-4 py-2">
+                                    <i class="fa-solid fa-backward"></i>
+                                </button></br>
+                            </form>
+                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                        <div class="mb-4">
+                            <p class="block text-gray-700 text-sm font-bold mb-2">new Response</p>
+                            {{ form_widget(form.reponse, {'attr': {'class': 'form-control px-4'}}) }}
+                            {{ form_errors(form.reponse, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
+                        </div>
+
+
+                        <button type="submit" class="btn btn-primary btn-lg px-4 py-2">
+                            {{ button_label|default('Save') }}
+                        </button>
+                            {{ form_end(form) }}</br>
+
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

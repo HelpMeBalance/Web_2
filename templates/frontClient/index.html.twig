@@ -1,0 +1,1241 @@
+{% extends 'frontClient/base.html.twig'  %}
+
+{% block body %}
+<!-- Hero Section - Start
+        ================================================== -->
+        {% block introSection %} 
+        <section class="hero_section decoration_wrapper">
+            <div class="container">
+              <div class="row align-items-center">
+                <div class="col-lg-6">
+                  <div class="hero_content_wrap" >
+                    <div style="padding: 30px;">
+                    <h1 class="heading_text">
+                      Your Safe Haven 
+                    </h1>
+                    <h4 >
+                      Compassionate Support When You Need It Most
+                    </h4>
+                    <p class="heading_description" >
+                      Step into a <b>nurturing</b> space where your concerns are met with <b>empathy</b> and <b>care</b>. 
+                      Our <b>online consultation</b> service provides a refuge for your <b>mental</b> health <b>needs.</b>
+                      <br> Begin your journey to <b>wellness</b> with <b>us.</b>
+                    </p>
+                    
+                    <ul class="btns_group unordered_list">
+                      <li>
+                        <a class="btn btn-primary" href="{{ path('app_login') }}">
+                          <span class="btn_text" data-text="Join Us">
+                              Get Started
+                          </span>
+                          <span class="btn_icon">
+                            <i class="fa-solid fa-arrow-up-right"></i>
+                          </span>
+                        </a>
+                      </li>
+                      <li>
+                        <a class="btn btn-outline-secondary" href="{{ path('app_aboutClient') }}">
+                          <span class="btn_text" data-text="Learn More">
+                            Who Are We
+                          </span>
+                          <span class="btn_icon">
+                            <i class="fa-solid fa-arrow-up-right"></i>
+                          </span>
+                        </a>
+                      </li>
+                    </ul>
+                </div>
+                    <ul class="hero_section_counter unordered_list">
+                      <li>
+                          <div class="counter_item">
+                            <div class="counter_value mb-0">
+                              <span class="odometer" data-count="98">0</span>
+                              <span>%</span>
+                            </div>
+                            <hr />
+                            <p class="counter_description mb-0">
+                                 Patients <b>Supported</b>
+                            </p>
+                          </div>
+                        </li>   
+                      <li>
+                        <div class="counter_item">
+                          <div class="counter_value mb-0">
+                            <span class="odometer" data-count="140">0</span>
+                            <span>+</span>
+                          </div>
+                          <hr />
+                          <p class="counter_description mb-0">
+                              <b>Consultations</b> Provided
+                          </p>
+                        </div>
+                      </li>
+                      <li>
+                          <div class="counter_item">
+                            <div class="counter_value mb-0">
+                              <span class="odometer" data-count="200">0</span>
+                              <span>+</span>
+                            </div>
+                            <hr />
+                            <p class="counter_description mb-0">
+                              Active Blog <b>Community</b>
+                            </p>
+                          </div>
+                        </li>
+                    </ul>                  
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div >
+                    <img
+                    src="{{asset('assets/images/gallery/psyg.png')}}"
+                      alt="HelpMeBalance"
+                     
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="decoration_item shape_blur_shadow"></div>
+            <div class="decoration_item shape_leaf">
+              <img
+                src="{{asset('assets/images/shapes/shape_leaf_left_top.svg')}}"
+                alt="Shape Leaf - Help Me Balance - Psychotherapist Site Template"
+              />
+            </div>
+          </section>
+          {% endblock %}
+          <!-- Hero Section - End
+          ================================================== -->
+  
+          <!-- Service Section - Start
+          ================================================== -->
+          {% block Service %} 
+          <section class="service_section section_space_lg bg_primary_light">
+            <div class="container">
+              <div class="section_heading text-center">
+                <h2 class="section_heading_text">Discover Your Path to Wellness</h2>
+                <p class="section_heading_description ">
+                    Find the <b>support</b> that <b>fits</b> you best.
+                </p>
+              </div>
+  
+              <div class="row justify-content-center " >
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                  <div class="service_item" style="display: flex;justify-content:center;align-items:center;flex-direction:column; ">
+                    <div class="item_icon" >
+                      <img
+                        src="{{asset('assets/images/icons/icon_brain.svg')}}"
+                        alt="Brain Icon - HelpMeBalance"
+                      />
+                    </div>
+                    <div class="item_contact"  style="display: flex;justify-content:center;align-items:center;flex-direction:column; ">
+                      <h3 class="item_title">Depression Therapy</h3>
+                      <p style="text-align:center;">
+                        <b>Personalized therapy</b> for overcoming depression.
+                      </p>
+                      <a class="btn-link" href="{{ path('app_serviceClient') }}">
+                        <span class="btn_text">Start Your <b>Healing</b> Journey</span>
+                        <span class="btn_icon"
+                          ><i class="fa-solid fa-arrow-up-right"></i
+                        ></span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6" >
+                  <div class="service_item" style="display: flex;justify-content:center;align-items:center;flex-direction:column; ">
+                    <div class="item_icon">
+                      <img
+                        src="{{asset('assets/images/icons/icon_head_double.svg')}}"
+                        alt="Head Double Icon - HelpMeBalance"
+                      />
+                    </div>
+                    <div class="item_contact" style="display: flex;justify-content:center;align-items:center;flex-direction:column; ">
+                      <h3 class="item_title">Couple Therapy</h3>
+                      <p style="text-align:center;">
+                        <b>Strengthen bonds</b> with our couple therapy.
+                      </p>
+                      <a class="btn-link" href="{{ path('app_serviceClient') }}">
+                        <span class="btn_text">Rekindle Your <b>Connection</b></span>
+                        <span class="btn_icon"
+                          ><i class="fa-solid fa-arrow-up-right"></i
+                        ></span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                  <div class="service_item" style="display: flex;justify-content:center;align-items:center;flex-direction:column; ">
+                    <div class="item_icon">
+                      <img
+                        src="{{asset('assets/images/icons/icon_head.svg')}}"
+                        alt="Brain Icon - HelpMeBalance"
+                      />
+                    </div>
+                    <div class="item_contact" style="display: flex;justify-content:center;align-items:center;flex-direction:column; ">
+                      <h3 class="item_title">Child Therapy</h3>
+                      <p style="text-align:center;">
+                        Tailored therapy to nurture <b>young minds</b>.
+                      </p>
+                      <a class="btn-link" href="{{ path('app_serviceClient') }}">
+                        <span class="btn_text">Support Your <b>Child</b>'s Growth</span>
+                        <span class="btn_icon"
+                          ><i class="fa-solid fa-arrow-up-right"></i
+                        ></span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="btn_wrap pb-2 text-center">
+                <a class="btn btn-primary" href="{{ path('app_serviceClient') }}">
+                  <span class="btn_text" data-text="All Services">
+                    All Services
+                  </span>
+                  <span class="btn_icon">
+                    <i class="fa-solid fa-arrow-up-right"></i>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </section>
+          {% endblock %}
+          <!-- Service Section - End
+          ================================================== -->
+  {# WFET LENA #}
+          <!-- About Section - Start
+          ================================================== -->
+          {# {% block about %} 
+          <section class="about_section section_space_lg">
+            <div class="container">
+              <div class="row align-items-center justify-content-lg-between">
+                <div class="col-lg-6 order-lg-last">
+                  <div class="image_widget">
+                    <img
+                      src="assets/images/about/about_image_1-min.jpg"
+                      alt="About Image - HelpMeBalance"
+                    />
+                    <div class="image_shape bg_primary_light"></div>
+                    <div class="about_video_icon">
+                      <a
+                        class="video_play_btn popup_video"
+                        href="https://www.youtube.com/watch?v=7e90gBu4pas"
+                      >
+                        <i class="fa-duotone fa-play"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="about_content">
+                    <div class="section_heading mb-4">
+                      <h2 class="section_heading_text">
+                        <mark>Dr. Merry Stone</mark> — Licensed Mental Health
+                        Counselor, Psychotherapist
+                      </h2>
+                      <p class="section_heading_description mb-0">
+                        It is a long established fact that a reader will be
+                        distracted by the readable content of a page. Sed ut
+                        perspiciatis unde omnis iste natus error.
+                      </p>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-5 col-sm-6">
+                        <ul class="info_list unordered_list_block">
+                          <li>
+                            <span class="info_icon">
+                              <i class="fa-light fa-circle-check"></i>
+                            </span>
+                            <span class="info_text">Personal Consultations</span>
+                          </li>
+                          <li>
+                            <span class="info_icon">
+                              <i class="fa-light fa-circle-check"></i>
+                            </span>
+                            <span class="info_text">Group Therapy</span>
+                          </li>
+                          <li>
+                            <span class="info_icon">
+                              <i class="fa-light fa-circle-check"></i>
+                            </span>
+                            <span class="info_text">Online Therapy</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-md-5 col-sm-6">
+                        <ul class="info_list unordered_list_block">
+                          <li>
+                            <span class="info_icon">
+                              <i class="fa-light fa-circle-check"></i>
+                            </span>
+                            <span class="info_text">Unique technique</span>
+                          </li>
+                          <li>
+                            <span class="info_icon">
+                              <i class="fa-light fa-circle-check"></i>
+                            </span>
+                            <span class="info_text">Couple Problem</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="btn_wrap pb-0">
+                      <a class="btn btn-primary" href="about.html">
+                        <span class="btn_text" data-text="Learn More">
+                          Learn More
+                        </span>
+                        <span class="btn_icon">
+                          <i class="fa-solid fa-arrow-up-right"></i>
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section> 
+          {% endblock %} #}
+          <!-- About Section - End
+          ================================================== -->
+  
+          <!-- Pricing Section - Start
+          ================================================== -->
+          {% block Pricing %} 
+          <section
+            class="pricing_section  bg_primary_light decoration_wrapper "
+          >
+            <div class="container">
+              <div class="section_heading text-center">
+                <h2 class="section_heading_text">Pricing Plans</h2>
+                <p class="section_heading_description mb-0">
+                  Discover our <b>flexible pricing</b> options designed to <b>meet your needs</b>
+                </p>
+              </div>
+  
+              <div class="pricing_toggle_btn_wrap">
+                <button class="pricing_toggle_btn" type="button">
+                  <span>Monthly</span>
+                  <span>Annually <mark>Save 20%</mark></span>
+                </button>
+              </div>
+  
+              <div class="row justify-content-center">
+                <div class="col-lg-4">
+                  <div class="pricing_item">
+                    <h3 class="pricing_heading">Light Session</h3>
+                    <div class="pricing_price_value">
+                      <span class="pricing_monthly"
+                        >150 Dt <sub>Per Month</sub></span
+                      >
+                      <span class="pricing_annually"
+                        >1,440 Dt<sub>You'll Save 360 Dt</sub></span
+                      >
+                    </div>
+                    <hr />
+                    <ul class="info_list unordered_list_block">
+                      <li>
+                        <span class="info_icon">
+                          <i class="fa-light fa-circle-check"></i>
+                        </span>
+                        <span class="info_text">8 Therapy Sessions</span>
+                      </li>
+                      <li>
+                        <span class="info_icon">
+                          <i class="fa-light fa-circle-check"></i>
+                        </span>
+                        <span class="info_text">Duration 30 Minutes</span>
+                      </li>
+                      <li>
+                        <span class="info_icon">
+                          <i class="fa-light fa-circle-check"></i>
+                        </span>
+                        <span class="info_text">Group Meetting</span>
+                      </li>
+                      <li>
+                        <span class="info_icon">
+                          <i class="fa-light fa-circle-check"></i>
+                        </span>
+                        <span class="info_text">Personal Meeting</span>
+                      </li>
+                      <li>
+                        <span class="info_icon">
+                          <i class="fa-light fa-circle-check"></i>
+                        </span>
+                        <span class="info_text">Support 24 Hours</span>
+                      </li>
+                    </ul>
+                    <div class="btn_wrap pb-0 text-center">
+                      <a class="btn btn-outline-primary" href="#!">
+                        <span class="btn_text" data-text="Buy Now">
+                          Begin Your Journey
+                        </span>
+                        <span class="btn_icon">
+                          <i class="fa-solid fa-arrow-up-right"></i>
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="pricing_item">
+                    <h3 class="badge_popular">Most Popular</h3>
+                    <h4 class="pricing_heading">Standart Session</h4>
+                    <div class="pricing_price_value">
+                      <span class="pricing_monthly"
+                        >250 Dt<sub>Per Month</sub></span
+                      >
+                      <span class="pricing_annually"
+                        >2,400 Dt <sub>You'll Save 600 Dt</sub></span
+                      >
+                    </div>
+                    <hr />
+                    <ul class="info_list unordered_list_block">
+                      <li>
+                        <span class="info_icon">
+                          <i class="fa-light fa-circle-check"></i>
+                        </span>
+                        <span class="info_text">12 Therapy Sessions</span>
+                      </li>
+                      <li>
+                        <span class="info_icon">
+                          <i class="fa-light fa-circle-check"></i>
+                        </span>
+                        <span class="info_text">Duration 30 Minutes</span>
+                      </li>
+                      <li>
+                        <span class="info_icon">
+                          <i class="fa-light fa-circle-check"></i>
+                        </span>
+                        <span class="info_text">Group Meetting</span>
+                      </li>
+                      <li>
+                        <span class="info_icon">
+                          <i class="fa-light fa-circle-check"></i>
+                        </span>
+                        <span class="info_text">Personal Meeting</span>
+                      </li>
+                      <li>
+                        <span class="info_icon">
+                          <i class="fa-light fa-circle-check"></i>
+                        </span>
+                        <span class="info_text">Support 24 Hours</span>
+                      </li>
+                    </ul>
+                    <div class="btn_wrap pb-0 text-center">
+                      <a class="btn btn-primary" href="#!">
+                        <span class="btn_text" data-text="Buy Now">
+                          Find Your Fit
+                        </span>
+                        <span class="btn_icon">
+                          <i class="fa-solid fa-arrow-up-right"></i>
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="pricing_item">
+                    <h3 class="pricing_heading">Individual Session</h3>
+                    <div class="pricing_price_value">
+                      <span class="pricing_monthly"
+                        >400 Dt <sub>Per Month</sub></span
+                      >
+                      <span class="pricing_annually"
+                        >3,840 Dt <sub>You'll Save 960 Dt</sub></span
+                      >
+                    </div>
+                    <hr />
+                    <ul class="info_list unordered_list_block">
+                      <li>
+                        <span class="info_icon">
+                          <i class="fa-light fa-circle-check"></i>
+                        </span>
+                        <span class="info_text">20 Therapy Sessions</span>
+                      </li>
+                      <li>
+                        <span class="info_icon">
+                          <i class="fa-light fa-circle-check"></i>
+                        </span>
+                        <span class="info_text">Duration 30 Minutes</span>
+                      </li>
+                      <li>
+                        <span class="info_icon">
+                          <i class="fa-light fa-circle-check"></i>
+                        </span>
+                        <span class="info_text">Group Meetting</span>
+                      </li>
+                      <li>
+                        <span class="info_icon">
+                          <i class="fa-light fa-circle-check"></i>
+                        </span>
+                        <span class="info_text">Personal Meeting</span>
+                      </li>
+                      <li>
+                        <span class="info_icon">
+                          <i class="fa-light fa-circle-check"></i>
+                        </span>
+                        <span class="info_text">Support 24 Hours</span>
+                      </li>
+                    </ul>
+                    <div class="btn_wrap pb-0 text-center">
+                      <a class="btn btn-outline-primary" href="#!">
+                        <span class="btn_text" data-text="Buy Now">
+                          Start Your Healing
+                        </span>
+                        <span class="btn_icon">
+                          <i class="fa-solid fa-arrow-up-right"></i>
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <div class="decoration_item shape_leaf_1">
+              <img
+                src="{{asset('assets/images/shapes/shape_leaf_right_top.svg')}}"
+                alt="Shape Leaf - Talking Minds - Psychotherapist Site Template"
+              />
+            </div>
+            <div class="decoration_item shape_leaf_2">
+              <img
+                src="{{asset('assets/images/shapes/shape_leaf_left_bottom.svg')}}"
+                alt="Shape Leaf - Talking Minds - Psychotherapist Site Template"
+              />
+            </div>
+          </section>
+          {% endblock %}
+          <!-- Pricing Section - End
+          ================================================== -->
+  
+          <!-- Testimonial Section - Start
+          ================================================== -->
+          {% block testimonial %} 
+          <section class="testimonial_section section_space_lg">
+            <div class="container">
+              <div class="section_heading text-center">
+                <h2 class="section_heading_text">Celebrating Our Patients' Journeys</h2>
+                <p class="section_heading_description mb-0">
+                  Hear from our <b>community</b> and be inspired by their <b>resilience</b> and <b>courage</b>.
+                </p>
+              </div>
+  
+              <div class="testimonial_carousel">
+                <div class="carousel_2col row" data-slick='{"arrows":false}'>
+                  {# <div class="carousel_item col-">
+                    <div class="testimonial_item">
+                      <ul class="rating_star unordered_list">
+                        <li><i class="fa-solid fa-star"></i></li>
+                        <li><i class="fa-solid fa-star"></i></li>
+                        <li><i class="fa-solid fa-star"></i></li>
+                        <li><i class="fa-solid fa-star"></i></li>
+                        <li><i class="fa-solid fa-star"></i></li>
+                      </ul>
+                      <div class="author_box">
+                        <div class="author_box_image">
+                          <img
+                            src="assets/images/icons/icon_brain.svg"
+                            alt="Reviewer Image"
+                          />
+                        </div>
+                        <div class="author_box_content">
+                          <h3 class="author_box_name">Kerry Banks</h3>
+                          <span class="author_box_designation">Housewife</span>
+                        </div>
+                      </div>
+                      <p class="mb-0">
+                        Lorem Ipsum is simply dummy text of the printing and
+                        typesetting text industry. Lorem Ipsum has been the
+                        industry's standard dumm ever since the 1500s, when an
+                        unknown printer took a galley of type and scrambled it to
+                        make a type specimen book.
+                      </p>
+                    </div>
+                  </div> #}
+                  {# <div class="carousel_item col-">
+                    <div class="testimonial_item">
+                      <ul class="rating_star unordered_list">
+                        <li><i class="fa-solid fa-star"></i></li>
+                        <li><i class="fa-solid fa-star"></i></li>
+                        <li><i class="fa-solid fa-star"></i></li>
+                        <li><i class="fa-solid fa-star"></i></li>
+                        <li><i class="fa-solid fa-star"></i></li>
+                      </ul>
+                      <div class="author_box">
+                        <div class="author_box_image">
+                          <img
+                          src="assets/images/icons/icon_brain.svg"
+                          alt="Reviewer Image"
+                          />
+                        </div>
+                        <div class="author_box_content">
+                          <h3 class="author_box_name">Damian York</h3>
+                          <span class="author_box_designation">Entrepreneur</span>
+                        </div>
+                      </div>
+                      <p class="mb-0">
+                        Lorem Ipsum is simply dummy text of the printing and
+                        typesetting industry. Lorem Ipsum has been the industry's
+                        standard dummy text ever since the 1500s, when an unknown
+                        printer took a galley of type text of the printing and
+                        typesetting industry.
+                      </p>
+                    </div>
+                  </div> #}
+                  <div class="carousel_item col-">
+                    <div class="testimonial_item">
+                      <ul class="rating_star unordered_list">
+                        <li><i class="fa-solid fa-star"></i></li>
+                        <li><i class="fa-solid fa-star"></i></li>
+                        <li><i class="fa-solid fa-star"></i></li>
+                        <li><i class="fa-solid fa-star"></i></li>
+                        {# <li><i class="fa-solid fa-star"></i></li> #}
+                      </ul>
+                      <div class="author_box">
+                        <div class="author_box_image">
+                          <img
+                          src="{{asset('assets/images/icons/icon_head.svg')}}"
+                          alt="Reviewer Image"
+                          />
+                        </div>
+                        <div class="author_box_content">
+                          <h3 class="author_box_name">David Lee</h3>
+                          <span class="author_box_designation">Artist</span>
+                        </div>
+                      </div>
+                      <p class="mb-0">
+                        "As an artist, my mental health greatly influences my creativity.
+                         The support I've received from the therapists here has not only improved my well-being
+                          but also enhanced my artistic process. I'm grateful for the holistic approach to therapy they provide."
+                      </p>
+                    </div>
+                  </div>
+                  <div class="carousel_item col-">
+                    <div class="testimonial_item">
+                      <ul class="rating_star unordered_list">
+                        <li><i class="fa-solid fa-star"></i></li>
+                        <li><i class="fa-solid fa-star"></i></li>
+                        <li><i class="fa-solid fa-star"></i></li>
+                        <li><i class="fa-solid fa-star"></i></li>
+                        <li><i class="fa-solid fa-star"></i></li>
+                      </ul>
+                      <div class="author_box">
+                        <div class="author_box_image">
+                          <img
+                          src="{{asset('assets/images/icons/icon_head.svg')}}"
+                          alt="Reviewer Image"
+                          />
+                        </div>
+                        <div class="author_box_content">
+                          <h3 class="author_box_name">Sophie Martinez</h3>
+                          <span class="author_box_designation">Teacher</span>
+                        </div>
+                      </div>
+                      <p class="mb-0">
+                        "I've been struggling with stress and burnout from work for a while. 
+                        The therapy sessions here have been instrumental in helping me find balance and prioritize self-care. 
+                        I feel more resilient and equipped to handle the challenges that come my way."
+                      </p>
+                    </div>
+                  </div>
+                  <div class="carousel_item col-">
+                    <div class="testimonial_item">
+                      <ul class="rating_star unordered_list">
+                        <li><i class="fa-solid fa-star"></i></li>
+                        <li><i class="fa-solid fa-star"></i></li>
+                        <li><i class="fa-solid fa-star"></i></li>
+                        <li><i class="fa-solid fa-star"></i></li>
+                        {# <li><i class="fa-solid fa-star"></i></li> #}
+                      </ul>
+                      <div class="author_box">
+                        <div class="author_box_image">
+                          <img
+                          src="{{asset('assets/images/icons/icon_head.svg')}}"
+                          alt="Reviewer Image"
+                          />
+                        </div>
+                        <div class="author_box_content">
+                          <h3 class="author_box_name">Michael Thompson</h3>
+                          <span class="author_box_designation">Parent</span>
+                        </div>
+                      </div>
+                      <p class="mb-0">
+                        "As a parent, finding the right support for my child's mental health was a top priority. 
+                        The therapists here provided not only expert guidance but also a safe and nurturing environment for my child to express themselves. 
+                        The progress we've seen is truly remarkable."
+                      </p>
+                    </div>
+                  </div>
+                  <div class="carousel_item col-">
+                    <div class="testimonial_item">
+                      <ul class="rating_star unordered_list">
+                        <li><i class="fa-solid fa-star"></i></li>
+                        <li><i class="fa-solid fa-star"></i></li>
+                        <li><i class="fa-solid fa-star"></i></li>
+                        <li><i class="fa-solid fa-star"></i></li>
+                        {# <li><i class="fa-solid fa-star"></i></li> #}
+                      </ul>
+                      <div class="author_box">
+                        <div class="author_box_image">
+                          <img
+                          src="{{asset('assets/images/icons/icon_head.svg')}}"
+                          alt="Reviewer Image"
+                          />
+                        </div>
+                        <div class="author_box_content">
+                          <h3 class="author_box_name">Emily Johnson</h3>
+                          <span class="author_box_designation">Student</span>
+                        </div>
+                      </div>
+                      <p class="mb-0">
+                        "The therapy sessions here have been a lifeline for me.
+                         I've gained invaluable insights and coping strategies that have helped me navigate through my anxiety and depression. 
+                         I'm incredibly grateful for the compassionate support I've received."
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          {% endblock %}
+          <!-- Testimonial Section - End
+          ================================================== -->
+  
+          <!-- Consultation Section - Start
+          ================================================== -->
+          {# <section class="consultation_section">
+            <div class="container">
+              <div class="consultation_form bg_primary_light decoration_wrapper">
+                <div class="section_heading text-center">
+                  <h2 class="section_heading_text mb-0">
+                    <span class="d-md-block">Get your first free</span> online
+                    consultation
+                  </h2>
+                </div>
+                <div class="row justify-content-center">
+                  <div class="col-lg-4"></div>
+                </div>
+                <div class="row justify-content-center">
+                  <div class="col-lg-7">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="input_name">Name</label>
+                          <input
+                            id="input_name"
+                            class="form-control"
+                            type="text"
+                            name="name"
+                            placeholder="Your Name"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="input_phone">Phone</label>
+                          <input
+                            id="input_phone"
+                            class="form-control"
+                            type="tel"
+                            name="phone"
+                            placeholder="Mobile phone number"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="select_therapy">Section</label>
+                          <select
+                            id="select_therapy"
+                            class="form-select"
+                            aria-label="Therapy Select Options"
+                          >
+                            <option selected>Select Therapy</option>
+                            <option value="Therapy One">Therapy One</option>
+                            <option value="Therapy Two">Therapy Two</option>
+                            <option value="Therapy Three">Therapy Three</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="input_calendar">Phone</label>
+                          <input
+                            id="input_calendar"
+                            class="form-control"
+                            type="date"
+                            name="date"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="btn_wrap pb-0 text-center">
+                      <button type="submit" class="btn btn-primary">
+                        <span class="btn_text" data-text="Get A Consultation">
+                          Get A Consultation
+                        </span>
+                        <span class="btn_icon">
+                          <i class="fa-solid fa-arrow-up-right"></i>
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="decoration_item shape_leaf_1">
+                  <img
+                    src="assets/images/shapes/shape_leaf_right_top.svg"
+                    alt="Shape Leaf - Talking Minds - Psychotherapist Site Template"
+                  />
+                </div>
+                <div class="decoration_item shape_leaf_2">
+                  <img
+                    src="assets/images/shapes/shape_leaf_left_bottom.svg"
+                    alt="Shape Leaf - Talking Minds - Psychotherapist Site Template"
+                  />
+                </div>
+              </div>
+            </div>
+          </section> #}
+          <!-- Consultation Section - End
+          ================================================== -->
+  
+          <!-- Blog Section - Start
+          ================================================== -->
+          {# <section class="blog_section">
+            <div class="container">
+              <div class="section_heading">
+                <div class="row align-items-center">
+                  <div class="col-md-6">
+                    <h2 class="section_heading_text mb-0">Latest Articles</h2>
+                  </div>
+                  <div class="col-md-6 d-none d-md-flex justify-content-end">
+                    <a class="btn btn-primary" href="blog.html">
+                      <span class="btn_text" data-text="Read More Articles">
+                        Read More Articles
+                      </span>
+                      <span class="btn_icon">
+                        <i class="fa-solid fa-arrow-up-right"></i>
+                      </span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="row justify-content-center">
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                  <div class="blog_item">
+                    <div class="blog_image">
+                      <a class="blog_image_wrap" href="blog_details.html">
+                        <img
+                          src="assets/images/blogs/blog_image_1-min.jpg"
+                          alt="Talking Minds - The pros and cons of group psychotherapy"
+                        />
+                      </a>
+                    </div>
+                    <div class="blog_content">
+                      <ul class="post_category unordered_list">
+                        <li><a href="#!">Family Problem</a></li>
+                      </ul>
+                      <ul class="post_meta unordered_list">
+                        <li>26 July 2023</li>
+                        <li><a href="#!">120 Views</a></li>
+                        <li><a href="#!">No Comments</a></li>
+                      </ul>
+                      <h3 class="item_title">
+                        <a href="blog_details.html">
+                          The pros and cons of group psychotherapy
+                        </a>
+                      </h3>
+                      <p>
+                        Lorem Ipsum is simply dummy text of the printing and
+                        typesetting industry. Sunt in similique culpa qui officia
+                        deserunt.
+                      </p>
+                      <a class="btn-link" href="blog_details.html">
+                        <span class="btn_text">Read More</span>
+                        <span class="btn_icon"
+                          ><i class="fa-solid fa-arrow-up-right"></i
+                        ></span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                  <div class="blog_item">
+                    <div class="blog_image">
+                      <a class="blog_image_wrap" href="blog_details.html">
+                        <img
+                          src="assets/images/blogs/blog_image_2-min.jpg"
+                          alt="Talking Minds - Top seven challenges in counselling children"
+                        />
+                      </a>
+                    </div>
+                    <div class="blog_content">
+                      <ul class="post_category unordered_list">
+                        <li><a href="#!">Family Problem</a></li>
+                      </ul>
+                      <ul class="post_meta unordered_list">
+                        <li>26 July 2023</li>
+                        <li><a href="#!">120 Views</a></li>
+                        <li><a href="#!">No Comments</a></li>
+                      </ul>
+                      <h3 class="item_title">
+                        <a href="blog_details.html">
+                          Top seven challenges in counselling children
+                        </a>
+                      </h3>
+                      <p>
+                        Lorem Ipsum is simply dummy text of the printing and
+                        typesetting industry. Sunt in similique culpa qui officia
+                        deserunt.
+                      </p>
+                      <a class="btn-link" href="blog_details.html">
+                        <span class="btn_text">Read More</span>
+                        <span class="btn_icon"
+                          ><i class="fa-solid fa-arrow-up-right"></i
+                        ></span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                  <div class="blog_item">
+                    <div class="blog_image">
+                      <a class="blog_image_wrap" href="blog_details.html">
+                        <img
+                          src="assets/images/blogs/blog_image_3-min.jpg"
+                          alt="Talking Minds - Actions, types and tips for finding group therapy"
+                        />
+                      </a>
+                    </div>
+                    <div class="blog_content">
+                      <ul class="post_category unordered_list">
+                        <li><a href="#!">Family Problem</a></li>
+                      </ul>
+                      <ul class="post_meta unordered_list">
+                        <li>26 July 2023</li>
+                        <li><a href="#!">120 Views</a></li>
+                        <li><a href="#!">No Comments</a></li>
+                      </ul>
+                      <h3 class="item_title">
+                        <a href="blog_details.html">
+                          Actions, types and tips for finding group therapy
+                        </a>
+                      </h3>
+                      <p>
+                        Lorem Ipsum is simply dummy text of the printing and
+                        typesetting industry. Sunt in similique culpa qui officia
+                        deserunt.
+                      </p>
+                      <a class="btn-link" href="blog_details.html">
+                        <span class="btn_text">Read More</span>
+                        <span class="btn_icon"
+                          ><i class="fa-solid fa-arrow-up-right"></i
+                        ></span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="btn_wrap pb-0 text-center d-md-none d-block">
+                <a class="btn btn-primary" href="blog.html">
+                  <span class="btn_text" data-text="Read More Articles">
+                    Read More Articles
+                  </span>
+                  <span class="btn_icon">
+                    <i class="fa-solid fa-arrow-up-right"></i>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </section> #}
+          <!-- Blog Section - End
+          ================================================== -->
+  
+          <!-- FAQ Section - Start
+          ================================================== -->
+          {% block faq %} 
+          <section class="faq_section">
+            <div class="container">
+              <div class="row align-items-center">
+                <div class="col-lg-6" >
+                  <div class="images_group_widget"  >
+                    <ul class="unordered_list">
+                      <li>
+                        
+                        <img
+                          src="{{asset('assets/images/gallery/Doctorb.png')}}"
+                          alt="Help Me Balance"
+                        />
+                        <img
+                          src="{{asset('assets/images/gallery/Doctorg.png')}}"
+                          alt="Help Me Balance"
+                        />
+                      </li>
+                      <li>
+                        <img
+                          src="{{asset('assets/images/gallery/Meditation.png')}}"
+                          alt="Help Me Balance"
+                        />
+                        <img
+                          src="{{asset('assets/images/gallery/Community.png')}}"
+                          alt="Help Me Balance"
+                        />
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="ps-lg-5">
+                    <div class="section_heading mb-lg-4 mb-2">
+                      <h2 class="section_heading_text mb-0">
+                        Exploring Common Mental Health Questions
+                      </h2>
+                    </div>
+                    <div class="accordion" id="faq_accordion">
+                      <div class="accordion-item">
+                        <div class="accordion-header" id="heading_one">
+                          <button
+                            class="accordion-button"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapse_one"
+                            aria-expanded="true"
+                            aria-controls="collapse_one"
+                          >
+                            What is mental health?
+                          </button>
+                        </div>
+                        <div
+                          id="collapse_one"
+                          class="accordion-collapse collapse show"
+                          aria-labelledby="heading_one"
+                          data-bs-parent="#faq_accordion"
+                        >
+                          <div class="accordion-body">
+                            <p class="m-0">
+                              Mental health is a <b>broad term</b> that refers to our <b>emotional</b>, <b>psychological</b>, and <b>social well-being</b>. 
+It encompasses how we <b>think</b>, <b>feel</b>, and <b>behave</b>, and influences how we handle <b>stress</b>, <b>relate to others</b>, and make <b>choices</b> in life. 
+Essentially, it's about finding a <b>balance</b> in all aspects of life and maintaining a <b>positive sense</b> of well-being.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="accordion-item">
+                        <div class="accordion-header" id="heading_two">
+                          <button
+                            class="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapse_two"
+                            aria-expanded="false"
+                            aria-controls="collapse_two"
+                          >
+                          What should I do if the support I'm receiving doesn't feel helpful?
+                          </button>
+                        </div>
+                        <div
+                          id="collapse_two"
+                          class="accordion-collapse collapse"
+                          aria-labelledby="heading_two"
+                          data-bs-parent="#faq_accordion"
+                        >
+                          <div class="accordion-body">
+                            <p class="m-0">
+                              If the <strong>support</strong> you're receiving doesn't seem to be meeting your needs, it's essential to communicate openly with your <strong>provider</strong>. 
+                              Together, you can explore <strong>alternative approaches</strong>, adjust your <strong>treatment plan</strong>, or seek additional <strong>resources</strong> and <strong>support networks</strong>. 
+                              Remember, finding the right support is a <strong>collaborative process</strong>, and your <strong>well-being</strong> is our top priority.
+                            </p>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div class="accordion-item">
+                        <div class="accordion-header" id="heading_three">
+                          <button
+                            class="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapse_three"
+                            aria-expanded="false"
+                            aria-controls="collapse_three"
+                          >
+                            Can you prevent mental health problems?
+                          </button>
+                        </div>
+                        <div
+                          id="collapse_three"
+                          class="accordion-collapse collapse"
+                          aria-labelledby="heading_three"
+                          data-bs-parent="#faq_accordion"
+                        >
+                          <div class="accordion-body">
+                            <p class="m-0">
+                              While we can't always <strong>prevent mental health challenges entirely</strong>, there are steps we can take to <strong>promote mental well-being and resilience</strong>.
+                              This may include <strong>adopting healthy lifestyle habits</strong>, <strong>seeking social support</strong>, <strong>practicing stress management techniques</strong>, and <strong>accessing mental health services when needed</strong>. 
+                              By taking <strong>proactive steps to care for our mental health</strong>, we can <strong>reduce the risk of developing more significant issues down the road</strong>.
+                            </p>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div class="accordion-item">
+                        <div class="accordion-header" id="heading_four">
+                          <button
+                            class="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapse_four"
+                            aria-expanded="false"
+                            aria-controls="collapse_four"
+                          >
+                          Where can I find tools to enhance my relaxation and self-care routine?
+                          </button>
+                        </div>
+                        <div
+                          id="collapse_four"
+                          class="accordion-collapse collapse"
+                          aria-labelledby="heading_four"
+                          data-bs-parent="#faq_accordion"
+                        >
+                          <div class="accordion-body">
+                            <p class="m-0">
+                              Our <strong>shop</strong> offers a <strong>curated selection</strong> of products designed to support your <strong>well-being</strong> and promote <strong>relaxation</strong>. 
+                              From <strong>calming aromatherapy essentials</strong> to <strong>cozy comfort items</strong>, we have everything you need to create a <strong>serene sanctuary</strong> at home.
+                            </p>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div class="accordion-item">
+                        <div class="accordion-header" id="heading_five">
+                          <button
+                            class="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapse_five"
+                            aria-expanded="false"
+                            aria-controls="collapse_five"
+                          >
+                          What if I need inspiration and support on my mental wellness journey?
+                          </button>
+                        </div>
+                        <div
+                          id="collapse_five"
+                          class="accordion-collapse collapse"
+                          aria-labelledby="heading_five"
+                          data-bs-parent="#faq_accordion"
+                        >
+                          <div class="accordion-body">
+                            <p class="m-0">
+                              If you're seeking <strong>inspiration</strong> and <strong>support</strong> as you navigate your <strong>mental wellness journey</strong>, our vibrant <strong>blog community</strong> is here for you.
+                              Explore a wealth of engaging <strong>content</strong>, heartfelt <strong>stories</strong>, and practical <strong>insights</strong> crafted to <strong>empower</strong> and <strong>uplift</strong> you.
+                              Join us as we embark on a shared exploration of <strong>mental health</strong>, <strong>supporting each other</strong>, sharing <strong>experiences</strong>, and discovering the path to <strong>greater well-being</strong> together.
+                            </p>
+                            
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          {% endblock %} 
+          <!-- FAQ Section - End
+          ================================================== -->
+  
+          <!-- Contact Section - Start
+          ================================================== -->
+          {% block Contact %} 
+          <section class="contact_section section_space_lg">
+            <div class="container">
+              <div class="row align-items-center justify-content-lg-between">
+                <div class="col-lg-5">
+                  <div class="section_heading mb-lg-5">
+                    <h2 class="section_heading_text">Contact Info</h2>
+                    <p class="section_heading_description mb-0">
+                      <strong>Feel free to reach out to us</strong> for any <strong>inquiries</strong> or <strong>assistance</strong>.We're here to <strong> help!</strong>
+                    </p>
+                    
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                      <ul class="contact_info_list unordered_list_block">
+                        <li>
+                          <div class="item_icon">
+                            <i class="fa-solid fa-phone"></i>
+                          </div>
+                          <div class="item_content">
+                            <h3 class="item_title">Phone Number</h3>
+                            <p class="item_info mb-0">+216 71 234 567</p>
+                          </div>
+                        </li>
+                        <li>
+                          <div class="item_icon">
+                            <i class="fa-solid fa-user-doctor-message"></i>
+                          </div>
+                          <div class="item_content">
+                            <h3 class="item_title">Support Number</h3>
+                            <p class="item_info mb-0">+216 71 890 123</p>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                      <ul class="contact_info_list unordered_list_block">
+                        <li>
+                          <div class="item_icon">
+                            <i class="fa-solid fa-envelope"></i>
+                          </div>
+                          <div class="item_content">
+                            <h3 class="item_title">Email</h3>
+                            <p class="item_info mb-0">info@helpmebalance.tn</p>
+                          </div>
+                        </li>
+                        <li>
+                          <div class="item_icon">
+                            <i class="fa-solid fa-location-dot"></i>
+                          </div>
+                          <div class="item_content">
+                            <h3 class="item_title">Location</h3>
+                            <p class="item_info mb-0">
+                              Technopark El Ghazela, Ariana 2083, Tunisia
+                          </p>                          
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="office_hour_list bg_primary_light mt-5">
+                    <h3 class="area_title">Working Time</h3>
+                    <ul class="unordered_list_block">
+                      <li>
+                        <span>Monday - Friday</span>
+                        <span>8 am - 6 pm</span>
+                      </li>
+                      <li>
+                        <span>Saturday - Sunday</span>
+                        <span>9 am - 2 pm</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="gmap_canvas">
+                    <iframe src="{{asset('https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3194.7662279134784!2d10.180940699999999!3d36.800155!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fd34720dc0e6dd%3A0x343b8b8933e15e60!2s49%20Av.%20Habib%20Bourguiba%2C%20Tunis%202045!5e0!3m2!1sfr!2stn!4v1708350501787!5m2!1sfr!2stn')}}" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          {% endblock %} 
+          <!-- Contact Section - End
+          ================================================== -->
+{% endblock %}

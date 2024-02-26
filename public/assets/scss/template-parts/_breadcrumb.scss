@@ -1,0 +1,58 @@
+/* 3.03 - Page Header, Page Banner, Breadcrumb - Start
+================================================== */
+.page_banner {
+	overflow: hidden;
+	padding: 55px 0 62px;
+	background-color: var(--bs-primary-bg-subtle);
+	.decoration_item {
+		top: 50%;
+		transform: translateY(-50%);
+		&.shape_leaf_1 {
+			left: 0;
+		}
+		&.shape_leaf_2 {
+			right: 0;
+		}
+	}
+}
+.site_header + main > .page_banner {
+	margin-top: 118px;
+}
+
+.breadcrumb_nav {
+	>li {
+		font-weight: 600;
+		color: var(--bs-dark);
+		font-family: var(--bs-font-heading);
+		font-size: var(--bs-body-font-size);
+		line-height: var(--bs-body-line-height);
+		&:not(:last-child) {
+			position: relative;
+			padding-right: 36px;
+			&:after {
+				top: 2px;
+				right: 13px;
+				font-size: 14px;
+				content: '\f105';
+				position: absolute;
+				font-family: 'Font Awesome 5 Pro';
+			}
+		}
+	}
+	a {
+		display: block;
+		color: var(--bs-primary);
+		&:hover {
+			color: var(--bs-secondary);
+		}
+	}
+}
+
+.page_title {
+	font-size: 54px;
+	font-weight: 800;
+	line-height: 60px;
+	margin-bottom: 30px;
+}
+/* 3.03 - Page Header, Page Banner, Breadcrumb - End
+================================================== */

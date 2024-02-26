@@ -1,0 +1,135 @@
+/* 2.09 - Carousel or Slider - Start
+================================================== */
+
+// Carousel Slick Dots - Start
+.slick-dots {
+	margin: 0;
+	display: flex;
+	position: static;
+	padding-top: 50px;
+	align-items: center;
+	justify-content: center;
+	li {
+		width: auto;
+		height: auto;
+		margin: 0 6px;
+		display: inline-block;
+		&:not(:last-child) {
+		}
+		button {
+			margin: 0;
+			padding: 0;
+			width: 30px;
+			height: 4px;
+			display: block;
+			border-radius: 3px;
+			background-color: #E0E4E8;
+			&:before {
+				display: none;
+			}
+			&:hover {
+				background-color: var(--bs-secondary);
+			}
+		}
+		&.slick-active {
+			button {
+				width: 90px;
+				background-color: var(--bs-secondary);
+			}
+		}
+	}
+}
+.slick-dotted.slick-slider {
+	margin-bottom: 0;
+}
+// Carousel Slick Dots - End
+
+// Carousel Arrow - Start
+.carousel_arrow {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	button {
+		z-index: 1;
+		width: 60px;
+		height: 60px;
+		font-size: 22px;
+		overflow: hidden;
+		position: relative;
+		color: var(--bs-white);
+		&:before {
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			content: '';
+			position: absolute;
+		}
+		i {
+			top: 50%;
+			position: absolute;
+			transition: var(--bs-transition);
+			&:nth-child(1) {
+				left: 50%;
+				transform: translate(-50%, -50%);
+			}
+			&:nth-child(2) {
+				color: var(--bs-primary);
+			}
+		}
+	}
+
+	>li {
+		&:not(:last-child) {
+			margin-right: 8px;
+		}
+		&:nth-child(1) {
+			button {
+				i {
+					&:nth-child(2) {
+						left: 110%;
+						transform: translateY(-50%);
+					}
+				}
+				&:hover {
+					i {
+						&:nth-child(1) {
+							left: -110%;
+							transform: translateY(-50%);
+						}
+						&:nth-child(2) {
+							left: 50%;
+							transform: translate(-50%, -50%);
+						}
+					}
+				}
+			}
+		}
+		&:nth-child(2) {
+			button {
+				i {
+					&:nth-child(2) {
+						left: -110%;
+						transform: translateY(-50%);
+					}
+				}
+				&:hover {
+					i {
+						&:nth-child(1) {
+							left: 110%;
+							transform: translateY(-50%);
+						}
+						&:nth-child(2) {
+							left: 50%;
+							transform: translate(-50%, -50%);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+// Carousel Arrow - End
+
+/* 2.09 - Carousel or Slider - End
+================================================== */

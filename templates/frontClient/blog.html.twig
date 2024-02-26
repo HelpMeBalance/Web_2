@@ -1,0 +1,238 @@
+{% extends 'frontClient/base.html.twig' %}
+{% block body %} 
+<!-- Blog Section - Start
+        ================================================== -->
+        <section class="blog_section ">
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-8">
+                  <div class="row">
+                    {% for publication in publications %}
+                    <div class="col-md-6">
+                      <div class="blog_item">
+                        <div class="blog_image">
+                          <a class="blog_image_wrap" href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">
+                            <img
+                              src="{{ asset(publication.image) }}"
+                              alt="HelpMeBalance"
+                            />
+                          </a>
+                        </div>
+                        <div class="blog_content">
+                          <ul class="post_category unordered_list">
+                            <li><a href="{{ path('app_blogCatClient', {'cat': publication.categorie.id, 'page': 1}) }}">{{ publication.categorie.nom }}</a></li>
+                          </ul>
+                          <ul class="post_meta unordered_list">
+                            <li>{{ publication.dateM ? publication.dateM|date('j F Y H:i:s')  : '' }}</li>
+                            <li>{{ publication.vues }} <i class="fa-solid fa-eye"></i></li>
+                            <li>
+                                {% set commentCount = commentaireRepository.findAllUnderPublication(publication)|length %}
+                                {% if publication.comOuvert %}
+                                    {% if commentCount > 0 %}
+                                        <a href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">{{ commentCount }} <i class="fa-solid fa-comment"></i></a>
+                                    {% else %}
+                                    <i class="fa-duotone fa-empty-set"></i> Com..
+                                    {% endif %}
+                                {% else %}
+                                    <i class="fas fa-lock"></i> Com..
+                                {% endif %}
+                            </li>
+                        </ul>
+                        
+                          
+                        
+                        <ul class="post_meta unordered_list">
+                          <li>
+                          <h3 class="item_title">
+                            <a href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">
+                                {{ publication.titre }}
+                            </a>
+                          </h3>
+                        </li>
+                          {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and publication.user.id== app.user.id %}
+                        
+                        <li>
+                        <form method="post" action="{{ path('app_publication_delete', {'id': publication.id}) }}" onsubmit="return confirm('Are you sure you want to delete this Publication ?');">
+                          <input  type="hidden" name="_token" value="{{ csrf_token('delete' ~ publication.id) }}">
+                          <button class=" btn_reply"><i class="fa-solid fa-trash"></i></button>
+                      </form>
+                        </li>
+                        <li>
+                          <a style="margin-right: 30px;"class=" btn_reply " href="{{ path('app_publication_update_blogClient', {'idp': publication.id}) }}">
+                            <i class="fa-solid fa-edit"></i>
+                          </a>   
+                        </li>
+                        </ul>       
+                        {% endif %}
+                        </ul>
+                          <p>
+                            {{ publication.contenu|slice(0, 40) ~ (publication.contenu|length > 40 ? '...' : '') }}
+
+                          </p>
+                          <a class="btn-link" href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">
+                            <span class="btn_text">Read More</span>
+                            <span class="btn_icon"
+                              ><i class="fa-solid fa-arrow-up-right"></i
+                            ></span>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+  
+                <div class="col-lg-4">
+                  <aside class="sidebar ps-lg-4">
+                    {# <div class="form-group">
+                      <input
+                        id="sidebar_search"
+                        class="form-control"
+                        type="search"
+                        name="search"
+                        placeholder="Search (coming soon)"
+                        disabled
+                      />
+                      <button type="submit" class="input_icon" disabled>
+                        <i class="fa-regular fa-magnifying-glass"></i>
+                      </button>                     
+                    </div> #}
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED')  %}
+                    <div class="form-group">
+                      <input
+                        id="sidebar_search"
+                        class="form-control"
+                        type="search"
+                        name="search"
+                        placeholder="Share Your Thoughts"
+                        disabled
+                      />        
+                      <a class="btn-link input_icon" href="{{ path('app_chooseCatClient') }}">
+                        <i class="fa-solid fa-pen-line"></i>
+                      </a>            
+                    </div>
+                    {% else %}
+                    <div class="form-group d-flex items-align-center">
+                      <input
+                        id="sidebar_search"
+                        class="form-control"
+                        type="search"
+                        name="search"
+                        placeholder="Login to post"
+                        disabled
+                      />        
+                      <a class="btn-link input_icon" href="{{ path('app_login') }}">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                      </a>            
+                    </div>
+                    {% endif %}
+                    <div class="sidebar_widget">
+                      <h3 class="sidebar_widget_title">
+                        <span class="title_icon">
+                          <img
+                            src="{{asset('assets/images/site_logo/favourite_icon.svg')}}"
+                            alt="help me balance"
+                          />
+                        </span>
+                        <span class="title_text">Categories</span>
+                      </h3>
+                      <ul class="post_category_list unordered_list_block">
+                        {% set sortedCategories = categories|sort((a, b) => (a.publications|length) < (b.publications|length)) %}
+                        {% for categorie in sortedCategories %}
+                        <li>
+                          <a href="{{ path('app_blogCatClient', {'cat': categorie.id, 'page': 1}) }}">
+                            <span class="category_name">{{categorie.nom}}</span>                     
+                            {% if categorie.publications|length == 0 %}
+                            <span class="category_counter">New</span>
+                            {% else %}
+                            <span class="category_counter">{{ categorie.publications|length }}</span>
+                            {% endif %}
+                          </a>
+                        </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                    <div class="sidebar_widget">
+                      <h3 class="sidebar_widget_title">
+                        <span class="title_icon">
+                          <img
+                            src="{{asset('assets/images/site_logo/favourite_icon.svg')}}"
+                            alt="help me balance"
+                          />
+                        </span>
+                        <span class="title_text">Explore More</span>
+                      </h3>
+                      <ul class="reecommended_post_group unordered_list_block">
+                        {% for publication in reccpublications|slice(0, 3) %}
+                        <li>
+                          <div class="blog_item_small">
+                            <div class="blog_image">
+                              <a class="blog_image_wrap" href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">
+                                <img
+                                src="{{ asset(publication.image) }}"
+                                alt="HelpMeBalance"
+                                />
+                              </a>
+                            </div>
+                            <div class="blog_content">
+                              <h3 class="item_title">
+                                <a href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">
+                                    {{ publication.titre }}
+                                </a>
+                              </h3>
+                              <ul class="post_meta unordered_list">
+                                <li>{{ publication.dateM ? publication.dateM|date('j F Y H:i:s')  : '' }}</li>
+                                <li>{{ publication.vues }} <i class="fa-solid fa-eye"></i></li>
+                                <li>
+                                  {% set commentCount = commentaireRepository.findAllUnderPublication(publication)|length %}
+                                  {% if publication.comOuvert %}
+                                      {% if commentCount > 0 %}
+                                          <a href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">{{ commentCount }} <i class="fa-solid fa-comment"></i></a>
+                                      {% else %}
+                                      <i class="fa-duotone fa-empty-set"></i> Com..
+                                      {% endif %}
+                                  {% else %}
+                                      <i class="fas fa-lock"></i> Com..
+                                  {% endif %}
+                              </li>                              </ul>
+                            </div>
+                          </div>
+                        </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                    <div class="sidebar_widget">
+                      <h3 class="sidebar_widget_title">
+                        <span class="title_icon">
+                          <img
+                            src="{{asset('assets/images/site_logo/favourite_icon.svg')}}"
+                            alt="Talking Minds - Psychotherapist Site Template"
+                          />
+                        </span>
+                        <span class="title_text">Explore Related Topics</span>
+                      </h3>
+                      <ul class="post_tags unordered_list">
+                        {% for souscat in souscategories %}
+                        <li><a href="{{ path('app_blogSousCatClient', {'souscat': souscat.id, 'page': 1}) }}">{{ souscat.nom }}</a></li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  </aside>
+                </div>
+              </div>
+              <div class="pagination_wrap  section_space_lg col-lg-8">
+                <ul class="pagination_nav unordered_list justify-content-center">
+                  {% if (totalPages>0)%}
+                    {% for page in range(1, totalPages) %}
+                    <li {% if curentPage == page %} class="active" {% endif %}>
+                        <a href="{{ path('app_blogClient', {'page': page}) }}">{{ page }}</a>
+                    </li>
+                    {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+            </div>
+          </section>
+          <!-- Blog Section - End
+          ================================================== -->
+{% endblock %}

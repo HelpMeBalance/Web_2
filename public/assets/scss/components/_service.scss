@@ -1,0 +1,33 @@
+/* 4.02 - Service - Start
+================================================== */
+.service_item {
+	padding: 60px 60px 53px;
+	box-shadow: var(--bs-box-shadow);
+	transition: var(--bs-transition);
+	background-color: var(--bs-white);
+	border-radius: var(--bs-border-radius);
+	&:hover {
+		transform: translateY(-6px);
+		box-shadow: var(--bs-box-shadow-lg);
+	}
+	.item_icon {
+		width: 90px;
+		height: 90px;
+		border-radius: 100%;
+		margin-bottom: 30px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.item_title {
+		font-size: 24px;
+		font-weight: 700;
+		line-height: 30px;
+		margin-bottom: 20px;
+	}
+	p {
+		margin-bottom: 30px;
+	}
+}
+/* 4.02 - Service - End
+================================================== */

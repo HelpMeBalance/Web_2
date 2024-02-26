@@ -1,0 +1,49 @@
+:root {
+	--bs-body-font-family: 'Open Sans', sans-serif;
+	--bs-font-body: 'Open Sans', sans-serif;
+	--bs-font-heading: 'Open Sans', sans-serif;
+	--bs-body-font-weight: 400;
+	--bs-body-font-size: 18px;
+	--bs-body-line-height: 28px;
+	--bs-body-font-size-md: 20px;
+	--bs-body-line-height-md: 30px;
+	--bs-body-color: #51565D;
+	--bs-body-color-rgb: 81,86,93;
+
+	--bs-transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+
+	--bs-primary: #26ABA3;
+	--bs-secondary: #F7AB1E;
+	--bs-dark: #293039;
+	--bs-primary-rgb: 38,171,163;
+	--bs-secondary-rgb: 247,171,30;
+	--bs-dark-rgb: 41,48,57;
+	--bs-primary-bg-subtle: #F4FCFA;
+	--bs-secondary-bg-subtle: #FEF3DE;
+
+
+	--bs-link-color: var(--bs-primary);
+	--bs-link-color-rgb: var(--bs-primary-rgb);
+	--bs-link-hover-color: #00CFC3;
+	--bs-link-hover-color-rgb: 0,207,195;
+
+	--bs-highlight-bg: var(--bs-primary);
+
+	--bs-border-width: 1px;
+	--bs-border-style: solid;
+	--bs-border-color: #C9CED3;
+
+	--bs-border-radius: 24px;
+	--bs-border-radius-sm: 6px;
+	--bs-border-radius-lg: 30px;
+	--bs-border-radius-xl: 80px 0 80px 0;
+	--bs-border-radius-xxl: 150px 0 150px 0;
+	--bs-border-radius-pill: 100%;
+
+	--bs-box-shadow: 0px 1px 2px 1px rgba(43, 171, 160, 0.14);
+	--bs-box-shadow-lg: 0px 20px 40px 0px rgba(43, 171, 160, 0.08);
+
+	--bs-focus-ring-width: 20px;
+	--bs-focus-ring-opacity: 0.25;
+	--bs-focus-ring-color: rgba(38, 171, 163, 0.25);
+}

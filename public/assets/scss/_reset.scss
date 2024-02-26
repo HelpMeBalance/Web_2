@@ -1,0 +1,173 @@
+/* 1.2 - Template Reset - Start
+================================================== */
+body {
+	margin: 0;
+	padding: 0;
+	font-size: var(--bs-body-font-size);
+	font-weight: var(--bs-body-font-weight);
+	line-height: var(--bs-body-line-height);
+	font-style: normal;
+	color: var(--bs-body-color);
+	font-family: var(--bs-font-body);
+	background-color: var(--bs-body-bg);
+	text-rendering: optimizelegibility;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+}
+
+.page_wrapper {
+	overflow: hidden;
+	position: relative;
+}
+
+iframe {
+	border: none;
+}
+
+a:focus,
+a:active,
+input,
+input:hover,
+input:focus,
+input:active,
+textarea,
+textarea:hover,
+textarea:focus,
+textarea:active {
+	outline: none;
+}
+
+img:not([draggable]),
+embed,
+object,
+video {
+	height: auto;
+	max-width: 100%;
+}
+img {
+	border: none;
+	height: auto;
+	max-width: 100%;
+	user-select: none;
+	vertical-align: middle;
+}
+
+a {
+	outline: 0;
+	display: inline-block;
+	text-decoration: none;
+	font-family: var(--bs-font-heading);
+	transition: var(--bs-transition);
+	&:active,
+	&:focus,
+	&:hover,
+	&:visited {
+		outline: 0;
+		text-decoration: none;
+	}
+}
+
+button {
+	padding: 0px;
+	border: none;
+	outline: none;
+	background: none;
+	display: inline-block;
+	font-family: var(--bs-font-heading);
+	transition: var(--bs-transition);
+	&:focus {
+		outline: none;
+	}
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 800;
+	color: var(--bs-dark);
+	font-family: var(--bs-font-heading);
+}
+
+hr {
+	opacity: 1;
+	height: 1px;
+	border: none;
+	margin: 25px 0;
+	background-color: var(--bs-border-color);
+}
+
+mark {
+	padding: 0;
+	color: var(--bs-primary);
+	background-color: transparent;
+}
+
+.container {
+	max-width: 1440px;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+.row {
+	margin: -15px;
+}
+[class*="col-"] {
+	padding: 15px;
+}
+
+.dropdown-menu {
+	padding: 8px 0;
+	margin-top: 20px;
+	border-radius: 8px;
+	background-color: var(--bs-white);
+	border: 1px solid rgba(38, 171, 163, 0.3);
+	box-shadow: 0 5px 20px 0 rgba(43, 171, 160, 0.12);
+	animation: 0.2s ease-in-out 0s normal none 1 running fadeIn;
+	&:before {
+		left: 0;
+		right: 0;
+		top: -20px;
+		content: '';
+		height: 20px;
+		display: block;
+		position: absolute;
+	}
+	>li {
+		padding: 0 5px;
+		&:not(:last-child) {
+			margin-bottom: 1px;
+		}
+		>a {
+			display: block;
+			font-size: 15px;
+			font-weight: 600;
+			line-height: 20px;
+			padding: 9px 18px;
+			position: relative;
+			border-radius: 6px;
+			white-space: nowrap;
+			color: var(--bs-body-color);
+		}
+		&:hover {
+			>a {
+				color: var(--bs-primary);
+				background-color: var(--bs-primary-bg-subtle);
+			}
+		}
+	}
+}
+.dropdown-toggle::after {
+	margin: 0;
+	border: none;
+	line-height: 1;
+	content: '\f107';
+	font-weight: 400;
+	color: var(--bs-body-color);
+	font-family: 'Font Awesome 6 Pro';
+}
+.dropdown {
+	&:hover {
+		>.dropdown-menu {
+			display: block;
+		}
+	}
+}
+/* 1.2 - Template Reset - End
+================================================== */

@@ -1,0 +1,50 @@
+/* 5.04 - Error Page - Start
+================================================== */
+.error_section {
+	height: 100vh;
+	display: flex;
+	padding: 100px 0;
+	align-items: center;
+	background-color: var(--bs-primary-bg-subtle);
+
+	h1 {
+		font-size: 270px;
+		font-weight: 800;
+		line-height: 0.8;
+		margin-bottom: 40px;
+		color: var(--bs-primary);
+	}
+
+	h2 {
+		font-size: 42px;
+		font-weight: 800;
+		line-height: 50px;
+		margin-bottom: 20px;
+	}
+
+	p {
+		margin: auto;
+		font-size: 20px;
+		max-width: 600px;
+		line-height: 32px;
+	}
+
+	.social_links {
+		left: 0;
+		right: 0;
+		bottom: 0;
+		position: absolute;
+		padding: 0 15px 60px;
+	}
+
+	.shape_leaf_1 {
+		left: -140px;
+		bottom: -108px;
+	}
+	.shape_leaf_2 {
+		top: -112px;
+		right: -108px;
+	}
+}
+/* 5.04 - Error Page - End
+================================================== */
