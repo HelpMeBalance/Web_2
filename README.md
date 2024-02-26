@@ -1,6 +1,6 @@
-# Symfony Twig Template Workshop
+# HelpMeBalance
 
-This repository contains my homework assignment for the Symfony Twig Template Workshop. In this assignment, I have created and implemented templates using Twig, the powerful templating engine for Symfony.
+This repository contains the Web Project
 
 ## Getting Started
 
@@ -10,15 +10,23 @@ Before you begin, ensure you have met the following requirements:
 - [Symfony](https://symfony.com/download) installed on your local development environment.
 - Basic knowledge of Symfony and Twig templating.
 
+### No Need For Migration 
+
+its just one command :
+   ```shell
+   php bin/console doctrine:schema:update --force
+   ```
+This will update your schema
+
 ### Installation
 
 1. Clone this repository to your local machine using:
    ```shell
-   git clone https://github.com/faresbrayek2/SymfonyTwigTemplateWorkshop.git
+   git clone https://github.com/HelpMeBalance/Web_2/Web_2.git
    ```
 2. Change into the project directory:
    ```shell
-   cd SymfonyTwigTemplateWorkshop
+   cd Web_2
    ```
 3. Install dependencies:
    ```shell
@@ -28,8 +36,8 @@ Before you begin, ensure you have met the following requirements:
    ```shell
    symfony server:start
    ```
-
 5. Access the application in your web browser at `http://localhost:8000`.
+
 
 ## Usage
 
