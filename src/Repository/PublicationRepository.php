@@ -24,9 +24,11 @@ class PublicationRepository extends ServiceEntityRepository
     public function findPaginatedbycat(int $page, int $perPage,int $cat)
     {
         $query =$this->createQueryBuilder('c')
-        ->join('c.Categorie','p')
-        ->andWhere('p.id = :val')
-        ->setParameter('val', $cat)
+            ->join('c.Categorie','p')
+            ->andWhere('p.id = :val')
+            ->setParameter('val', $cat)
+            ->andWhere('c.valide = :valide') // Filter by the valide status
+            ->setParameter('valide', true) // Assuming 'true' means validated
             ->orderBy('c.vues', 'DESC')
             ->addOrderBy('c.dateC', 'DESC')
             ->getQuery();
@@ -36,9 +38,11 @@ class PublicationRepository extends ServiceEntityRepository
     public function findbycat(int $cat)
     {
         return $this->createQueryBuilder('c')
-        ->join('c.Categorie','p')
-        ->andWhere('p.id = :val')
-        ->setParameter('val', $cat)
+            ->join('c.Categorie','p')
+            ->andWhere('p.id = :val')
+            ->setParameter('val', $cat)
+            ->andWhere('c.valide = :valide') // Filter by the valide status
+            ->setParameter('valide', true) // Assuming 'true' means validated
             ->orderBy('c.vues', 'DESC')
             ->addOrderBy('c.dateC', 'DESC')
             ->getQuery()
@@ -47,9 +51,11 @@ class PublicationRepository extends ServiceEntityRepository
     public function findPaginatedbysouscat(int $page, int $perPage,int $souscat)
     {
         $query =$this->createQueryBuilder('c')
-        ->join('c.SousCategorie','p')
-        ->andWhere('p.id = :val')
-        ->setParameter('val', $souscat)
+            ->join('c.SousCategorie','p')
+            ->andWhere('p.id = :val')
+            ->setParameter('val', $souscat)
+            ->andWhere('c.valide = :valide') // Filter by the valide status
+            ->setParameter('valide', true) // Assuming 'true' means validated
             ->orderBy('c.vues', 'DESC')
             ->addOrderBy('c.dateC', 'DESC')
             ->getQuery();
@@ -64,12 +70,24 @@ class PublicationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    public function findAllsortedValide()
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.valide = :valide') // Filter by the valide status
+            ->setParameter('valide', true) // Assuming 'true' means validated
+            ->orderBy('c.vues', 'DESC')
+            ->addOrderBy('c.dateC', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
     public function findbysouscat(int $souscat)
     {
         return $this->createQueryBuilder('c')
-        ->join('c.SousCategorie','p')
-        ->andWhere('p.id = :val')
-        ->setParameter('val', $souscat)
+            ->join('c.SousCategorie','p')
+            ->andWhere('p.id = :val')
+            ->setParameter('val', $souscat)
+            ->andWhere('c.valide = :valide') // Add this line to filter by valide status
+            ->setParameter('valide', true) // Assuming 'true' indicates a validated item
             ->orderBy('c.vues', 'DESC')
             ->addOrderBy('c.dateC', 'DESC')
             ->getQuery()
@@ -78,6 +96,8 @@ class PublicationRepository extends ServiceEntityRepository
     public function findPaginated(int $page, int $perPage)
     {
         $query = $this->createQueryBuilder('p')
+            ->Where('p.valide = :valide') // Add this line to filter by valide status of the publication
+            ->setParameter('valide', true) // Set true for the valide condition
             ->orderBy('p.vues', 'DESC')
             ->addOrderBy('p.dateC', 'DESC')
             ->getQuery();

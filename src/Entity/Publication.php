@@ -17,6 +17,17 @@ class Publication
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: 'Please enter the content of your publication.')]
+    #[Assert\Length([
+        'min' => 20,
+        'max' => 200,
+        'minMessage' => 'Your publication must be at least {{ limit }} characters long',
+        'maxMessage' => 'Your publication cannot be longer than {{ limit }} characters',
+    ])]
+    #[Assert\Regex(
+        pattern: '/[A-Za-z]/',
+        message: 'Your publication must contain at least one letter.'
+    )]
     private ?string $contenu = null;
 
     #[ORM\Column]
@@ -56,10 +67,25 @@ class Publication
     private Collection $commentaires;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Please enter your title.')]
+    #[Assert\Length([
+        'min' => 5,
+        'max' => 100,
+        'minMessage' => 'Your title must be at least {{ limit }} characters long',
+        'maxMessage' => 'Your title cannot be longer than {{ limit }} characters',
+    ])]
+    #[Assert\Regex(
+        pattern: '/^[A-Za-z0-9]+$/',
+        message: 'Your title must contain only letters and numbers.'
+    )]
+    #[Assert\Regex(
+        pattern: '/[A-Za-z]/',
+        message: 'Your title must contain at least one letter.'
+    )]
     private ?string $titre = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $image = "";
+    private ?string $image = "assets/images/site_logo/logo.png";
 
     public function __construct()
     {
@@ -78,7 +104,7 @@ class Publication
         return $this->contenu;
     }
 
-    public function setContenu(string $contenu): static
+    public function setContenu(string $contenu= null): static
     {
         $this->contenu = $contenu;
 
@@ -240,7 +266,7 @@ class Publication
         return $this->titre;
     }
 
-    public function setTitre(string $titre): static
+    public function setTitre(string $titre= null): static
     {
         $this->titre = $titre;
 
