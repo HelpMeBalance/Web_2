@@ -22,7 +22,7 @@ This will update your schema
 
 1. Clone this repository to your local machine using:
    ```shell
-   git clone https://github.com/HelpMeBalance/Web_2/Web_2.git
+   git clone https://github.com/HelpMeBalance/Web_2.git
    ```
 2. Change into the project directory:
    ```shell
