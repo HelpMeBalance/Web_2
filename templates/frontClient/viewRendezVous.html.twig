@@ -1,120 +1,43 @@
 {% extends 'frontClient/base.html.twig' %}
 
-{% block styles %}
-
-<style>
-  .rating {
-    display: inline-block;
-    position: relative;
-    height: 50px;
-    line-height: 50px;
-    font-size: 50px;
-  }
-  .rating label {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    cursor: pointer;
-  }
-  .rating label:last-child {
-    position: static;
-  }
-  .rating label:nth-child(1) {
-    z-index: 5;
-  }
-  .rating label:nth-child(2) {
-    z-index: 4;
-  }
-  .rating label:nth-child(3) {
-    z-index: 3;
-  }
-  .rating label:nth-child(4) {
-    z-index: 2;
-  }
-  .rating label:nth-child(5) {
-    z-index: 1;
-  }
-  .rating label input {
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-  }
-  .rating label .icon {
-    float: left;
-    color: transparent;
-  }
-  .rating label:last-child .icon {
-    color: #000;
-  }
-  .rating:not(:hover) label input:checked~.icon,
-  .rating:hover label:hover input~.icon {
-    color: #09f;
-  }
-  .rating label input:focus:not(:checked)~.icon:last-child {
-    color: #000;
-    text-shadow: 0 0 5px #09f;
-  }
-  
-</style>
-{% endblock %}
-
 {% block body %}
-<div class="container mt-5">
-  <div class="row">
-    <div class="col-lg-8 mx-auto">
-      <div class="card shadow">
-        <div class="card-body p-4">
-          <h2 class="text-center">RendezVous</h2>
-          <a class="w-100 d-flex justify-content-center" href="{{ path('app_rendez_vous_new')}}">add a new appointment</a>
-          <hr>
-          {% for rv in rendezvous %}
-          <div class="card shadow mt-2 w-100 p-5">
-            <p class="text-center">{{rv.dateR|date('Y-m-d H:i:s') }}</p>
-            <p class="text-center">{{rv.nomService}}</p>
-            <p class="text-center">{{rv.statut ? 'Confirmed' : 'Not Confirmed'}}</p>
-            {% if rv.statut == true %}
-            <p class="text-center">
-            <form class="rating d-flex justify-content-evenly">
-              <label>
-                <input type="radio" name="stars" value="1" />
-                <span class="icon">★</span>
-              </label>
-              <label>
-                <input type="radio" name="stars" value="2" />
-                <span class="icon">★</span>
-                <span class="icon">★</span>
-              </label>
-              <label>
-                <input type="radio" name="stars" value="3" />
-                <span class="icon">★</span>
-                <span class="icon">★</span>
-                <span class="icon">★</span>
-              </label>
-              <label>
-                <input type="radio" name="stars" value="4" />
-                <span class="icon">★</span>
-                <span class="icon">★</span>
-                <span class="icon">★</span>
-                <span class="icon">★</span>
-              </label>
-              <label>
-                <input type="radio" name="stars" value="5" />
-                <span class="icon">★</span>
-                <span class="icon">★</span>
-                <span class="icon">★</span>
-                <span class="icon">★</span>
-                <span class="icon">★</span>
-              </label>
-            </form>
+<section class="testimonial_section section_space_lg">
+  <div class="container">
+    <div class="section_heading text-center">
+      <h2 class="section_heading_text">Celebrating Our Patients' Journeys</h2>
+      <p class="section_heading_description mb-0">
+        Hear from our <b>community</b> and be inspired by their <b>resilience</b> and <b>courage</b>.
+      </p>
+    </div>
+    <div class="testimonial_carousel">
+      <div class="carousel_2col row" data-slick='{"arrows":false}'>
+        {% for rv in rendezvous %}
+        <div class="carousel_item col-">
+          <div class="testimonial_item">
+            <ul class="rating_star unordered_list">
+              <li><i class="fa-solid fa-star"></i></li>
+              <li><i class="fa-solid fa-star"></i></li>
+              <li><i class="fa-solid fa-star"></i></li>
+              <li><i class="fa-solid fa-star"></i></li>
+            </ul>
+            <div class="author_box">
+              <div class="author_box_image">
+                <img src="{{asset('assets/images/gallery/4.png')}}" alt="Reviewer Image" />
+              </div>
+              <div class="author_box_content ">
+                <h3 class="author_box_name">{{rv.dateR|date('Y-m-d H:i:s') }}</h3>
+                <span class="author_box_designation">{{rv.statut ? 'Confirmed' : 'Not Confirmed'}}</span>
+              </div>
+            </div>
+            <p class="mb-0 d-flex justify-content-center">
+              {{rv.nomService}}
             </p>
-            {% endif %}
           </div>
-          {% endfor %}
         </div>
+        {% endfor %}
+
       </div>
     </div>
   </div>
-</div>
+</section>
 {% endblock %}

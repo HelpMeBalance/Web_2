@@ -91,7 +91,11 @@
                         <i class="fa-solid fa-lightbulb"></i> Our Services
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="help_submenu">
-                          <li{% if (part==4)%}  class="active"{% endif %}><a href="{{ path('app_serviceClient') }}">Book a Session</a></li>
+                          {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                            <li{% if (part==4)%}  class="active"{% endif %}><a href="{{ path('app_serviceClient') }}">Book a Session</a></li>
+                          {% else %}
+                          <li{% if (part==4)%}  class="active"{% endif %}><a href="{{ path('app_login') }}">Book a Session</a></li>
+                          {% endif %}
                           <li{% if (part==5)%}  class="active"{% endif %}><a href="{{ path('app_blogClient', {'page':1}) }}">Brave Chats</a></li>
                           <li{% if (part==6)%}  class="active"{% endif %}><a href="{{ path('app_faqClient') }}">Questions Corner</a></li>
                         </ul>
