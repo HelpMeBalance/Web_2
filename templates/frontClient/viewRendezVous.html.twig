@@ -67,16 +67,16 @@
       <div class="card shadow">
         <div class="card-body p-4">
           <h2 class="text-center">RendezVous</h2>
-
+          <a class="w-100 d-flex justify-content-center" href="{{ path('app_rendez_vous_new')}}">add a new appointment</a>
           <hr>
           {% for rv in rendezvous %}
-          <div class="card shadow mt-2 w-50 d-flex justify-content-evenly p-5">
+          <div class="card shadow mt-2 w-100 p-5">
             <p class="text-center">{{rv.dateR|date('Y-m-d H:i:s') }}</p>
             <p class="text-center">{{rv.nomService}}</p>
             <p class="text-center">{{rv.statut ? 'Confirmed' : 'Not Confirmed'}}</p>
             {% if rv.statut == true %}
             <p class="text-center">
-            <form class="rating">
+            <form class="rating d-flex justify-content-evenly">
               <label>
                 <input type="radio" name="stars" value="1" />
                 <span class="icon">★</span>
