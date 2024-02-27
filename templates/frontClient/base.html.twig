@@ -10,14 +10,6 @@
     
     <title>{% block title %} {{ titlepage }}HelpMeBalance{% endblock %}</title>
     <link rel="icon" href="{{asset('assets/images/site_logo/iconlogo.png')}}" />
-    <script>
-document.addEventListener('DOMContentLoaded', (event) => {
-    setTimeout(() => {
-        $('.alert').alert('close');
-    }, 5000); // Close alerts after 5 seconds
-});
-</script>
-
     {% block css %}
     
     <!-- Fraimwork - CSS Include -->
@@ -146,7 +138,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                   <!-- Login Button for Guests -->
                   <li>
                     <a class="btn btn-primary" href="{{ path('app_login') }}">
-                      <span class="btn_text" data-text="🫡">
+                      <span class="btn_text" data-text="🤯">
                       Login
                       </span>
                       <span class="btn_icon">
@@ -219,7 +211,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
       <!-- Site Footer - Start
       ================================================== -->
-      <footer class="site_footer bg_primary ">
+      <footer class="site_footer bg_footer ">
         <div class="container">
           <div class="site_footer_content">
             <div class="row align-items-center">
@@ -276,6 +268,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                       <span class="info_text">Blog</span>
                     </a>
                   </li>
+                  <li>
                     <a href="{{ path('app_contactClient') }}">
                       <span class="info_icon">
                         <i class="fa-solid fa-circle"></i>
