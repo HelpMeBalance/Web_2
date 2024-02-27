@@ -48,7 +48,11 @@ class ConsultationController extends AbstractController
     public function show(Consultation $consultation): Response
     {
         return $this->render('consultation/show.html.twig', [
-            'consultation' => $consultation,
+            'consultation' => $consultation,            'title' => 'consultation',
+            'titlepage' => 'consultation',
+            'controller_name' => 'ConsultationController',
+            'service' => 1,
+            'part' => 59,
         ]);
     }
 
@@ -59,14 +63,20 @@ class ConsultationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($consultation);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_consultation_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_rendez_vous_confirm', ['psyid' => $consultation->getPsychiatre()->getId()]);
         }
 
         return $this->render('consultation/edit.html.twig', [
             'consultation' => $consultation,
             'form' => $form->createView(),
+            'title' => 'consultation',
+            'titlepage' => 'consultation',
+            'controller_name' => 'ConsultationController',
+            'service' => 1,
+            'part' => 59,
         ]);
     }
 

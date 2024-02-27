@@ -1,0 +1,40 @@
+{% extends 'frontClient/base.html.twig' %}
+
+{% block body %}
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+      <div class="card shadow">
+        <div class="card-body p-4">
+          <h2 class="text-center">RendezVous</h2>
+          <hr>
+          {% for rv in rendezvous %}
+          <div class="d-flex justify-content-center">
+          <div class="card shadow mt-2 w-50 d-flex justify-content-center p-3">
+            <p class="text-center">{{rv.patient.firstname}}</p>
+            <p class="text-center">{{rv.dateR|date('Y-m-d H:i:s') }}</p>
+            <p class="text-center">{{rv.nomService}}</p>
+            <p class="text-center">{{rv.statut ? 'Confirmed' : 'Not Confirmed'}}</p>
+            {% if rv.statut == false %}
+            <form class="text-center" action="{{ path('app_rendez_vous_edit_status', {"id": rv.id}) }}">
+              <button class="btn btn-primary btn-lg px-4 py-2">Confirm?</button>
+            </form>
+            {% endif %}
+            {% if rv.statut %}
+            {% for consultation in consultations %}
+            {% if (consultation.rendezvous == rv) %}
+            <form class="text-center" action="{{ path('app_consultation_show', {"id": consultation.id}) }}">
+              <button class="btn btn-primary btn-lg px-4 py-2">Info Consultation</button>
+            </form>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

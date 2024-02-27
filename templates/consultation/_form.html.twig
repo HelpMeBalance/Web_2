@@ -1,34 +1,18 @@
-<div class="flex justify-center items-center h-screen bg-blue-200">
+<div class="w-100 d-flex justify-content-center">
     <div class="w-full max-w-md bg-gray-200 p-4 rounded-md">
         {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-            <div class="mb-4">
-                <p class="block text-gray-700 text-sm font-bold mb-2">rendez vous</p>
-                {{ form_widget(form.rendezvous, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}        
-            </div>    
-
-            <div class="mb-4">
-                <p class="block text-gray-700 text-sm font-bold mb-2">duree</p>
-                {{ form_widget(form.duree, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}        
-            </div>
-            
             <div class="mb-4">
                 <p class="block text-gray-700 text-sm font-bold mb-2">note</p>
                 {{ form_widget(form.note, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}
                 {{ form_errors(form.note, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
             </div>
 
-            <div class="mb-4">
-                <p class="block text-gray-700 text-sm font-bold mb-2">avisPatient</p>
-                {{ form_widget(form.avisPatient, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}
-                {{ form_errors(form.avisPatient, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
-            </div>
-            
             <div class="mb-4 flex">
                 {{ form_label(form.RecommandationSuivi, null, {'class': 'block text-gray-700 text-sm font-bold mb-2'}) }}
                 {{ form_widget(form.RecommandationSuivi, {'attr': {'class': 'px- 4 form-input'}}) }}
             </div>
-            
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">
+
+            <button type="submit" class="btn btn-primary btn-lg px-4 py-2">
                 {{ button_label|default('Save') }}
             </button>
         {{ form_end(form) }}

@@ -17,24 +17,32 @@ class Consultation
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
-    #[Assert\NotBlank(message: 'veuillez remplir durée.')]
+    #[Assert\NotBlank(message: 'Please select time')]
     private ?\DateTimeInterface $duree = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: 'veuillez remplir note.')]
+    #[Assert\NotBlank(message: 'veuillez remplir note')]
     private ?string $note = null;
 
     #[ORM\Column(nullable: true)]
-    #[Assert\NotBlank(message: 'veuillez remplir avis patient.')]
-    #[Assert\Range(min:0, max:5, notInRangeMessage:'veuillez entrer une valeur entre 0 et 5')]
+    //#[Assert\NotBlank(message: 'Please enter avisPatient')]
+    //#[Assert\Range(min:0, max:5, notInRangeMessage:'Please enter a number between 0 and 5')]
     private ?float $avisPatient = null;
 
     #[ORM\Column]
     private ?bool $RecommandationSuivi = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[Assert\NotBlank(message: 'veuillez remplir rendez-vous.')]
+    #[Assert\NotBlank(message: 'Please enter a rendez-vous.')]
     private ?RendezVous $rendezvous = null;
+
+    #[ORM\ManyToOne(inversedBy: 'consultations')]
+    #[Assert\NotBlank(message: 'Please select a Patient')]
+    private ?User $Patient = null;
+
+    #[ORM\ManyToOne(inversedBy: 'consultations')]
+    #[Assert\NotBlank(message:'Please select a Psychiatre')]
+    private ?User $Psychiatre = null;
 
     public function getId(): ?int
     {
@@ -97,6 +105,30 @@ class Consultation
     public function setRendezvous(?RendezVous $rendezvous): static
     {
         $this->rendezvous = $rendezvous;
+
+        return $this;
+    }
+
+    public function getPatient(): ?User
+    {
+        return $this->Patient;
+    }
+
+    public function setPatient(?User $Patient): static
+    {
+        $this->Patient = $Patient;
+
+        return $this;
+    }
+
+    public function getPsychiatre(): ?User
+    {
+        return $this->Psychiatre;
+    }
+
+    public function setPsychiatre(?User $Psychiatre): static
+    {
+        $this->Psychiatre = $Psychiatre;
 
         return $this;
     }

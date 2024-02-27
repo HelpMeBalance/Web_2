@@ -47,6 +47,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     // #[Assert\NotBlank(message: 'Please enter your last name.')]
     private ?string $lastname = null;
 
+    #[ORM\OneToMany(targetEntity: Consultation::class, mappedBy: 'Patient')]
+    private Collection $consultations;
+
+    #[ORM\OneToMany(targetEntity: RendezVous::class, mappedBy: 'user')]
+    private Collection $rendezVouses;
+
+    #[ORM\OneToMany(targetEntity: RendezVous::class, mappedBy: 'patient')]
+    private Collection $rendezVousesP;
+
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Formulaire $formulaire = null;
   
@@ -94,6 +103,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->publications = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
+        $this->rendezVousesP = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -291,5 +301,95 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
+    /**
+     * @return Collection<int, Consultation>
+     */
+    public function getConsultations(): Collection
+    {
+        return $this->consultations;
+    }
+
+    public function addConsultation(Consultation $consultation): static
+    {
+        if (!$this->consultations->contains($consultation)) {
+            $this->consultations->add($consultation);
+            $consultation->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConsultation(Consultation $consultation): static
+    {
+        if ($this->consultations->removeElement($consultation)) {
+            // set the owning side to null (unless already changed)
+            if ($consultation->getPatient() === $this) {
+                $consultation->setPatient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RendezVous>
+     */
+    public function getRendezVouses(): Collection
+    {
+        return $this->rendezVouses;
+    }
+
+    public function addRendezVouse(RendezVous $rendezVouse): static
+    {
+        if (!$this->rendezVouses->contains($rendezVouse)) {
+            $this->rendezVouses->add($rendezVouse);
+            $rendezVouse->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRendezVouse(RendezVous $rendezVouse): static
+    {
+        if ($this->rendezVouses->removeElement($rendezVouse)) {
+            // set the owning side to null (unless already changed)
+            if ($rendezVouse->getUser() === $this) {
+                $rendezVouse->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RendezVous>
+     */
+    public function getRendezVousesP(): Collection
+    {
+        return $this->rendezVousesP;
+    }
+
+    public function addRendezVousesP(RendezVous $rendezVousesP): static
+    {
+        if (!$this->rendezVousesP->contains($rendezVousesP)) {
+            $this->rendezVousesP->add($rendezVousesP);
+            $rendezVousesP->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRendezVousesP(RendezVous $rendezVousesP): static
+    {
+        if ($this->rendezVousesP->removeElement($rendezVousesP)) {
+            // set the owning side to null (unless already changed)
+            if ($rendezVousesP->getPatient() === $this) {
+                $rendezVousesP->setPatient(null);
+            }
+        }
+
+        return $this;
+    }
 
 }
