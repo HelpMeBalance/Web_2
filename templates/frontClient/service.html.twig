@@ -1,4 +1,85 @@
 {% extends 'frontClient/base.html.twig' %}
 {% block body %}
-
+{% block Service %}
+<section class="service_section section_space_lg bg_primary_light">
+    <div class="container">
+        <div class="section_heading text-center">
+            <h2 class="section_heading_text">Discover Your Path to Wellness</h2>
+            <p class="section_heading_description ">
+                Find the <b>support</b> that <b>fits</b> you best.
+            </p>
+        </div>
+        
+        <div class="row justify-content-center ">
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="service_item"
+                    style="display: flex;justify-content:center;align-items:center;flex-direction:column; ">
+                    <div class="item_icon">
+                        <img src="{{asset('assets/images/gallery/2.png')}}" alt="Brain Icon - HelpMeBalance" />
+                    </div>
+                    <div class="item_contact"
+                        style="display: flex;justify-content:center;align-items:center;flex-direction:column; ">
+                        <h3 class="item_title">Depression Therapy</h3>
+                        <p style="text-align:center;">
+                            <b>Personalized therapy</b> for overcoming depression.
+                        </p>
+                        <a class="btn-link" href="{{ path('app_rendez_vous_new') }}">
+                            <span class="btn_text">Start Your <b>Healing</b> Journey</span>
+                            <span class="btn_icon"><i class="fa-solid fa-arrow-up-right"></i></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="service_item"
+                    style="display: flex;justify-content:center;align-items:center;flex-direction:column; ">
+                    <div class="item_icon">
+                        <img src="{{asset('assets/images/gallery/3.png')}}" alt="Head Double Icon - HelpMeBalance" />
+                    </div>
+                    <div class="item_contact"
+                        style="display: flex;justify-content:center;align-items:center;flex-direction:column; ">
+                        <h3 class="item_title">Couple Therapy</h3>
+                        <p style="text-align:center;">
+                            <b>Strengthen bonds</b> with our couple therapy.
+                        </p>
+                        <a class="btn-link" href="{{ path('app_rendez_vous_new') }}">
+                            <span class="btn_text">Rekindle Your <b>Connection</b></span>
+                            <span class="btn_icon"><i class="fa-solid fa-arrow-up-right"></i></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="service_item"
+                    style="display: flex;justify-content:center;align-items:center;flex-direction:column; ">
+                    <div class="item_icon">
+                        <img src="{{asset('assets/images/gallery/5.png')}}" alt="Brain Icon - HelpMeBalance" />
+                    </div>
+                    <div class="item_contact"
+                        style="display: flex;justify-content:center;align-items:center;flex-direction:column; ">
+                        <h3 class="item_title">Child Therapy</h3>
+                        <p style="text-align:center;">
+                            Tailored therapy to nurture <b>young minds</b>.
+                        </p>
+                        <a class="btn-link" href="{{ path('app_rendez_vous_new') }}">
+                            <span class="btn_text">Support Your <b>Child</b>'s Growth</span>
+                            <span class="btn_icon"><i class="fa-solid fa-arrow-up-right"></i></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="btn_wrap pb-2 text-center">
+            <a class="btn btn-primary" href="{{ path('app_serviceClient') }}">
+                <span class="btn_text" data-text="All Services">
+                    All Services
+                </span>
+                <span class="btn_icon">
+                    <i class="fa-solid fa-arrow-up-right"></i>
+                </span>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
 {% endblock %}

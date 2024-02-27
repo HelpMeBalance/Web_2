@@ -1,27 +1,77 @@
-<div class="flex justify-center items-center h-screen bg-blue-200">
-    <div class="w-full max-w-md bg-gray-200 p-4 rounded-md">
-        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-            <div >
-                <p class="block text-gray-700 text-sm font-bold mb-2">Date Rendez Vous</p>
-                {{ form_widget(form.dateR, {'attr': {'class': 'form-control'}}) }}
-            </div>
+<section class="consultation_section">
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+    <div class="container">
+        <div class="consultation_form bg_primary_light decoration_wrapper">
+          <div class="section_heading text-center">
+            <h2 class="section_heading_text mb-0">
+              <span class="d-md-block">Get your first free</span> online
+              consultation
+            </h2>
+          </div>
+          <div class="row justify-content-center">
+            <div class="col-lg-4"></div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="col-lg-7">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="input_name">Pshychiatre</label>
+                    {{ form_widget(form.user, {'attr': {'class': 'form-control'}}) }}
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="input_phone">Phone</label>
+                    <input
+                      id="input_phone"
+                      class="form-control"
+                      type="tel"
+                      name="phone"
+                      placeholder="Mobile phone number"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="select_therapy">Section</label>
 
-            <div >
-                <p class="block text-gray-700 text-sm font-bold mb-2">Pshychiatre</p>
-                {{ form_widget(form.user, {'attr': {'class': 'form-control'}}) }}
-            </div>
-
-            <div>
-                <p class="block text-gray-700 text-sm font-bold mb-2">Nom service</p>
-                {{ form_widget(form.nomService, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.nomService, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
-            </div>
-
-            <div class="form-button mt-4 d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary btn-lg px-4 py-2">
+                    {{ form_widget(form.nomService, {'attr': {'class': 'form-select'}}) }}
+                    {{ form_errors(form.nomService, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="input_calendar">Phone</label>
+                     {{ form_widget(form.dateR, {'attr': {'class': 'form-control'}}) }}
+                  </div>
+                </div>
+              </div>
+              <div class="btn_wrap pb-0 text-center">
+                <button type="submit" class="btn btn-primary">
+                  <span class="btn_text" data-text="Get A Consultation">
                     {{ button_label|default('Save') }}
+                  </span>
+                  <span class="btn_icon">
+                    <i class="fa-solid fa-arrow-up-right"></i>
+                  </span>
                 </button>
+              </div>
             </div>
+          </div>
+          <div class="decoration_item shape_leaf_1">
+            <img
+              src="assets/images/shapes/shape_leaf_right_top.svg"
+              alt="Shape Leaf - Talking Minds - Psychotherapist Site Template"
+            />
+          </div>
+          <div class="decoration_item shape_leaf_2">
+            <img
+              src="assets/images/shapes/shape_leaf_left_bottom.svg"
+              alt="Shape Leaf - Talking Minds - Psychotherapist Site Template"
+            />
+          </div>
+        </div>
+      </div>
         {{ form_end(form) }}
-    </div>
-</div>
+    </section>

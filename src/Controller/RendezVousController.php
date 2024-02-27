@@ -48,6 +48,7 @@ class RendezVousController extends AbstractController
         $errordate = "";
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
             $rendezVou->setStatut(false);
             $entityManager->persist($rendezVou);
             $entityManager->flush();
