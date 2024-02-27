@@ -10,7 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-
+use Symfony\Component\Validator\Constraints\Regex;
 class EditProfileType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -19,32 +19,40 @@ class EditProfileType extends AbstractType
             ->add('lastname', TextType::class,[
                 'attr' => [
                     'class' => 'p-2 rounded-md w-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent'],
-                'mapped' => false,
+                // 'mapped' => false,
                 'constraints' => [
                         new NotBlank([
-                            'message' => 'Please enter a lastname',
+                            'message' => 'Please enter a last name.',
                         ]),
                         new Length([
-                            'minMessage' => 'Your lastname should be at least {{ limit }} characters',
-                            'maxMessage' => 'Your lastname should be no more than {{ limit }} characters',
+                            'minMessage' => 'Your last name should be at least {{ limit }} characters.',
+                            'maxMessage' => 'Your last name should be no more than {{ limit }} characters.',
                             'min' => 2,
                             'max' => 50,
+                        ]),
+                        new Regex([
+                            'pattern' => '/^[a-zA-Z]+$/',
+                            'message' => 'Your last name should contain only alphabets.',
                         ]),
                     ],
             ])
             ->add('firstname', TextType::class,[
-                'mapped' => false,
+                // 'mapped' => false,
                 'attr' => [
                     'class' => 'p-2 rounded-md w-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent'],
                 'constraints' => [
                         new NotBlank([
-                            'message' => 'Please enter a firstname',
+                            'message' => 'Please enter a first name.',
                         ]),
                         new Length([
-                            'minMessage' => 'Your firstname should be at least {{ limit }} characters',
-                            'maxMessage' => 'Your firstname should be no more than {{ limit }} characters',
+                            'minMessage' => 'Your first name should be at least {{ limit }} characters.',
+                            'maxMessage' => 'Your first name should be no more than {{ limit }} characters.',
                             'min' => 2,
                             'max' => 50,
+                        ]),
+                        new Regex([
+                            'pattern' => '/^[a-zA-Z]+$/',
+                            'message' => 'Your first name should contain only alphabets.',
                         ]),
                     ],
             ])

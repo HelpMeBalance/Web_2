@@ -26,20 +26,40 @@ class RegistrationFormType extends AbstractType
                     'class' => 'form-control'
                 ],
                 'constraints' => [
-                    new NotBlank(
-                        ['message' => 'Please enter your first name.']
-                    ),
-                ]
+                    new NotBlank([
+                        'message' => 'Please enter a first name.',
+                    ]),
+                    new Length([
+                        'minMessage' => 'Your first name should be at least {{ limit }} characters.',
+                        'maxMessage' => 'Your first name should be no more than {{ limit }} characters.',
+                        'min' => 2,
+                        'max' => 50,
+                    ]),
+                    new Regex([
+                        'pattern' => '/^[a-zA-Z]+$/',
+                        'message' => 'Your first name should contain only alphabets.',
+                    ]),
+                ],
             ])
             ->add('lastName', TextType::class, [
                 'attr' => [
                     'class' => 'form-control'
                 ],
                 'constraints' => [
-                    new NotBlank(
-                        ['message' => 'Please enter your last name.']
-                    ),
-                ]
+                    new NotBlank([
+                        'message' => 'Please enter a last name.',
+                    ]),
+                    new Length([
+                        'minMessage' => 'Your last name should be at least {{ limit }} characters.',
+                        'maxMessage' => 'Your last name should be no more than {{ limit }} characters.',
+                        'min' => 2,
+                        'max' => 50,
+                    ]),
+                    new Regex([
+                        'pattern' => '/^[a-zA-Z]+$/',
+                        'message' => 'Your last name should contain only alphabets.',
+                    ]),
+                ],
             ])
             ->add('email', EmailType::class, [
                 'attr' => [

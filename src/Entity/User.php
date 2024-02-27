@@ -40,11 +40,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $commentaires;
 
     #[ORM\Column(length: 100)]
-    #[Assert\NotBlank(message: 'Please enter your first name.')]
+    // #[Assert\NotBlank(message: 'Please enter your first name.')]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 100)]
-    #[Assert\NotBlank(message: 'Please enter your last name.')]
+    // #[Assert\NotBlank(message: 'Please enter your last name.')]
     private ?string $lastname = null;
 
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
@@ -250,7 +250,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->firstname;
     }
 
-    public function setFirstname(string $firstname): static
+    public function setFirstname(string $firstname= null): static
     {
         $this->firstname = $firstname;
 
@@ -262,7 +262,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->lastname;
     }
 
-    public function setLastname(string $lastname): static
+    public function setLastname(string $lastname= null): static
     {
         $this->lastname = $lastname;
 
