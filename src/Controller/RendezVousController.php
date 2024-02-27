@@ -3,22 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Consultation;
-use App\Entity\Question;
 use App\Entity\RendezVous;
-use App\Entity\Reponse;
-use App\Form\ConsultationType;
 use App\Form\RendezVousType;
 use App\Repository\ConsultationRepository;
 use App\Repository\RendezVousRepository;
-use App\Repository\QuestionRepository;
-use App\Repository\ReponseRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/rendez/vous')]
 class RendezVousController extends AbstractController
@@ -49,6 +43,7 @@ class RendezVousController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $rendezVou->setStatut(false);
+            $rendezVou->setPatient($rendezVou->getUser());
             $entityManager->persist($rendezVou);
             $entityManager->flush();
             // Check if the selected date is before today
@@ -130,11 +125,9 @@ class RendezVousController extends AbstractController
     }
 
     #[Route('/{id}/edit/status', name: 'app_rendez_vous_edit_status')]
-    public function editS(Request $request, RendezVous $rendezVou, EntityManagerInterface $entityManager): Response
+    public function editS(Request $request, RendezVousRepository $RVrep, EntityManagerInterface $entityManager, $id): Response
     {
-        $form = $this->createForm(RendezVousType::class, $rendezVou);
-        $form->handleRequest($request);
-
+        $rendezVou = $RVrep->find($id);
         $rendezVou->setStatut(true);
         $entityManager->persist($rendezVou);
         $entityManager->flush();
@@ -146,10 +139,10 @@ class RendezVousController extends AbstractController
         $consultation->setDuree(new \DateTime());
         $consultation->setNote('');
         $consultation->setRecommandationSuivi(false);
+
         $entityManager->persist($consultation);
-
         $entityManager->flush();
-        return $this->redirectToRoute('app_rendez_vous_confirm', ['psyid'=>$rendezVou->getUser()->getId()]);
 
+        return $this->redirectToRoute('app_rendez_vous_confirm', ['psyid'=>$rendezVou->getUser()->getId()]);
     }
 }

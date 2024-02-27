@@ -10,7 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\Time;
 
 #[Route('/consultation')]
 class ConsultationController extends AbstractController
@@ -45,10 +44,10 @@ class ConsultationController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_consultation_show', methods: ['GET'])]
-    public function show(Consultation $consultation): Response
+    public function show(ConsultationRepository $Crep, $id): Response
     {
         return $this->render('consultation/show.html.twig', [
-            'consultation' => $consultation,            'title' => 'consultation',
+            'consultation' => $Crep->find($id),            'title' => 'consultation',
             'titlepage' => 'consultation',
             'controller_name' => 'ConsultationController',
             'service' => 1,
@@ -57,8 +56,9 @@ class ConsultationController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_consultation_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Consultation $consultation, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, ConsultationRepository $Crep, EntityManagerInterface $entityManager, $id): Response
     {
+        $consultation = $Crep->find($id);
         $form = $this->createForm(ConsultationType::class, $consultation);
         $form->handleRequest($request);
 
