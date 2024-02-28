@@ -59,6 +59,14 @@
           <i class="fa-regular fa-comments  fa-lg"></i>
           <span class="ml-2"  x-show="menu">Blog</span>
         </a>
+        <a href="{{ path('admin_article_index') }}" class="inline-flex items-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg px-2 {% if currentRoute == 'app_blogAdmin' %}bg-blue-600 text-white{% else %}bg-gray-800 text-gray-500{% endif %}">
+          <i class="fa-solid fa-shop"></i>
+          <span class="ml-2"  x-show="menu">Articles</span>
+        </a>
+        <a href="{{ path('admin_categorie_produit_index') }}" class="inline-flex items-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg px-2 {% if currentRoute == 'app_blogAdmin' %}bg-blue-600 text-white{% else %}bg-gray-800 text-gray-500{% endif %}">
+          <i class="fa-solid fa-shop"></i>
+          <span class="ml-2"  x-show="menu">Categorie</span>
+        </a>
       </nav>
       <div class="flex justify-end">
         <a class="inline-flex p-3 hover:text-gray-400 justify-center border-gray-700 h-15 w-full border-t hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 px-2">
