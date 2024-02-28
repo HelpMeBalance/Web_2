@@ -74,12 +74,23 @@ class AdminArticleController extends AbstractController
     public function edit(int $id, ArticleRepository $articleRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
         $article = $articleRepository->find($id);
-        $form = $this->createForm(ArticleType::class, $article);
+        $formUpdate = $this->createForm(ArticleType::class, $article);
+        $formUpdate->handleRequest($request);
+
+        if ($formUpdate->isSubmitted() && $formUpdate->isValid()) {
+            $entityManager->flush();
+            return $this->redirectToRoute('admin_article_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        $articleAdd = new Article();
+        $form = $this->createForm(ArticleType::class, $articleAdd);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($articleAdd);
             $entityManager->flush();
-            return $this->redirectToRoute('index', [], Response::HTTP_SEE_OTHER);
+
+            return $this->redirectToRoute('admin_article_index', [], Response::HTTP_SEE_OTHER);
         }
 
         $articles = $articleRepository->findAll();
@@ -87,6 +98,7 @@ class AdminArticleController extends AbstractController
         return $this->render('admin/article/index.html.twig', [
             'article' => $article,
             'articles' => $articles,
+            'formUpdate' => $formUpdate->createView(),
             'form' => $form->createView(),
         ]);
     }

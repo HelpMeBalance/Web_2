@@ -70,20 +70,34 @@ class AdminCategorieController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'admin_categorie_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, CategorieProduit $categorieProduit, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, CategorieProduitRepository $CPrep, EntityManagerInterface $entityManager, $id): Response
     {
-        $form = $this->createForm(CategorieProduitType::class, $categorieProduit);
+        $categorieProduit = $CPrep->find($id);
+        $formUpdate = $this->createForm(CategorieProduitType::class, $categorieProduit);
+        $formUpdate->handleRequest($request);
+
+        if ($formUpdate->isSubmitted() && $formUpdate->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('admin_categorie_produit_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        $categorieProduitAdd = new CategorieProduit();
+        $form = $this->createForm(CategorieProduitType::class, $categorieProduitAdd);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($categorieProduitAdd);
             $entityManager->flush();
 
             return $this->redirectToRoute('admin_categorie_produit_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('admin/categorie/index.html.twig', [
-            'categorie_produit' => $categorieProduit,
-            'form' => $form,
+            'categorie' => $categorieProduit,
+            'formUpdate' => $formUpdate->createView(),
+            'form' => $form->createView(),
+            "categories" => $CPrep->findAll(),
         ]);
     }
 
