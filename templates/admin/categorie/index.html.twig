@@ -7,6 +7,30 @@
     <div class="mb-4">
         <h1 class="text-xl font-semibold">Categorie Management</h1>
     </div>
+
+    {% if categorie is defined %}
+
+    <div id="editModal{{ categorie.id }}" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+    <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="flex justify-between items-center mb-4">
+            <h4 class="text-lg font-bold">Edit categorie</h4>
+            <span class="close cursor-pointer" onclick="closeModal('editModal{{ categorie.id }}')">&times;</span>
+        </div>
+        {% if formUpdate is defined %}
+            {{ form_start(formUpdate) }}
+                {{ form_row(formUpdate.nom, {
+                    'label': 'Name:',
+                    'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'}
+                }) }}
+                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Save
+                </button>
+            {{ form_end(formUpdate) }}
+        {% endif %}
+    </div>
+    </div>
+
+    {% endif %}
     <div class="bg-white shadow-md rounded-lg">
       {{ include('categorie_produit/_form.html.twig') }}
         <table class="min-w-full leading-normal">
@@ -46,10 +70,12 @@
                         </g>
                         </svg>                      
                     </button>
-                      <button class="text-blue-600 hover:text-blue-900" onclick="openModal('editModal{{ categorie.id }}')">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                        </svg>
+                 <button class="text-blue-600 hover:text-blue-900">
+                        <a href="{{ path('admin_categorie_edit', {'id': categorie.id}) }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                            </svg>
+                        </a>
                       </button>
                       <button class="text-red-600 hover:text-red-900" onclick="openModal('deleteModal{{ categorie.id }}')">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -75,35 +101,20 @@
                 </div>
 
                 {# Edit Modal - Simplified for demonstration #}
-                <div id="editModal{{ categorie.id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onclick="closeModal('viewModal{{ categorie.id }}')">
+                 <div id="editModal{{ categorie.id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onclick="closeModal('viewModal{{ categorie.id }}')">
                     <!-- Modal content -->
                         <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white" onclick="event.stopPropagation()">
                             <div class="flex justify-between items-center mb-4">
                                 <h4 class="text-lg font-bold">Edit categorie</h4>
                                 <span class="close cursor-pointer" onclick="closeModal('editModal{{ categorie.id }}')">&times;</span>
                             </div>
-                            <form action="{{ path('admin_categorie_edit', {'id': categorie.id}) }}" method="post" class="space-y-4">
-                                <div>
-                                    <label for="nom" class="block text-sm font-medium text-gray-700">Nom categorie</label>
-                                    <input type="text" id="nom" name="nom" value="{{ categorie.nom }}" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                </div>
-                               
-                               
-                                <div>
-                                    {# <label for="categorie" class="block text-sm font-medium text-gray-700">Categorie categorie:</label>
-                                    <select id="categorie" name="categories[]" multiple class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                                        {% for categorie in categories %}
-                                            <option value="{{ categorie }}">{{ categorie }}</option>
-                                        {% endfor %}
-                                    </select> #}
-                                </div>
-                                <div class="flex justify-end">
-                                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                        Save Changes
-                                    </button>
-                                </div>
-                            </form>
-
+                                {% if formUpdate is defined %}
+                                    {{ form_start(formUpdate) }}
+                                        <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                            Save
+                                        </button>
+                                    {{ form_end(formUpdate) }}
+                                {% endif %}
                         </div>
                     </div>
 
