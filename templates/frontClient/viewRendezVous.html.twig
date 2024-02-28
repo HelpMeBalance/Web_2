@@ -4,9 +4,9 @@
 <section class="testimonial_section section_space_lg">
   <div class="container">
     <div class="section_heading text-center">
-      <h2 class="section_heading_text">Celebrating Our Patients' Journeys</h2>
+      <h2 class="section_heading_text">Appointment Managment</h2>
       <p class="section_heading_description mb-0">
-        Hear from our <b>community</b> and be inspired by their <b>resilience</b> and <b>courage</b>.
+        {{rendezvous[0].patient.firstname}} {{rendezvous[0].patient.lastname}}
       </p>
     </div>
     <div class="testimonial_carousel">
@@ -35,7 +35,6 @@
           </div>
         </div>
         {% endfor %}
-
       </div>
     </div>
   </div>
