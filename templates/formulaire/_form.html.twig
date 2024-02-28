@@ -2,11 +2,13 @@
 
 <div class="mb-4">
     <p class="block text-gray-700 text-sm font-bold mb-2">Reponse</p>
+
     {{ form_widget(form.Reponse, {'attr': {'class': 'form-control px-4'}}) }}
-{# {{ form_errors(form.reponse, {'attr': {'class': 'text-red-200 bg-red-400'}}) }} #}
+    {{ form_errors(form.Reponse, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
 </div>
 
 <button type="submit" class="btn btn-primary btn-lg px-4 py-2">
-    {{ button_label|default('Save') }}
+    <i class="fa-solid fa-check"></i>
+
 </button>
 {{ form_end(form) }}
