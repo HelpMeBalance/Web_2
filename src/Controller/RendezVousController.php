@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Consultation;
 use App\Entity\RendezVous;
+use App\Form\RendezVousAdminType;
 use App\Form\RendezVousType;
 use App\Repository\ConsultationRepository;
 use App\Repository\RendezVousRepository;
@@ -82,8 +83,9 @@ class RendezVousController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_rendez_vous_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, RendezVous $rendezVou, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, RendezVousRepository $RVrep, EntityManagerInterface $entityManager, $id): Response
     {
+        $rendezVou = $RVrep->find($id);
         $form = $this->createForm(RendezVousType::class, $rendezVou);
         $form->handleRequest($request);
 
@@ -100,12 +102,10 @@ class RendezVousController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_rendez_vous_delete', methods: ['POST'])]
-    public function delete(Request $request, RendezVous $rendezVou, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, RendezVousRepository $rendezVou, EntityManagerInterface $entityManager, $id): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $rendezVou->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($rendezVou);
+            $entityManager->remove($rendezVou->find($id));
             $entityManager->flush();
-        }
 
         return $this->redirectToRoute('app_rendez_vous_index', [], Response::HTTP_SEE_OTHER);
     }
@@ -146,4 +146,34 @@ class RendezVousController extends AbstractController
 
         return $this->redirectToRoute('app_rendez_vous_confirm', ['psyid'=>$rendezVou->getUser()->getId()]);
     }
+
+    #[Route('/admin/rendez/vous', name: 'app_rendezvousAdmin')]
+    public function indexAdmin(RendezVousRepository $RVrep, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        return $this->render('admin/rendezvous/index.html.twig', [
+            "rendezvouses" => $RVrep->findall(),  
+            
+        ]);
+    }
+
+    #[Route('/admin/{id}/edit', name: 'app_rendez_vous_edit_admin', methods: ['GET', 'POST'])]
+    public function editAdmin(Request $request, RendezVousRepository $RVrep, EntityManagerInterface $entityManager, $id): Response
+    {
+        $rendezVou = $RVrep->find($id);
+        $form = $this->createForm(RendezVousAdminType::class, $rendezVou);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_rendezvousAdmin', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('admin/rendezvous/index.html.twig', [
+            'rendezVou' => $rendezVou,
+            'form' => $form->createView(),
+            "rendezvouses" => $RVrep->findall(), 
+        ]);
+    }
+
 }
