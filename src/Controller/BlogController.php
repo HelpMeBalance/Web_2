@@ -43,22 +43,23 @@ class BlogController extends AbstractController
         ]);
     }
     #[Route('/admin/blog', name: 'app_blogAdmin')]
-    public function indexAdmin(Request $request, PublicationRepository $publicationRepository,CommentaireRepository $commentaireRepository,SousCategorieRepository $sousCategorieRepository,CategorieRepository $categorieRepository): Response
+    public function indexAdmin(Request $request, PublicationRepository $publicationRepository,CommentaireRepository $commentaireRepository): Response
     {
         $publications = $publicationRepository->findAllsorted();
         return $this->render('admin/blog/index.html.twig', [
             'controller_name' => 'BlogController',
-            // 'service' => 1,
-            // 'part' => 5,
-            // 'title' => 'Brave Chats',
-            // 'titlepage' => 'Blog - ',
             'publications' => $publications,
-            // 'totalPages' => $totalPages,
-            // 'curentPage'=>$page,
              'commentaireRepository'=>$commentaireRepository,
-            // 'souscategories'=> $sousCategorieRepository->findAll(),
-            // 'categories'=> $categorieRepository->findAll(),
-            // 'reccpublications' => $publicationRepository->findAllsortedValide(),
+        ]);
+    }
+    #[Route('/admin/{idp}/coms', name: 'app_blogAdminCom')]
+    public function indexAdmincoms(Request $request, PublicationRepository $publicationRepository,int $idp): Response
+    {
+        $publication = $publicationRepository->find($idp);
+        return $this->render('admin/blog/coms.html.twig', [
+            'controller_name' => 'BlogController',
+            'coms' => $publication->getCommentaires(),
+            'titre'=>$publication->gettitre(),
         ]);
     }
     #[Route('/blogSousCat/{souscat}/{page}', name: 'app_blogSousCatClient')]

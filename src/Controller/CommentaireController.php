@@ -30,6 +30,31 @@ class CommentaireController extends AbstractController
             'commentaires' => $commentaireRepository->findAll(),
         ]);
     }*/
+    #[Route('/{idc}/validationcom', name: 'app_com_validate', methods: ['GET', 'POST'])]
+    public function validate(Request $request,int $idc, EntityManagerInterface $entityManager,CommentaireRepository $commentaireRepository): Response
+    {
+        $commentaire = new Commentaire();
+        $commentaire = $commentaireRepository->find($idc);
+        $commentaire->setValide(!($commentaire->isValide()));
+        $entityManager->flush();
+        return $this->render('admin/blog/coms.html.twig', [
+            'controller_name' => 'BlogController',
+            'coms' => $commentaire->getpublication()->getCommentaires(),
+            'titre'=>$commentaire->getpublication()->gettitre(),
+        ]);
+    }
+   
+    #[Route('/com/{id}', name: 'admin_com_delete',  methods: ['POST'])]
+    public function deleteadmin(Request $request, int $id, EntityManagerInterface $entityManager,CommentaireRepository $commentaireRepository): Response
+    { $idp=$commentaireRepository->find($id)->getpublication()->getid();
+        if ($this->isCsrfTokenValid('delete'.$id, $request->request->get('_token'))) {
+            $entityManager->remove($commentaireRepository->find($id));
+            $entityManager->flush();
+        }
+        if($entityManager->getRepository(Publication::class)->find($idp)->getcommentaires()->isEmpty())
+        return $this->redirectToRoute('app_blogAdmin');
+        else return $this->redirectToRoute('app_blogAdminCom', ['idp'=>$idp], Response::HTTP_SEE_OTHER);
+    }
     #[Route('/{idPublication}/new', name: 'app_commentaire_new', methods: ['GET', 'POST'])]
     public function new(int $idPublication,Request $request, EntityManagerInterface $entityManager,CommentaireRepository $commentaireRepository): Response
     {

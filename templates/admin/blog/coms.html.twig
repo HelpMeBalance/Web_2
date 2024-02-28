@@ -4,53 +4,38 @@
 
 {% block content %}
 <div class="container mx-auto px-4 py-8">
-    <div class="mb-4">
-        <h1 class="text-xl font-semibold">Blog Management</h1>
+    <div class="flex justify-center items-center mb-4">
+        <h1 class="text-xl font-semibold"><a class="text-sky-700" href="{{ path('app_blogAdmin') }}" ><i class="fa-solid fa-arrow-left-long"></i></a> {{titre}}</h1>
     </div>
     <div class="bg-white shadow-md rounded-lg">
         <table class="min-w-full leading-normal">
             <thead>
                 <tr>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Title</th>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Content</th>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Posted By</th>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">State</th>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Views</th>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Comments</th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Created At</th>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Updated At</th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 "></th>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100"></th>
                 </tr>
             </thead>
             <tbody>
-                {% for publication in publications %}
+                {% for com in coms %}
                 <tr>
-                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{publication.titre}}</td>
-                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ publication.contenu|slice(0, 30) ~ (publication.contenu|length > 30 ? '...' : '') }}</td>
-                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{publication.user.lastname|capitalize}} {{publication.user.firstname|capitalize}}</td>
-                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{publication.valide ? 'Approved' : 'Under Review' }}</td>
-                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{publication.vues}}</td>
-                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm ">
-                       
-                        {% set commentCount = commentaireRepository.findAllUnderPublication(publication)|length %}
-                        {% if publication.comOuvert %}
-                            {% if commentCount > 0 %}
-                                <a class="text-sky-700"href="{{ path('app_blogAdminCom', {'idp': publication.id}) }}"> <i class="fas fa-comment fa-flip-horizontal fa-lg"></i> {{ commentCount }}</a>
-                            {% else %}
-                            <i class="fa-duotone fa-empty-set fa-lg"></i> Comments
-                            {% endif %}
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{com.contenu}}</td>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{com.user.lastname|capitalize}} {{com.user.firstname|capitalize}}</td>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{com.valide ? 'Approved' : 'Under Review' }}</td>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ com.dateC|date('j F Y H:i:s') }}</td>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ com.dateM|date('j F Y H:i:s') }}</td>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"> {% if(com.valide) %}
+                        <a class="text-lg font-bold" href="{{ path('app_com_validate', {'idc': com.id}) }}"><strong> Unvalidate </strong>  </a>
                         {% else %}
-                        {% if commentCount > 0 %}
-                        <a class="text-sky-700" href="{{ path('app_blogAdminCom', {'idp': publication.id}) }}"> <i class="fas fa-lock fa-lg"></i> {{ commentCount }}</a>
-                    {% else %}
-                    <i class="fas fa-lock fa-lg"></i> Comments
-                    {% endif %}
-                           
-                        {% endif %}
-    
-                    </td>
-                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ publication.dateM|date('j F Y H:i:s') }}</td>
+                        <a class="text-lg font-bold" href="{{ path('app_com_validate', {'idc': com.id}) }}"><strong> Validate </strong> </a>
+                        {% endif %}</td>
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
-                      <button class="text-blue-600 hover:text-blue-900" onclick="openModal('viewModal{{ publication.id }}')">
+                       
+                      {# <button class="text-blue-600 hover:text-blue-900" onclick="openModal('viewModal{{ com.id }}')">
                         <svg version="1.1" class="h-6 w-6" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 442.04 442.04"
                         	 xml:space="preserve">
                         <g>
@@ -74,13 +59,13 @@
                         	</g>
                         </g>
                         </svg>                      
-                    </button>
-                      <button class="text-blue-600 hover:text-blue-900" onclick="openModal('editModal{{ publication.id }}')">
+                    </button> #}
+                      {# <button class="text-blue-600 hover:text-blue-900" onclick="openModal('editModal{{ com.id }}')">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                         </svg>
-                      </button>
-                      <button class="text-red-600 hover:text-red-900" onclick="openModal('deleteModal{{ publication.id }}')">
+                      </button> #}
+                      <button class="text-red-600 hover:text-red-900" onclick="openModal('deleteModal{{ com.id }}')">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
@@ -88,9 +73,9 @@
                     </td>
                 </tr>
 
-                {# Modals for each publication #}
+                {# Modals for each com #}
                 {# View Modal #}
-                <div id="viewModal{{ publication.id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onclick="closeModal('viewModal{{ publication.id }}')">
+                {# <div id="viewModal{{ com.id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onclick="closeModal('viewModal{{ com.id }}')">
                     <!-- Modal content -->
                     <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
                         <div class="mb-2">
@@ -99,30 +84,30 @@
                                 <h4 class="text-lg font-bold">Publication Details</h4>
                             </div>
                             <!-- Position the close button absolutely to the top-right corner of the modal -->
-                            <span class="close cursor-pointer absolute top-0 right-0 p-4" onclick="closeModal('viewModal{{ publication.id }}')">&times;</span>
+                            <span class="close cursor-pointer absolute top-0 right-0 p-4" onclick="closeModal('viewModal{{ com.id }}')">&times;</span>
                         </div>
                         <div class="flex justify-center mb-2">
                             <img
-                            src="{{ asset(publication.image) }}"
+                            src="{{ asset(com.image) }}"
                             alt="HelpMeBalance" width="200" height="200"
                             />
                         </div>
-                        <p class="mb-2"><b>Categorie : </b> {{ publication.categorie.nom }}</p>
-                        <p class="mb-2"><b>Sub-Categorie : </b>{{ publication.souscategorie.nom}}</p>
-                        <p class="mb-2"><b>Title : </b> {{ publication.titre }}</p>
-                        <p class="mb-2"><b>Content :</b> <br> {{ publication.contenu|nl2br}}</p>
-                        {% if (publication.anonyme) %}
+                        <p class="mb-2"><b>Categorie : </b> {{ com.categorie.nom }}</p>
+                        <p class="mb-2"><b>Sub-Categorie : </b>{{ com.souscategorie.nom}}</p>
+                        <p class="mb-2"><b>Title : </b> {{ com.titre }}</p>
+                        <p class="mb-2"><b>Content :</b> <br> {{ com.contenu|nl2br}}</p>
+                        {% if (com.anonyme) %}
                         <p class="mb-2"> Posted as <b>Anonyme</b></p>
                         {% endif %}
                         <div class="flex justify-between">
                             <p class="border-r ">
-                                {{ publication.dateC|date('j F Y ') }} <i class="fa-regular fa-calendar-days"></i> 
+                                {{ com.dateC|date('j F Y ') }} <i class="fa-regular fa-calendar-days"></i> 
                             </p>
                             <p class="border-r ">
-                                {% set commentCount = commentaireRepository.findAllUnderPublication(publication)|length %}
-                        {% if publication.comOuvert %}
+                                {% set commentCount = commentaireRepository.findAllUnderPublication(com)|length %}
+                        {% if com.comOuvert %}
                             {% if commentCount > 0 %}
-                                <a class="text-sky-700" href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}"> {{ commentCount }} <i class="far fa-comment"></i> </a>
+                                <a href="{{ path('app_blogDetails', {'id': com.id,'showmore':0}) }}"> {{ commentCount }} <i class="far fa-comment"></i> </a>
                             {% else %}
                              Comments <i class="fa-duotone fa-empty-set fa-lg"></i>
                             {% endif %}
@@ -131,19 +116,19 @@
                         {% endif %}
                             </p>
                             <p >
-                                 {{ publication.vues }} <i class="fa-solid fa-eye"></i>
+                                 {{ com.vues }} <i class="fa-solid fa-eye"></i>
                             </p>
                         </div>
                         <div class="flex justify-center items-center">
-                            {% if(publication.valide) %}
-                            <a class="text-lg font-bold" href="{{ path('app_publication_validate', {'idp': publication.id}) }}"><strong>Invalidate</strong></a>
+                            {% if(com.valide) %}
+                            <a class="text-lg font-bold" href="{{ path('app_com_validate', {'idp': com.id}) }}"><strong>Invalidate</strong></a>
                             {% else %}
-                            <a class="text-lg font-bold" href="{{ path('app_publication_validate', {'idp': publication.id}) }}"><strong> Validate </strong></a>
+                            <a class="text-lg font-bold" href="{{ path('app_com_validate', {'idp': com.id}) }}"><strong> Validate </strong></a>
                             {% endif %}
                         </div>
                         
                     </div>
-                </div>
+                </div> #}
 
                 {# Edit Modal - Simplified for demonstration #}
                 {# <div id="editModal{{ user.id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onclick="closeModal('viewModal{{ user.id }}')">
@@ -180,15 +165,15 @@
                     </div> #}
 
                 {# Delete Modal #}
-                    <div id="deleteModal{{ publication.id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto justify-center items-center h-full w-full" onclick="closeModal('deleteModal{{ publication.id }}')">
+                    <div id="deleteModal{{ com.id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto justify-center items-center h-full w-full" onclick="closeModal('deleteModal{{ com.id }}')">
                         <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white" onclick="event.stopPropagation()">
                             <div class="flex justify-between items-center mb-4">
                                 <h4 class="text-lg font-bold">Confirm Deletion</h4>
-                                <span class="close cursor-pointer" onclick="closeModal('deleteModal{{ publication.id }}')">&times;</span>
+                                <span class="close cursor-pointer" onclick="closeModal('deleteModal{{ com.id }}')">&times;</span>
                             </div>
-                            <p class="mb-4">Are you sure you want to delete {{ publication.titre }}?</p>
-                            <form action="{{ path('admin_publication_delete', {'id': publication.id}) }}" method="post">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ publication.id) }}">
+                            <p class="mb-4">Are you sure you want to delete this comment ?</p>
+                            <form action="{{ path('admin_com_delete', {'id': com.id}) }}" method="post">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ com.id) }}">
                                 <div class="flex justify-end">
                                     <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                                         Delete
