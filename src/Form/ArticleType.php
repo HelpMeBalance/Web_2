@@ -15,11 +15,12 @@ class ArticleType extends AbstractType
     {
         $builder
             ->add('prix')
+            ->add('quantite')
             ->add('nom')
             ->add('description')
             ->add('categorie', EntityType::class, [
                 'class' => CategorieProduit::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom',
             ]);
     }
 
