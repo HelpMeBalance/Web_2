@@ -24,7 +24,7 @@ class BlogController extends AbstractController
     public function index(Request $request, PublicationRepository $publicationRepository, int $page,CommentaireRepository $commentaireRepository,SousCategorieRepository $sousCategorieRepository,CategorieRepository $categorieRepository): Response
     {
         $itemsPerPage = 4; // Number of items per page
-        $totalItems = count($publicationRepository->findAll()); // Total number of items
+        $totalItems = count($publicationRepository->findAllsortedValide()); // Total number of items
         $totalPages = ceil($totalItems / $itemsPerPage); // Calculate the total number of pages
         $publications = $publicationRepository->findPaginated($page, $itemsPerPage);
         return $this->render('frontClient/blog.html.twig', [
@@ -39,7 +39,26 @@ class BlogController extends AbstractController
             'commentaireRepository'=>$commentaireRepository,
             'souscategories'=> $sousCategorieRepository->findAll(),
             'categories'=> $categorieRepository->findAll(),
-            'reccpublications' => $publicationRepository->findAllsorted(),
+            'reccpublications' => $publicationRepository->findAllsortedValide(),
+        ]);
+    }
+    #[Route('/admin/blog', name: 'app_blogAdmin')]
+    public function indexAdmin(Request $request, PublicationRepository $publicationRepository,CommentaireRepository $commentaireRepository,SousCategorieRepository $sousCategorieRepository,CategorieRepository $categorieRepository): Response
+    {
+        $publications = $publicationRepository->findAllsorted();
+        return $this->render('admin/blog/index.html.twig', [
+            'controller_name' => 'BlogController',
+            // 'service' => 1,
+            // 'part' => 5,
+            // 'title' => 'Brave Chats',
+            // 'titlepage' => 'Blog - ',
+            'publications' => $publications,
+            // 'totalPages' => $totalPages,
+            // 'curentPage'=>$page,
+             'commentaireRepository'=>$commentaireRepository,
+            // 'souscategories'=> $sousCategorieRepository->findAll(),
+            // 'categories'=> $categorieRepository->findAll(),
+            // 'reccpublications' => $publicationRepository->findAllsortedValide(),
         ]);
     }
     #[Route('/blogSousCat/{souscat}/{page}', name: 'app_blogSousCatClient')]
@@ -57,7 +76,7 @@ class BlogController extends AbstractController
             'title' =>$Souscat->getNom() ,
             'titlepage' => 'Blog - ',
             'publications' => $publications,
-            'reccpublications' => $publicationRepository->findAllsorted(),
+            'reccpublications' => $publicationRepository->findAllsortedValide(),
             'totalPages' => $totalPages,
             'curentPage'=>$page,
             'commentaireRepository'=>$commentaireRepository,
@@ -86,7 +105,7 @@ class BlogController extends AbstractController
             'commentaireRepository'=>$commentaireRepository,
             'souscategories'=> $sousCategorieRepository->findAll(),
             'categories'=> $categorieRepository->findAll(),
-            'reccpublications' => $publicationRepository->findAllsorted(),
+            'reccpublications' => $publicationRepository->findAllsortedValide(),
             'cat'=>$Cat,
         ]);
     }
@@ -103,7 +122,7 @@ class BlogController extends AbstractController
             'commentaireRepository'=>$commentaireRepository,
             'souscategories'=> $sousCategorieRepository->findAll(),
             'categories'=> $categorieRepository->findAll(),
-            'reccpublications' => $publicationRepository->findAllsorted(),
+            'reccpublications' => $publicationRepository->findAllsortedValide(),
             'cat'=>$categorieRepository->find($cat),
         ]);
     }
@@ -119,7 +138,7 @@ class BlogController extends AbstractController
             'commentaireRepository'=>$commentaireRepository,
             'souscategories'=> $sousCategorieRepository->findAll(),
             'categories'=> $categorieRepository->findAll(),
-            'reccpublications' => $publicationRepository->findAllsorted(),
+            'reccpublications' => $publicationRepository->findAllsortedValide(),
         ]);
     }
     #[Route('/blogDetails/{id}/{showmore}', name: 'app_blogDetails', methods: ['GET', 'POST'])]
@@ -151,7 +170,7 @@ class BlogController extends AbstractController
             'souscategoriesundercat'=>$publication->getCategorie()->getSousCategories(),
             'souscategories'=> $sousCategorieRepository->findAll(),
             'categories'=> $categorieRepository->findAll(),
-            'reccpublications' => $publicationRepository->findAllsorted(),
+            'reccpublications' => $publicationRepository->findAllsortedValide(),
             'cat'=>$Cat,
             'commentaireRepository'=>$commentaireRepository,
             'showmore'=>$showmore,
@@ -188,7 +207,7 @@ class BlogController extends AbstractController
             'souscategoriesundercat'=>$publication->getCategorie()->getSousCategories(),
             'souscategories'=> $sousCategorieRepository->findAll(),
             'categories'=> $categorieRepository->findAll(),
-            'reccpublications' => $publicationRepository->findAllsorted(),
+            'reccpublications' => $publicationRepository->findAllsortedValide(),
             'cat'=>$Cat,
             'commentaireRepository'=>$commentaireRepository,
             'showmore'=>$showmore,
@@ -219,7 +238,7 @@ class BlogController extends AbstractController
             'commentaireRepository'=>$commentaireRepository,
             'souscategories'=> $sousCategorieRepository->findAll(),
             'categories'=> $categorieRepository->findAll(),
-            'reccpublications' => $publicationRepository->findAllsorted(),
+            'reccpublications' => $publicationRepository->findAllsortedValide(),
             'publication' => $pub,
             'form' => $form->createView(),
             'cat'=>$categorieRepository->find($cat),
@@ -249,7 +268,7 @@ class BlogController extends AbstractController
             'commentaireRepository'=>$commentaireRepository,
             'souscategories'=> $sousCategorieRepository->findAll(),
             'categories'=> $categorieRepository->findAll(),
-            'reccpublications' => $publicationRepository->findAllsorted(),
+            'reccpublications' => $publicationRepository->findAllsortedValide(),
             'publication' => $pub,
             'form' => $form->createView(),
             'cat'=>$pub->getCategorie(),

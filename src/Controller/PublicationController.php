@@ -79,6 +79,15 @@ class PublicationController extends AbstractController
             'form' => $form,
         ]);
     }
+    #[Route('/{idp}/validation', name: 'app_publication_validate', methods: ['GET', 'POST'])]
+    public function validate(Request $request,int $idp, EntityManagerInterface $entityManager,PublicationRepository $publicationRepository): Response
+    {
+        $publication = new Publication();
+        $publication = $publicationRepository->find($idp);
+        $publication->setValide(!($publication->isValide()));
+        $entityManager->flush();
+        return $this->redirectToRoute('app_blogAdmin');
+    }
     #[Route('/{id}/like', name: 'app_publication_like', methods: ['GET', 'POST'])]
     public function like(Request $request, Publication $publication, EntityManagerInterface $entityManager): Response
     {
