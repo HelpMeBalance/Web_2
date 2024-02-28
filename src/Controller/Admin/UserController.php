@@ -43,39 +43,31 @@ class UserController extends AbstractController
 
     // Edit a user
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, $id): Response
-    {
+    public function edit(Request $request, $id): Response {
         $user = $this->entityManager->getRepository(User::class)->find($id);
-
+    
         if (!$user) {
             throw $this->createNotFoundException('No user found for id '.$id);
         }
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-        // Perform the persistence logic
-        $this->entityManager->flush();
-        $this->addFlash('success', 'User updated successfully.');
-        return $this->redirectToRoute('admin_user_index');
-        } else {
-            // Debugging
-            foreach ($form->getErrors(true, true) as $error) {
-                // Use logger or error_log
-                error_log($error->getMessage());
-            }
+    
+        $formUpdate = $this->createForm(UserType::class, $user);
+        $formUpdate->handleRequest($request);
+    
+        if ($formUpdate->isSubmitted() && $formUpdate->isValid()) {
+            $this->entityManager->flush();
+            $this->addFlash('success', 'User updated successfully.');
+            return $this->redirectToRoute('admin_user_index');
         }
+
         $users = $this->entityManager->getRepository(User::class)->findAll();
-
-        // In your edit method
+    
         return $this->render('admin/user/index.html.twig', [
-            'users' => $users, // For listing
-            'user_edit' => $user, // Specifically for edit; differentiate from 'user' in view modal
-            'form' => $form->createView(), // Form for editing
+            'user_edit' => $user,
+            'formUpdate' => $formUpdate->createView(),
+            'users' => $users,
         ]);
-
     }
-
+    
     // Delete a user
     #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, $id): Response

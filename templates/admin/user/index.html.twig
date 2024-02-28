@@ -2,16 +2,58 @@
 {# templates/admin/user/index.html.twig #}
 
 
+
 {% block content %}
 <div class="container mx-auto px-4 py-8">
     <div class="mb-4">
         <h1 class="text-xl font-semibold">User Management</h1>
     </div>
+    {% if user_edit is defined %}
+
+    <div id="editModal{{ user_edit.id }}" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+    <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="flex justify-between items-center mb-4">
+            <h4 class="text-lg font-bold">Edit User</h4>
+            <span class="close cursor-pointer" onclick="closeModal('editModal{{ user_edit.id }}')">&times;</span>
+        </div>
+        {% if formUpdate is defined %}
+            {{ form_start(formUpdate) }}
+    {{ form_row(formUpdate.firstname, {
+        'label': 'Name:',
+        'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'}
+    }) }}
+
+    {{ form_row(formUpdate.lastname, {
+        'label': 'LastName:',
+        'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'}
+    }) }}
+
+    {{ form_row(formUpdate.email, {
+        'label': 'Email:',
+        'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'}
+    }) }}
+
+    {{ form_row(formUpdate.roles, {
+        'label': 'Roles:',
+        'attr': {'class': 'mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md'}
+    }) }}
+                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Save
+                </button>
+            {{ form_end(formUpdate) }}
+        {% endif %}
+    </div>
+    </div>
+
+    {% endif %}
+
+
     <div class="bg-white shadow-md rounded-lg">
         <table class="min-w-full leading-normal">
             <thead>
                 <tr>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Name</th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">LastName</th>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Role</th>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100"></th>
@@ -21,7 +63,11 @@
                 {% for user in users %}
                 <tr>
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ user.firstname }}</td>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ user.lastname }}</td>
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ user.email }}</td>
+
+                    {#  check there is a role before setting it  #}
+                    {% if user.roles[0]  is defined  %}
                     {% set role = user.roles[0]|lower %}
 
                       {% if role == 'role_user' %}
@@ -31,6 +77,8 @@
                       {% elseif role == 'role_admin' %}
                           {% set role = 'administration' %}
                       {% endif %}
+
+                    {% endif %}
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ role }}</td>
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
                       <button class="text-blue-600 hover:text-blue-900" onclick="openModal('viewModal{{ user.id }}')">
@@ -58,10 +106,12 @@
                         </g>
                         </svg>                      
                     </button>
-                      <button class="text-blue-600 hover:text-blue-900" onclick="openModal('editModal{{ user.id }}')">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                        </svg>
+                      <button class="text-blue-600 hover:text-blue-900">
+                        <a href="{{ path('admin_user_edit', {'id': user.id}) }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                            </svg>
+                        </a>
                       </button>
                       <button class="text-red-600 hover:text-red-900" onclick="openModal('deleteModal{{ user.id }}')">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -81,6 +131,7 @@
                             <span class="close cursor-pointer" onclick="closeModal('viewModal{{ user.id }}')">&times;</span>
                         </div>
                         <p class="mb-2">Name: {{ user.firstname }}</p>
+                        <p class="mb-2">LastName: {{ user.lastname }}</p>
                         <p class="mb-2">Email: {{ user.email }}</p>
                         <p>Roles: {{ role }}</p>
                     </div>
@@ -94,29 +145,13 @@
                                 <h4 class="text-lg font-bold">Edit User</h4>
                                 <span class="close cursor-pointer" onclick="closeModal('editModal{{ user.id }}')">&times;</span>
                             </div>
-                            <form action="{{ path('admin_user_edit', {'id': user.id}) }}" method="post" class="space-y-4">
-                                <div>
-                                    <label for="name" class="block text-sm font-medium text-gray-700">Name:</label>
-                                    <input type="text" id="name" name="name" value="{{ user.firstname }}" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                </div>
-                                <div>
-                                    <label for="email" class="block text-sm font-medium text-gray-700">Email:</label>
-                                    <input type="email" id="email" name="email" value="{{ user.email }}" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                </div>
-                                <div>
-                                    <label for="roles" class="block text-sm font-medium text-gray-700">Roles:</label>
-                                    <select id="roles" name="roles[]" multiple class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                                        <option value="ROLE_USER"{{ 'ROLE_USER' in user.roles ? ' selected' : '' }}>User</option>
-                                        <option value="ROLE_ADMIN"{{ 'ROLE_ADMIN' in user.roles ? ' selected' : '' }}>Admin</option>
-                                        <!-- Add other roles as needed -->
-                                    </select>
-                                </div>
-                                <div class="flex justify-end">
-                                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                        Save Changes
-                                    </button>
-                                </div>
-                            </form>
+                                {% if formUpdate is defined %}
+                                    {{ form_start(formUpdate) }}
+                                        <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                            Save
+                                        </button>
+                                    {{ form_end(formUpdate) }}
+                                {% endif %}
                         </div>
                     </div>
 

@@ -15,6 +15,7 @@ class UserType extends AbstractType
     {
         $builder
             ->add('firstname') // Assuming 'firstname' is a property of your User entity
+            ->add('lastname') // Assuming 'firstname' is a property of your User entity
             ->add('email') // Assuming 'email' is a property of your User entity
             ->add('roles', ChoiceType::class, [
                 'choices' => [
@@ -23,7 +24,7 @@ class UserType extends AbstractType
                     // Add other roles as needed
                 ],
                 'expanded' => true, // for checkboxes
-                // 'multiple' => true,
+                'multiple' => true,
             ]);
         ;
     }
