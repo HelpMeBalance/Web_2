@@ -23,7 +23,7 @@ class UserType extends AbstractType
                     // Add other roles as needed
                 ],
                 'expanded' => true, // for checkboxes
-                'multiple' => true,
+                // 'multiple' => true,
             ]);
         ;
     }
