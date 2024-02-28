@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Entity\Article;
 use App\Entity\CategorieProduit;
-use App\Entity\Panier;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,16 +17,10 @@ class ArticleType extends AbstractType
             ->add('prix')
             ->add('nom')
             ->add('description')
-            ->add('panier', EntityType::class, [
-                'class' => Panier::class,
-                'choice_label' => 'id',
-                'multiple' => true,
-            ])
             ->add('categorie', EntityType::class, [
                 'class' => CategorieProduit::class,
                 'choice_label' => 'id',
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

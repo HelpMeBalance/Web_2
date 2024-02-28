@@ -28,14 +28,13 @@ class ArticleController extends AbstractController
 
     //Partie Ajout Article
     #[Route('/new', name: 'app_article_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, PanierRepository $rep): Response
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $article->addPanier($rep->find(1));
             $entityManager->persist($article);
             $entityManager->flush();
 
