@@ -79,6 +79,7 @@ class PublicationController extends AbstractController
             'form' => $form,
         ]);
     }
+    
     #[Route('/{idp}/validation', name: 'app_publication_validate', methods: ['GET', 'POST'])]
     public function validate(Request $request,int $idp, EntityManagerInterface $entityManager,PublicationRepository $publicationRepository): Response
     {
@@ -88,6 +89,7 @@ class PublicationController extends AbstractController
         $entityManager->flush();
         return $this->redirectToRoute('app_blogAdmin');
     }
+   
     #[Route('/{id}/like', name: 'app_publication_like', methods: ['GET', 'POST'])]
     public function like(Request $request, Publication $publication, EntityManagerInterface $entityManager): Response
     {
@@ -115,6 +117,16 @@ class PublicationController extends AbstractController
         }
 
         return $this->redirectToRoute('app_blogClient', ['page'=>1], Response::HTTP_SEE_OTHER);
+    }
+    #[Route('/pub/{id}', name: 'admin_publication_delete', methods: ['POST'])]
+    public function deleteadmin(Request $request, int $id, EntityManagerInterface $entityManager,PublicationRepository $publicationRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$id, $request->request->get('_token'))) {
+            $entityManager->remove($publicationRepository->find($id));
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_blogAdmin');
     }
     #[Route('/{id}/{idcat}', name: 'app_publication_deleteCat', methods: ['POST'])]
     public function deleteCat(Request $request, Publication $publication, EntityManagerInterface $entityManager,int $idcat): Response
