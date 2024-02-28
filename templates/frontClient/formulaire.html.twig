@@ -1,0 +1,18 @@
+{% extends 'frontClient/base.html.twig' %}
+
+{% block body %}
+    <div class="container p-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="quiz-container">
+                    <h2 class="text-center">Start Quiz</h2>
+                    <p class="text-center">{{ question.question }}</p>
+
+                    {{ include('formulaire/_form.html.twig') }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

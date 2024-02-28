@@ -119,7 +119,7 @@ class FormulaireController extends AbstractController
         }
 
 
-        return $this->render('frontClient/viewRendezVous.html.twig', [
+        return $this->render('frontClient/formulaire.html.twig', [
             'question' => $question,
             "form" => $form->createView(),
             'reponses' => $reposeRepository->findBy(['question'=> $question->getId()]),

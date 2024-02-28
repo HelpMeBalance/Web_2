@@ -22,6 +22,7 @@ class FormulaireType extends AbstractType
                 'class' => Reponse::class,
 'choice_label' => 'Reponse',
 'multiple' => true,
+'expanded' => true,
                 'query_builder' => function (ReponseRepository $er) use ($question) {
                     return $er->createQueryBuilder('r')
                         ->andWhere('r.question = :question')
