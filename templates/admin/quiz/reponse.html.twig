@@ -1,0 +1,112 @@
+{% extends 'admin/base_admin.html.twig' %}
+{# templates/admin/user/index.html.twig #}
+
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="mb-4">
+        <h1 class="text-xl font-semibold">formulaire </h1>
+    </div>
+    {% if reponse is defined %}
+
+    <div id="editModal{{ reponse .id }}" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+    <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="flex justify-between items-center mb-4">
+            <h4 class="text-lg font-bold">Edit reponse </h4>
+            <span class="close cursor-pointer" onclick="closeModal('editModal{{ reponse .id }}')">&times;</span>
+        </div>
+        {% if formUpdate is defined %}
+            {{ form_start(formUpdate) }}
+    {{ form_row(formUpdate.reponse, {
+        'label': 'reponse :',
+        'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'}
+    }) }}
+
+   
+                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Save
+                </button>
+            {{ form_end(formUpdate) }}
+        {% endif %}
+    </div>
+    </div>
+
+    {% endif %}
+    {{ include('reponse/_form.html.twig') }}
+    <div class="bg-white shadow-md rounded-lg">
+        <table class="min-w-full leading-normal">
+            <thead>
+                <tr>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">question</th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reponse in Listrepons %}
+                <tr>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ reponse.reponse  }}</td>
+                    
+                    
+                   <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
+                      
+                      <button class="text-blue-600 hover:text-blue-900" onclick="openModal('editModal{{ reponse.id }}')">
+                      <a href="{{ path('app_reponse_edit', {'id': reponse.id,'idq':reponse.question.id}) }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                        </svg>
+                        </a>
+                      </button>
+                      <button class="text-red-600 hover:text-red-900" onclick="openModal('deleteModal{{ reponse.id }}')">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </td>
+                </tr>
+                 <div>
+                     {# Edit Modal - Simplified for demonstration #}
+                    <div id="editModal{{ reponse.id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onclick="closeModal('viewModal{{ reponse.id }}')">
+                        <!-- Modal content -->
+                        <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white" onclick="event.stopPropagation()">
+                            <div class="flex justify-between items-center mb-4">
+                                <h4 class="text-lg font-bold">Edit reponse</h4>
+                                <span class="close cursor-pointer" onclick="closeModal('editModal{{reponse.id }}')">&times;</span>
+                            </div>
+                            {% if formUpdate is defined %}
+                                    {{ form_start(formUpdate) }}
+                                        <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                            Save
+                                        </button>
+                                    {{ form_end(formUpdate) }}
+                                {% endif %}
+                        </div>
+                    </div>
+                    </div>
+
+                     {# Delete Modal #}
+                    <div id="deleteModal{{ reponse.id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto justify-center items-center h-full w-full" onclick="closeModal('deleteModal{{reponse.id }}')">
+                        <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white" onclick="event.stopPropagation()">
+                            <div class="flex justify-between items-center mb-4">
+                                <h4 class="text-lg font-bold">Confirm Deletion</h4>
+                                <span class="close cursor-pointer" onclick="closeModal('deleteModal{{ reponse.id }}')">&times;</span>
+                            </div>
+                            <p class="mb-4">Are you sure you want to delete {{reponse.reponse }}?</p>
+                            <form action="{{ path('app_reponse_delete',  {'id': reponse.id, 'idq':reponse.question.id}) }}" method="post">
+                                
+                                <div class="flex justify-end">
+                                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                        Delete
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+ 
+                {% endfor %}
+             
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
