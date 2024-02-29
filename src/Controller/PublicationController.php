@@ -30,8 +30,9 @@ class PublicationController extends AbstractController
         $pub = new Publication();
         $form = $this->createForm(PublicationType::class, $pub);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+           
+           
             $entityManager->persist($pub);
             $entityManager->flush();
 
@@ -50,14 +51,15 @@ class PublicationController extends AbstractController
         $publication->setVues($publication->getVues()+1);
         $entityManager->flush();
         return $this->render('publication/show.html.twig', [
-            'publication' => $publication,'like'=>0,'nbcom'=>count($commentaireRepository->findAllUnderPublication($publication))
+            'publication' => $publication,'like'=>0,'nbcom'=>count($commentaireRepository->findAllValidatedUnderPublication($publication)),
+            'comentaires'=>$commentaireRepository->findAllValidatedUnderPublication($publication),
         ]);
     }
     #[Route('/{id}/showcoms', name: 'app_publication_show_comments', methods: ['GET'])]
     public function showComments(Publication $publication,CommentaireRepository $commentaireRepository): Response
     {
         return $this->render('commentaire/showunderpub.html.twig', [
-            'commentaires' => $commentaireRepository->findAllUnderPublication($publication),'publication'=>$publication,
+            'commentaires' => $commentaireRepository->findAllValidatedUnderPublication($publication),'publication'=>$publication,
         ]);
     }
     
@@ -90,24 +92,24 @@ class PublicationController extends AbstractController
         return $this->redirectToRoute('app_blogAdmin');
     }
    
-    #[Route('/{id}/like', name: 'app_publication_like', methods: ['GET', 'POST'])]
-    public function like(Request $request, Publication $publication, EntityManagerInterface $entityManager): Response
-    {
-        $publication->setLikes($publication->getLikes()+1);
-        $entityManager->flush();
-        return $this->render('publication/show.html.twig', [
-            'publication' => $publication,'like'=>1
-        ]);
-    }
-    #[Route('/{id}/dislike', name: 'app_publication_dislike', methods: ['GET', 'POST'])]
-    public function dislike(Request $request, Publication $publication, EntityManagerInterface $entityManager): Response
-    {
-        $publication->setLikes($publication->getLikes()-1);
-        $entityManager->flush();
-        return $this->render('publication/show.html.twig', [
-            'publication' => $publication,'like'=>0
-        ]);
-    }
+    // #[Route('/{id}/like', name: 'app_publication_like', methods: ['GET', 'POST'])]
+    // public function like(Request $request, Publication $publication, EntityManagerInterface $entityManager): Response
+    // {
+    //     $publication->setLikes($publication->getLikes()+1);
+    //     $entityManager->flush();
+    //     return $this->render('publication/show.html.twig', [
+    //         'publication' => $publication,'like'=>1
+    //     ]);
+    // }
+    // #[Route('/{id}/dislike', name: 'app_publication_dislike', methods: ['GET', 'POST'])]
+    // public function dislike(Request $request, Publication $publication, EntityManagerInterface $entityManager): Response
+    // {
+    //     $publication->setLikes($publication->getLikes()-1);
+    //     $entityManager->flush();
+    //     return $this->render('publication/show.html.twig', [
+    //         'publication' => $publication,'like'=>0
+    //     ]);
+    // }
     #[Route('/{id}', name: 'app_publication_delete', methods: ['POST'])]
     public function delete(Request $request, Publication $publication, EntityManagerInterface $entityManager): Response
     {

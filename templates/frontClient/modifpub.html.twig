@@ -13,10 +13,23 @@
                   <div class="row">
                     {% if is_granted('IS_AUTHENTICATED_REMEMBERED')  %}
                     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                    
                     <div class="comment_form pb-0">
-                      <h3 class="comment_area_title">Express Yourself</h3>
+                      <h3 class="comment_area_title">Express Yourself {{app.user.id}} </h3>
+                      <div class="user-profile-picture">
+                        <img
+                    {% set url='uploads/pub_pictures/'~publication.image %} 
+                    src="{{ asset(url)  }}" 
+                    alt="HelpMeBalance"
+                    style="width: auto; height: 300px; "
+                  />
+                    </div>
                       <div class="row">
                         <div class="col-md-6">
+                          <div class="form-group">
+                            {{ form_widget(form.imageFile, {'attr': {'class': 'form-control'}}) }}
+
+                          </div>
                           <div class="form-group">
                             <label for="input_name">Title</label>
                             {{ form_widget(form.titre,{'attr' : {'class' : 'form-control'}})}}
@@ -101,10 +114,10 @@
                         <li>
                           <a href="{{ path('app_blogCatClient', {'cat': categorie.id, 'page': 1}) }}">
                             <span class="category_name" >{% if categorie.id == cat.id %}<mark>{{categorie.nom }}</mark>{% else %}{{categorie.nom }} {% endif %}</span>                     
-                            {% if categorie.publications|length == 0 %}
+                            {% if categorie.publications|filter(publication => publication.valide)|length == 0 %}
                             <span class="category_counter">New</span>
                             {% else %}
-                            <span class="category_counter">{{ categorie.publications|length }}</span>
+                            <span class="category_counter">{{ categorie.publications|filter(publication => publication.valide)|length }}</span>
                             {% endif %}
                           </a>
                         </li>
@@ -143,7 +156,7 @@
                                 <li>{{ publication.dateM ? publication.dateM|date('j F Y H:i:s')  : '' }}</li>
                                 <li>{{ publication.vues }} <i class="fa-solid fa-eye"></i></li>
                                 <li>
-                                  {% set commentCount = commentaireRepository.findAllUnderPublication(publication)|length %}
+                                  {% set commentCount = commentaireRepository.findAllValidatedUnderPublication(publication)|length %}
                                   {% if publication.comOuvert %}
                                       {% if commentCount > 0 %}
                                           <a href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">{{ commentCount }} <i class="fa-solid fa-comment"></i></a>
