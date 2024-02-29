@@ -21,9 +21,11 @@
                 <div class="col-lg-8">
                   <div class="blog_image">
                     <img
-                    src="{{ asset(publication.image) }}"
+                    {% set url='uploads/pub_pictures/'~publication.image %} 
+                    src="{{ asset(url)  }}" 
                     alt="HelpMeBalance"
-                    />
+                    style="width: 1860px; height: 600px; "
+                  />
                   </div>
                   <div class="details_content">
                     <ul class="post_meta unordered_list mb-4">
@@ -97,14 +99,14 @@
                       </div>
                     </div>
                   </div>
-                  {% if(publication.commentaires|length >0)%}
+                  {% if(commentaires|length >0)%}
                   <div class="comment_area  pb-0">
-                    <h3 class="comment_area_title">Comments ({{publication.commentaires|length}})</h3>
+                    <h3 class="comment_area_title">Comments ({{commentaires|length}})</h3>
                     
                     <ul class="comment_list_wrap unordered_list_block">
 
-                      {% for commentaire in publication.commentaires|sort((a, b) => b.dateM <=> a.dateM)  %}
-                      {% if (showmore == 0 and loop.index <= 3 ) or showmore==1%}
+                      {% for commentaire in commentaires|sort((a, b) => b.dateM <=> a.dateM)  %}
+                      {% if (showmore == 0 and loop.index <= commentaires|length/2 ) or showmore==1%}
                       <li>
                         <div class="comment_item">
                           <div class="author_box">
@@ -306,10 +308,10 @@
                         <li  >
                           <a href="{{ path('app_blogCatClient', {'cat': categorie.id, 'page': 1}) }}" >
                             <span class="category_name" >{% if categorie.id == cat.id %}<mark>{{categorie.nom }}</mark>{% else %}{{categorie.nom }} {% endif %}</span>                     
-                            {% if categorie.publications|length == 0 %}
+                            {% if categorie.publications|filter(publication => publication.valide)|length == 0 %}
                             <span class="category_counter">New</span> 
                             {% else %}
-                            <span class="category_counter">{{ categorie.publications|length }}</span>
+                            <span class="category_counter">{{ categorie.publications|filter(publication => publication.valide)|length }}</span>
                             {% endif %}
                           </a>
                         </li>
@@ -348,7 +350,7 @@
                                 <li>{{ publication.dateM ? publication.dateM|date('j F Y H:i:s')  : '' }}</li>
                                 <li>{{ publication.vues }} <i class="fa-solid fa-eye"></i></li>
                                 <li>
-                                  {% set commentCount = commentaireRepository.findAllUnderPublication(publication)|length %}
+                                  {% set commentCount = commentaireRepository.findAllValidatedUnderPublication(publication)|length %}
                                   {% if publication.comOuvert %}
                                       {% if commentCount > 0 %}
                                           <a href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">{{ commentCount }} <i class="fa-solid fa-comment"></i></a>

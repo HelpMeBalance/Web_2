@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\File; // Add this line
+
 #[ORM\Entity(repositoryClass: PublicationRepository::class)]
 class Publication
 {
@@ -75,9 +77,10 @@ class Publication
         'maxMessage' => 'Your title cannot be longer than {{ limit }} characters',
     ])]
     #[Assert\Regex(
-        pattern: '/^[A-Za-z0-9]+$/',
-        message: 'Your title must contain only letters and numbers.'
+        pattern: '/^[A-Za-z0-9]+(?: [A-Za-z0-9]+)*$/',
+        message: 'Your title must contain only letters, numbers, and a single space between words.'
     )]
+    
     #[Assert\Regex(
         pattern: '/[A-Za-z]/',
         message: 'Your title must contain at least one letter.'
@@ -85,7 +88,15 @@ class Publication
     private ?string $titre = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $image = "assets/images/site_logo/logo.png";
+    private ?string $image = null;
+
+    #[Assert\File(
+        maxSize: '1024k',
+        mimeTypes: ['image/jpeg', 'image/png'],
+    )]
+    
+    private ?File $imageFile = null;
+
 
     public function __construct()
     {
@@ -273,15 +284,31 @@ class Publication
         return $this;
     }
 
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
     public function getImage(): ?string
     {
         return $this->image;
     }
 
-    public function setImage(string $image): static
+    public function setImage(?string $image = null): self
     {
         $this->image = $image;
-
         return $this;
     }
+
+    public function setProfilePictureFile(?File $imageFile = null): self
+    {
+        $this->imageFile = $imageFile;
+        if ($imageFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            // Update an "updatedAt" field here, if you have one
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+        return $this;
+    }
+
 }

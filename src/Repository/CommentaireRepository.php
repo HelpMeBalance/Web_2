@@ -35,6 +35,18 @@ public function findAllUnderPublication(Publication $publication): array
     ->getQuery()
     ->getResult();
 }
+public function findAllValidatedUnderPublication(Publication $publication): array
+{
+    return $this->createQueryBuilder('c')
+    ->join('c.Publication','p')
+    ->andWhere('p.id = :val')
+    ->setParameter('val', $publication->getId())
+    ->andWhere('c.valide = :valide') // Filter by the valide status
+    ->setParameter('valide', true) // Assuming 'true' means validated
+    ->orderBy('c.dateC', 'DESC')
+    ->getQuery()
+    ->getResult();
+}
 //    public function findByExampleField($value): array
 //    {
 //        return $this->createQueryBuilder('c')

@@ -18,6 +18,11 @@
                       <div class="row">
                         <div class="col-md-6">
                           <div class="form-group">
+                            <label for="input_name">Image</label>
+                            {{ form_widget(form.imageFile, {'attr': {'class': 'form-control'}}) }}
+
+                          </div>
+                          <div class="form-group">
                             <label for="input_name">Title</label>
                             {{ form_widget(form.titre,{'attr' : {'class' : 'form-control','placeholder' : 'Title of Your Post'}})}}
                             {{ form_errors(form.titre, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
@@ -102,10 +107,10 @@
                         <li>
                           <a href="{{ path('app_blogCatClient', {'cat': categorie.id, 'page': 1}) }}">
                             <span class="category_name" >{% if categorie.id == cat.id %}<mark>{{categorie.nom }}</mark>{% else %}{{categorie.nom }} {% endif %}</span>                     
-                            {% if categorie.publications|length == 0 %}
+                            {% if categorie.publications|filter(publication => publication.valide)|length == 0 %}
                             <span class="category_counter">New</span>
                             {% else %}
-                            <span class="category_counter">{{ categorie.publications|length }}</span>
+                            <span class="category_counter">{{ categorie.publications|filter(publication => publication.valide)|length }}</span>
                             {% endif %}
                           </a>
                         </li>
@@ -144,7 +149,7 @@
                                 <li>{{ publication.dateM ? publication.dateM|date('j F Y H:i:s')  : '' }}</li>
                                 <li>{{ publication.vues }} <i class="fa-solid fa-eye"></i></li>
                                 <li>
-                                  {% set commentCount = commentaireRepository.findAllUnderPublication(publication)|length %}
+                                  {% set commentCount = commentaireRepository.findAllValidatedUnderPublication(publication)|length %}
                                   {% if publication.comOuvert %}
                                       {% if commentCount > 0 %}
                                           <a href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">{{ commentCount }} <i class="fa-solid fa-comment"></i></a>

@@ -2717,21 +2717,6 @@ button[class*="-dark"]:hover {
   -webkit-box-shadow: var(--bs-box-shadow-lg);
   box-shadow: var(--bs-box-shadow-lg);
 }
-.blog_item .blog_image_wrap {
-  display: block;
-  overflow: hidden;
-  position: relative;
-}
-.blog_item .blog_image_wrap img {
-  width: 100%;
-  display: block;
-  -webkit-transition: var(--bs-transition);
-  transition: var(--bs-transition);
-}
-.blog_item .blog_image_wrap:hover img {
-  -webkit-transform: scale(1.08);
-  transform: scale(1.08);
-}
 .blog_item .blog_content {
   z-index: 1;
   position: relative;

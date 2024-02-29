@@ -10,6 +10,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class PublicationType extends AbstractType
 {
@@ -32,7 +33,13 @@ class PublicationType extends AbstractType
             ->add('contenu')
             ->add('comOuvert')
             ->add('anonyme')
-                ;
+
+            ->add('imageFile', FileType::class, [
+                'label' => 'Publication Picture',
+                'mapped' => false, // This field is not mapped to any entity property
+                'required' => false,
+            ])
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

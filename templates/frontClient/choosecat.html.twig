@@ -91,10 +91,10 @@
                         <li  >
                           <a href="{{ path('app_blogCatClient', {'cat': categorie.id, 'page': 1}) }}" >
                             <span class="category_name" >{{categorie.nom }} </span>                     
-                            {% if categorie.publications|length == 0 %}
+                            {% if categorie.publications|filter(publication => publication.valide)|length == 0 %}
                             <span class="category_counter">New</span> 
                             {% else %}
-                            <span class="category_counter">{{ categorie.publications|length }}</span>
+                            <span class="category_counter">{{ categorie.publications|filter(publication => publication.valide)|length }}</span>
                             {% endif %}
                           </a>
                         </li>
@@ -133,7 +133,7 @@
                                 <li>{{ publication.dateM ? publication.dateM|date('j F Y H:i:s')  : '' }}</li>
                                 <li>{{ publication.vues }} <i class="fa-solid fa-eye"></i></li>
                                 <li>
-                                  {% set commentCount = commentaireRepository.findAllUnderPublication(publication)|length %}
+                                  {% set commentCount = commentaireRepository.findAllValidatedUnderPublication(publication)|length %}
                                   {% if publication.comOuvert %}
                                       {% if commentCount > 0 %}
                                           <a href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">{{ commentCount }} <i class="fa-solid fa-comment"></i></a>

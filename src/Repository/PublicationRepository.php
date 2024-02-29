@@ -70,6 +70,13 @@ class PublicationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    public function     findAllsorteddate()
+    {
+        return $this->createQueryBuilder('c')
+            ->OrderBy('c.dateC', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
     public function findAllsortedValide()
     {
         return $this->createQueryBuilder('c')
