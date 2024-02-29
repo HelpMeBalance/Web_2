@@ -9,43 +9,56 @@
     {% if rendezVou is defined %}
 
     <div id="editModal{{ rendezVou.id }}" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
-    <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-        <div class="flex justify-between items-center mb-4">
-            <h4 class="text-lg font-bold">Edit Appointment</h4>
-            <span class="close cursor-pointer" onclick="closeModal('editModal{{ rendezVou.id }}')">&times;</span>
-        </div>
-        {% if form is defined %}
-            {{ form_start(form) }}
-    {{ form_row(form.dateR, {
-        'label': 'Date Appointment:',
-        'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'}
-    }) }}
+        <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="flex justify-between items-center mb-4">
+                <h4 class="text-lg font-bold">Edit Appointment</h4>
+                <span class="close cursor-pointer" onclick="closeModal('editModal{{ rendezVou.id }}')">&times;</span>
+            </div>
+            {% if form is defined %}
+            <div class="flex justify-center">
+                {{ form_start(form) }}
+            {{ form_row(form.dateR, {
+            'label': 'Date Appointment:',
+            'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm
+            border-gray-300 rounded-md'}
+            }) }}
+        </br>
 
-    {{ form_row(form.nomService, {
-        'label': 'Service Name:',
-        'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'}
-    }) }}
+            {{ form_row(form.nomService, {
+            'label': 'Service Name:',
+            'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm
+            border-gray-300 rounded-md'}
+            }) }}
+        </br>
 
-    {{ form_row(form.statut, {
-        'label': 'Status:',
-        'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'}
-    }) }}
+            {{ form_row(form.statut, {
+            'label': 'Status:',
+            'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm
+            border-gray-300 rounded-md'}
+            }) }}
+        </br>
 
-    {{ form_row(form.patient, {
-        'label': 'Patient:',
-        'attr': {'class': 'mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md'}
-    }) }}
+            {{ form_row(form.patient, {
+            'label': 'Patient:',
+            'attr': {'class': 'mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none
+            focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md'}
+            }) }}
+        </br>
 
-    {{ form_row(form.user, {
-        'label': 'Psy:',
-        'attr': {'class': 'mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md'}
-    }) }}
-                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    Save
-                </button>
+            {{ form_row(form.user, {
+            'label': 'Psy:',
+            'attr': {'class': 'mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none
+            focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md'}
+            }) }}
+        </br>
+            <button type="submit"
+                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Save
+            </button>
             {{ form_end(form) }}
-        {% endif %}
-    </div>
+            </div>
+            {% endif %}
+        </div>
     </div>
 
     {% endif %}
@@ -107,11 +120,13 @@
                         </button>
                         <button class="text-blue-600 hover:text-blue-900">
                             <a href="{{ path('app_rendez_vous_edit_admin', {'id': rv.id}) }}">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                 </svg>
                             </a>
-                          </button>
+                        </button>
                         <button class="text-red-600 hover:text-red-900" onclick="openModal('deleteModal{{ rv.id }}')">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
@@ -142,22 +157,27 @@
                 </div> #}
 
                 {# Edit Modal - Simplified for demonstration #}
-                <div id="editModal{{ rv.id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onclick="closeModal('viewModal{{ rv.id }}')">
+                <div id="editModal{{ rv.id }}"
+                    class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
+                    onclick="closeModal('viewModal{{ rv.id }}')">
                     <!-- Modal content -->
-                        <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white" onclick="event.stopPropagation()">
-                            <div class="flex justify-between items-center mb-4">
-                                <h4 class="text-lg font-bold">Edit Appointment</h4>
-                                <span class="close cursor-pointer" onclick="closeModal('editModal{{ rv.id }}')">&times;</span>
-                            </div>
-                                {% if form is defined %}
-                                    {{ form_start(form) }}
-                                        <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                            Save
-                                        </button>
-                                    {{ form_end(form) }}
-                                {% endif %}
+                    <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white"
+                        onclick="event.stopPropagation()">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="text-lg font-bold">Edit Appointment</h4>
+                            <span class="close cursor-pointer"
+                                onclick="closeModal('editModal{{ rv.id }}')">&times;</span>
                         </div>
+                        {% if form is defined %}
+                        {{ form_start(form) }}
+                        <button type="submit"
+                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Save
+                        </button>
+                        {{ form_end(form) }}
+                        {% endif %}
                     </div>
+                </div>
 
                 {# Delete Modal #}
                 <div id="deleteModal{{ rv.id }}"
