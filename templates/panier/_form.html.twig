@@ -1,0 +1,20 @@
+<div class="flex justify-center items-center h-screen bg-blue-400">
+    <div class="w-full max-w-md bg-gray-200 p-4 rounded-md">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            <div class="mb-4">
+                <p 'class': 'block text-gray-700 text-sm font-bold mb-2'>Quantity</p>
+                {{ form_widget(form.Quantity, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}
+            </div>
+            {{ form_errors(form.Quantity, {'class': 'text-red-200 bg-red-400'}) }}
+
+            <div class="mb-4">
+                <p 'class': 'block text-gray-700 text-sm font-bold mb-2'>Article</p>
+                {{ form_widget(form.article, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}
+            </div>
+            {{ form_errors(form.article, {'class': 'text-red-200 bg-red-400'}) }}
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">
+                {{ button_label|default('Save') }}
+            </button>
+            {{ form_end(form) }}
+    </div>
+    </div>
