@@ -7,33 +7,51 @@
     <div class="mb-4">
         <h1 class="text-xl font-semibold">formulaire </h1>
     </div>
+    {% if question is defined %}
+
+    <div id="editModal{{ question.id }}" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+    <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="flex justify-between items-center mb-4">
+            <h4 class="text-lg font-bold">Edit question</h4>
+            <span class="close cursor-pointer" onclick="closeModal('editModal{{ question.id }}')">&times;</span>
+        </div>
+        {% if formUpdate is defined %}
+            {{ form_start(formUpdate) }}
+    {{ form_row(formUpdate.question, {
+        'label': 'question:',
+        'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'}
+    }) }}
+
+   
+                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Save
+                </button>
+            {{ form_end(formUpdate) }}
+        {% endif %}
+    </div>
+    </div>
+
+    {% endif %}
+
+{{ include('question/_form.html.twig') }}
+
+
     <div class="bg-white shadow-md rounded-lg">
         <table class="min-w-full leading-normal">
             <thead>
                 <tr>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Name</th>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Role</th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">question</th>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100"></th>
                 </tr>
             </thead>
             <tbody>
-                {% for user in users %}
+                {% for question in questions %}
                 <tr>
-                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ user.firstname }}</td>
-                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ user.email }}</td>
-                    {% set role = user.roles[0]|lower %}
-
-                      {% if role == 'role_user' %}
-                          {% set role = 'patient' %}
-                      {% elseif role == 'role_psy' %}
-                          {% set role = 'psychologist' %}
-                      {% elseif role == 'role_admin' %}
-                          {% set role = 'administration' %}
-                      {% endif %}
-                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ role }}</td>
-                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
-                      <button class="text-blue-600 hover:text-blue-900" onclick="openModal('viewModal{{ user.id }}')">
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ question.question  }}</td>
+                    
+                    
+                   <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
+                      <button class="text-blue-600 hover:text-blue-900" onclick="openModal('viewModal{{ question.id }}')">
                         <svg version="1.1" class="h-6 w-6" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 442.04 442.04"
                         	 xml:space="preserve">
                         <g>
@@ -57,79 +75,67 @@
                         	</g>
                         </g>
                         </svg>                      
-                    </button>
-                      <button class="text-blue-600 hover:text-blue-900" onclick="openModal('editModal{{ user.id }}')">
+                      </button>
+                      <button class="text-blue-600 hover:text-blue-900" onclick="openModal('editModal{{ question.id }}')">
+                                              <a href="{{ path('app_question_edit', {'id': question.id}) }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                         </svg>
+                        </a>
                       </button>
-                      <button class="text-red-600 hover:text-red-900" onclick="openModal('deleteModal{{ user.id }}')">
+                      <button class="text-red-600 hover:text-red-900" onclick="openModal('deleteModal{{ question.id }}')">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
                       </button>
+
                     </td>
                 </tr>
 
-                {# Modals for each user #}
-                {# View Modal #}
-                <div id="viewModal{{ user.id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onclick="closeModal('viewModal{{ user.id }}')">
-                    <!-- Modal content -->
-                    <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-                        <div class="flex justify-between items-center mb-4">
-                            <h4 class="text-lg font-bold">User Details</h4>
-                            <span class="close cursor-pointer" onclick="closeModal('viewModal{{ user.id }}')">&times;</span>
+                    {# View Modal #}
+                    <div id="viewModal{{ question.id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onclick="closeModal('viewModal{{ question.id }}')">
+                        <div class="modal-content relative top-F20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                            <div class="flex justify-between items-center mb-4">
+                                <h4 class="text-lg font-bold">question Details</h4>
+                                <span class="close cursor-pointer" onclick="closeModal('viewModal{{ question.id }}')">&times;</span>
+                            </div>
+                            {% for reponse in question.reponse%}
+                            <p class="mb-2">Reponse: {{ reponse.reponse }}</p>
+                            {% endfor %}
+                            <a class="text-lg font-bold" href="{{ path('app_question_show', {'id': question.id}) }}"><strong>Invalidate</strong></a>
                         </div>
-                        <p class="mb-2">Name: {{ user.firstname }}</p>
-                        <p class="mb-2">Email: {{ user.email }}</p>
-                        <p>Roles: {{ role }}</p>
                     </div>
-                </div>
 
-                {# Edit Modal - Simplified for demonstration #}
-                <div id="editModal{{ user.id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onclick="closeModal('viewModal{{ user.id }}')">
-                    <!-- Modal content -->
+                <div>
+                    {# Edit Modal - Simplified for demonstration #}
+                    <div id="editModal{{ question.id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onclick="closeModal('viewModal{{ question.id }}')">
+                        <!-- Modal content -->
                         <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white" onclick="event.stopPropagation()">
                             <div class="flex justify-between items-center mb-4">
                                 <h4 class="text-lg font-bold">Edit User</h4>
-                                <span class="close cursor-pointer" onclick="closeModal('editModal{{ user.id }}')">&times;</span>
+                                <span class="close cursor-pointer" onclick="closeModal('editModal{{ question.id }}')">&times;</span>
                             </div>
-                            <form action="{{ path('admin_user_edit', {'id': user.id}) }}" method="post" class="space-y-4">
-                                <div>
-                                    <label for="name" class="block text-sm font-medium text-gray-700">Name:</label>
-                                    <input type="text" id="name" name="name" value="{{ user.firstname }}" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                </div>
-                                <div>
-                                    <label for="email" class="block text-sm font-medium text-gray-700">Email:</label>
-                                    <input type="email" id="email" name="email" value="{{ user.email }}" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                </div>
-                                <div>
-                                    <label for="roles" class="block text-sm font-medium text-gray-700">Roles:</label>
-                                    <select id="roles" name="roles[]" multiple class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                                        <option value="ROLE_USER"{{ 'ROLE_USER' in user.roles ? ' selected' : '' }}>User</option>
-                                        <option value="ROLE_ADMIN"{{ 'ROLE_ADMIN' in user.roles ? ' selected' : '' }}>Admin</option>
-                                        <!-- Add other roles as needed -->
-                                    </select>
-                                </div>
-                                <div class="flex justify-end">
-                                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                        Save Changes
-                                    </button>
-                                </div>
-                            </form>
+                            {% if formUpdate is defined %}
+                                    {{ form_start(formUpdate) }}
+                                        <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                            Save
+                                        </button>
+                                    {{ form_end(formUpdate) }}
+                                {% endif %}
                         </div>
                     </div>
+                    </div>
 
-                {# Delete Modal #}
-                    <div id="deleteModal{{ user.id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto justify-center items-center h-full w-full" onclick="closeModal('deleteModal{{ user.id }}')">
+                     {# Delete Modal #}
+                    <div id="deleteModal{{ question.id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto justify-center items-center h-full w-full" onclick="closeModal('deleteModal{{ question.id }}')">
                         <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white" onclick="event.stopPropagation()">
                             <div class="flex justify-between items-center mb-4">
                                 <h4 class="text-lg font-bold">Confirm Deletion</h4>
-                                <span class="close cursor-pointer" onclick="closeModal('deleteModal{{ user.id }}')">&times;</span>
+                                <span class="close cursor-pointer" onclick="closeModal('deleteModal{{ question.id }}')">&times;</span>
                             </div>
-                            <p class="mb-4">Are you sure you want to delete {{ user.firstname }}?</p>
-                            <form action="{{ path('admin_user_delete', {'id': user.id}) }}" method="post">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                            <p class="mb-4">Are you sure you want to delete {{ question.question }}?</p>
+                            <form action="{{ path('app_question_delete', {'id':question.id}) }}" method="post">
+                                
                                 <div class="flex justify-end">
                                     <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                                         Delete
@@ -139,6 +145,7 @@
                         </div>
                     </div>
                 {% endfor %}
+
             </tbody>
         </table>
     </div>

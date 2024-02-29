@@ -14,7 +14,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/reponse')]
 class ReponseController extends AbstractController
-{
+{ 
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
     #[Route('/', name: 'app_reponse_index', methods: ['GET'])]
     public function index(ReponseRepository $reponseRepository): Response
     {
@@ -61,8 +67,8 @@ class ReponseController extends AbstractController
     }
 
     #[Route('/{id}/{idq}/edit', name: 'app_reponse_edit')]
-    public function edit(Request $request, int $idq, int $id, ReponseRepository $reponseRepository, EntityManagerInterface $entityManager): Response
-    {
+    public function edit(Request $request, int $idq, int $id,QuestionRepository $qrep, ReponseRepository $reponseRepository, EntityManagerInterface $entityManager): Response
+    {   $repos = $reponseRepository->findBy(['question' => $qrep->find($idq)]);
         $reponse = $reponseRepository->find($id);
         
         // Ensure the Reponse entity exists
@@ -73,17 +79,23 @@ class ReponseController extends AbstractController
         $form = $this->createForm(ReponseType::class, $reponse);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
+        $formUpdate = $this->createForm(ReponseType::class, $reponse);
+        $formUpdate->handleRequest($request);
+    
+        if ($formUpdate->isSubmitted() && $formUpdate->isValid()) {
+            $this->entityManager->flush();
+            $this->addFlash('success', 'reponse updated successfully.');
             return $this->redirectToRoute('app_question_show', ['id'=>$idq], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('reponse/edit.html.twig', [
+        return $this->render('admin/quiz/reponse.html.twig', [
             'reponse' => $reponse,
             'form' => $form->createView(),
             'controller_name' => 'questionController',
             'service' => 1,
+            'idq'=>$idq,
+            'formUpdate' => $formUpdate->createView(),
+            'Listrepons' => $repos,
             'part' => 5,
             'title' => "question" ,
             'titlepage' => 'question - ',
