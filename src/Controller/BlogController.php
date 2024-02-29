@@ -228,6 +228,12 @@ class BlogController extends AbstractController
         $imageFile = $form->get('imageFile')->getData(); 
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $pub->setUser($this->getUser());
+            $pub->setDateC(new \DateTimeImmutable());
+            $pub->setValide(0);
+            $pub->setCategorie($categorieRepository->find($cat));
+            $pub->setSousCategorie($sousCategorieRepository->find($souscat));
+            
             $imageFile = $form->get('imageFile')->getData(); // Ensure 'imageFile' matches your form field name
             if ($imageFile) {
                 $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);

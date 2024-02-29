@@ -24,20 +24,22 @@ class ChangePasswordFormType extends AbstractType
                             'message' => 'Please enter a password',
                         ]),
                         new Length([
-                            'min' => 6,
+                            'min' => 8,
                             'minMessage' => 'Your password should be at least {{ limit }} characters',
                             // max length allowed by Symfony for security reasons
                             'max' => 4096,
                         ]),
                     ],
                     'label' => 'New password :',
-                    'label_attr' => ['class' => 'text-gray-900 pr-2'],
-                    'attr' => ['class' => 'p-2 rounded-md w-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent'], // Add a CSS class
+                    'label_attr' => ['class' => 'p-2'],
+                    'attr' => ['class' => 'form-control'], // Add a CSS class
+                    'help' => "The password must be 8-20 characters, and must not contain spaces.", // Small text under the input
                 ],
                 'second_options' => [
                     'label' => 'Repeat Password : ',
-                    'label_attr' => ['class' => 'text-gray-900 pr-2'],
-                    'attr' => ['class' => 'p-2 rounded-md w-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent'], // Add a CSS class
+                    'label_attr' => ['class' => 'p-2'],
+                    'attr' => ['class' => 'form-control'], // Add a CSS class
+                    'help' => 'To confirm, type the new password again.', // Small text under the input
                 ],
                 'invalid_message' => 'The password fields must match.',
                 'mapped' => false,
