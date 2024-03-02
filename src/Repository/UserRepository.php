@@ -63,4 +63,28 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 //            ->getOneOrNullResult()
 //        ;
 //    }
+        public function search($searchTerm, $sortField = 'firstname', $sortOrder = 'asc')
+        {
+            $qb = $this->createQueryBuilder('u');
+        
+            if ($searchTerm) {
+                $qb->where('u.firstname LIKE :searchTerm OR u.lastname LIKE :searchTerm OR u.email LIKE :searchTerm')
+                   ->setParameter('searchTerm', '%' . $searchTerm . '%');
+            }
+        
+            // Ensure the sortField is one of the valid fields
+            if (!in_array($sortField, ['firstname', 'lastname', 'email'])) {
+                $sortField = 'firstname'; // Default field to sort by
+            }
+        
+            // Ensure the sortOrder is either 'asc' or 'desc'
+            if (!in_array($sortOrder, ['asc', 'desc'])) {
+                $sortOrder = 'asc'; // Default sort order
+            }
+        
+            $qb->orderBy('u.' . $sortField, $sortOrder);
+        
+            return $qb->getQuery()->getResult();
+        }
+
 }
