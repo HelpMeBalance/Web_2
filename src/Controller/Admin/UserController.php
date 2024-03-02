@@ -86,4 +86,49 @@ class UserController extends AbstractController
 
         return $this->redirectToRoute('admin_user_index');
     }
+
+    #[Route('/{id}/ban', name: 'ban', methods: ['POST'])]
+    public function ban(Request $request, EntityManagerInterface $entityManager, int $id): Response
+    {
+        // Check if the current user has the permission to ban users
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        $banDuration = $request->request->get('banDuration'); // The ban duration in days
+
+        if (!$banDuration) {
+            $this->addFlash('error', 'Ban duration must be specified.');
+            return $this->redirectToRoute('admin_user_index');
+        }
+        $user = $entityManager->getRepository(User::class)->find($id);
+
+        $user->setIsBanned(true);
+        $user->setBanExpiresAt(new \DateTime(sprintf('+%d days', $banDuration)));
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        $this->addFlash('success', 'User has been banned.');
+
+        return $this->redirectToRoute('admin_user_index');
+    }
+
+    #[Route('/{id}/unban', name: 'unban', methods: ['POST'])]
+    public function unban(int $id,EntityManagerInterface $entityManager): Response
+    {
+        // Check if the current user has the permission to unban users
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $user = $entityManager->getRepository(User::class)->find($id);
+
+
+        $user->setIsBanned(false);
+        $user->setBanExpiresAt(null);
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        $this->addFlash('success', 'User ban has been removed.');
+
+        return $this->redirectToRoute('admin_user_index');
+    }
+
 }
