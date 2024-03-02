@@ -15,6 +15,7 @@ use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use VictorPrdh\RecaptchaBundle\Form\ReCaptchaType;
 
 class RegistrationFormType extends AbstractType
 {
@@ -97,6 +98,14 @@ class RegistrationFormType extends AbstractType
                         'maxMessage' => 'Your password should be no more than {{ limit }} characters'
                     ]),
                 ],
+            ])
+            ->add("recaptcha", ReCaptchaType::class, [
+                "mapped" => false,
+                "constraints" => [
+                    new NotBlank([
+                        "message" => "Please confirm that you are not a robot."
+                    ])
+                ]
             ])
         ;
     }
