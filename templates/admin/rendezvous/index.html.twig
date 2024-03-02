@@ -90,7 +90,7 @@
                     </td>
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
                         <button class="text-blue-600 hover:text-blue-900"
-                            {#onclick="openModal('viewModal{{ user.id }}')" #}>
+                            onclick="openModal('viewModal{{ rv.id }}')">
                             <svg version="1.1" class="h-6 w-6" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
                                 xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 442.04 442.04"
                                 xml:space="preserve">
@@ -127,34 +127,42 @@
                                 </svg>
                             </a>
                         </button>
-                        <button class="text-red-600 hover:text-red-900" onclick="openModal('deleteModal{{ rv.id }}')">
+                        {% if (rv.statut) %}
+                        <button class="text-grey-600 hover:text-red-900" onclick="openModal('deleteModal{{ rv.id }}')" disabled>
+                        {% else %}
+                        <button class="text-red-600 hover:text-red-900" onclick="openModal('deleteModal{{ rv.id }}')" >
+                        {% endif %}
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
                         </button>
+                        
+                        
                     </td>
                 </tr>
 
 
                 {# Modals for each user #}
                 {# View Modal #}
-                {# <div id="viewModal{{ user.id }}"
+                <div id="viewModal{{ rv.id }}"
                     class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
-                    onclick="closeModal('viewModal{{ user.id }}')">
+                    onclick="closeModal('viewModal{{ rv.id }}')">
                     <!-- Modal content -->
                     <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
                         <div class="flex justify-between items-center mb-4">
                             <h4 class="text-lg font-bold">User Details</h4>
                             <span class="close cursor-pointer"
-                                onclick="closeModal('viewModal{{ user.id }}')">&times;</span>
+                                onclick="closeModal('viewModal{{ rv.id }}')">&times;</span>
                         </div>
-                        <p class="mb-2">Name: {{ user.firstname }}</p>
-                        <p class="mb-2">Email: {{ user.email }}</p>
-                        <p>Roles: {{ role }}</p>
+                        <p class="mb-2">date: {{ rv.dateR|date('Y-m-d H:i') }}</p>
+                        <p class="mb-2">Service: {{ rv.nomService }}</p>
+                        <p class="mb-2">Status: {{ rv.statut }}</p>
+                        <p class="mb-2">Patient: {{ rv.patient.firstname }}</p>
+                        <p class="mb-2">Psychyatrist: {{ rv.user.firstname }}</p>
                     </div>
-                </div> #}
+                </div>
 
                 {# Edit Modal - Simplified for demonstration #}
                 <div id="editModal{{ rv.id }}"

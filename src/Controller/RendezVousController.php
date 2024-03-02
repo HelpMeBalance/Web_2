@@ -6,6 +6,7 @@ use App\Entity\Consultation;
 use App\Entity\RendezVous;
 use App\Form\RendezVousAdminType;
 use App\Form\RendezVousType;
+use App\Form\StringIdType;
 use App\Repository\ConsultationRepository;
 use App\Repository\RendezVousRepository;
 use App\Repository\UserRepository;
@@ -15,10 +16,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
-#[Route('/rendez/vous')]
+// #[Route('/rendez/vous')]
 class RendezVousController extends AbstractController
 {
-    #[Route('/', name: 'app_rendez_vous_index', methods: ['GET'])]
+    #[Route('/rendez/vous/', name: 'app_rendez_vous_index', methods: ['GET'])]
     public function index(RendezVousRepository $rendezVousRepository, Request $request, EntityManagerInterface $entityManager, ConsultationRepository $Conrep): Response
     {
         return $this->render('frontClient/viewRendezVous.html.twig', [
@@ -33,8 +34,8 @@ class RendezVousController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_rendez_vous_new')]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/rendez/vous/new', name: 'app_rendez_vous_new')]
+    public function new(UserRepository $Urep, Request $request, EntityManagerInterface $entityManager): Response
     {
         $rendezVou = new RendezVous();
         $rendezVou->setDateR(new \DateTime());
@@ -45,7 +46,7 @@ class RendezVousController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             
             $rendezVou->setStatut(false);
-            $rendezVou->setPatient($rendezVou->getUser());
+            //$rendezVou->setPatient($Urep->find(?????????));
             $entityManager->persist($rendezVou);
             $entityManager->flush();
             // Check if the selected date is before today
@@ -74,15 +75,15 @@ class RendezVousController extends AbstractController
         ]);
     }
     
-    #[Route('/{id}', name: 'app_rendez_vous_show', methods: ['GET'])]
-    public function show(RendezVous $rendezVou): Response
+    #[Route('/rendez/vous/{id}', name: 'app_rendez_vous_show', methods: ['GET'])]
+    public function show(RendezVousRepository $rendezVousRepository, $id): Response
     {
         return $this->render('rendez_vous/show.html.twig', [
-            'rendez_vou' => $rendezVou,
+            'rendez_vou' => $rendezVousRepository->find($id),
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_rendez_vous_edit', methods: ['GET', 'POST'])]
+    #[Route('/rendez/vous/{id}/edit', name: 'app_rendez_vous_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, RendezVousRepository $RVrep, EntityManagerInterface $entityManager, $id): Response
     {
         $rendezVou = $RVrep->find($id);
@@ -101,7 +102,7 @@ class RendezVousController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_rendez_vous_delete', methods: ['POST'])]
+    #[Route('/rendez/vous/{id}', name: 'app_rendez_vous_delete', methods: ['POST'])]
     public function delete(Request $request, RendezVousRepository $rendezVou, EntityManagerInterface $entityManager, $id): Response
     {
             $entityManager->remove($rendezVou->find($id));
@@ -110,7 +111,7 @@ class RendezVousController extends AbstractController
         return $this->redirectToRoute('app_rendez_vous_index', [], Response::HTTP_SEE_OTHER);
     }
 
-        #[Route('/psy/{psyid}', name: 'app_rendez_vous_confirm')]
+        #[Route('/rendez/vous/psy/{psyid}', name: 'app_rendez_vous_confirm')]
     public function psyConfirm($psyid, UserRepository $userRepository, RendezVousRepository $rendezVousRepository, Request $request, EntityManagerInterface $entityManager, ConsultationRepository $Conrep): Response
     {
         return $this->render('rendez_vous/psyRVConfirmation.html.twig', [
@@ -125,7 +126,7 @@ class RendezVousController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit/status', name: 'app_rendez_vous_edit_status')]
+    #[Route('/rendez/vous/{id}/edit/status', name: 'app_rendez_vous_edit_status')]
     public function editS(Request $request, RendezVousRepository $RVrep, EntityManagerInterface $entityManager, $id): Response
     {
         $rendezVou = $RVrep->find($id);
@@ -135,7 +136,7 @@ class RendezVousController extends AbstractController
 
         $consultation = new Consultation();
         $consultation->setPsychiatre($rendezVou->getUser());
-        $consultation->setPatient($rendezVou->getUser());
+        $consultation->setPatient($rendezVou->getPatient());
         $consultation->setRendezvous($rendezVou);
         $consultation->setDuree(new \DateTime());
         $consultation->setNote('');
@@ -156,7 +157,7 @@ class RendezVousController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/{id}/edit', name: 'app_rendez_vous_edit_admin', methods: ['GET', 'POST'])]
+    #[Route('/admin/rendez/vous/{id}/edit', name: 'app_rendez_vous_edit_admin', methods: ['GET', 'POST'])]
     public function editAdmin(Request $request, RendezVousRepository $RVrep, EntityManagerInterface $entityManager, $id): Response
     {
         $rendezVou = $RVrep->find($id);
