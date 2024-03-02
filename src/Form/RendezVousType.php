@@ -18,6 +18,10 @@ class RendezVousType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+        ->add('patient', EntityType::class, [
+            'class' => User::class,
+            'choice_label' => 'firstname',
+            ])
             ->add('dateR',DateTimeType::class, [
                 'widget' => 'single_text',
                 'html5' => true,

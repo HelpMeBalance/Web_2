@@ -1,25 +1,35 @@
 {% extends 'frontClient/base.html.twig' %}
-
+{% set stars = 0 %}
 {% block body %}
 <section class="testimonial_section section_space_lg">
   <div class="container">
     <div class="section_heading text-center">
       <h2 class="section_heading_text">Appointment Managment</h2>
+      <a href="{{ path('app_rendez_vous_new') }}">Create new appointment</a>
       <p class="section_heading_description mb-0">
-        {{rendezvous[0].patient.firstname}} {{rendezvous[0].patient.lastname}}
+        {{app.user.firstname}} {{app.user.lastname}}
       </p>
     </div>
     <div class="testimonial_carousel">
       <div class="carousel_2col row" data-slick='{"arrows":false}'>
         {% for rv in rendezvous %}
+        {% if app.user == rv.patient %}
         <div class="carousel_item col-">
           <div class="testimonial_item">
+            {% if rv.statut %}
+            {% for c in consultation %}
+            {% if c.rendezvous == rv %}
+            {% set stars = c.avisPatient %}
+            {% endif %}
+            {% endfor %}
             <ul class="rating_star unordered_list">
+              {% for _ in range(0,stars ) %}
               <li><i class="fa-solid fa-star"></i></li>
-              <li><i class="fa-solid fa-star"></i></li>
-              <li><i class="fa-solid fa-star"></i></li>
-              <li><i class="fa-solid fa-star"></i></li>
+              {% endfor %}
             </ul>
+            {% else %}
+            {#print form for avisPatient here#}
+            {% endif %}
             <div class="author_box">
               <div class="author_box_image">
                 <img src="{{asset('assets/images/gallery/4.png')}}" alt="Reviewer Image" />
@@ -34,6 +44,7 @@
             </p>
           </div>
         </div>
+        {% endif %}
         {% endfor %}
       </div>
     </div>
