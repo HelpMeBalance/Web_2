@@ -57,10 +57,45 @@
                     </li>
                     </ul>
                     <h3 class="item_title">
-                           <mark>  {{ publication.titre }} <i class="fa-solid fa-pen"></i></mark>
+                           <mark>  {{ publication.titre }}
+                            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and publication.user.id== app.user.id %}
+                            <a style="margin-right: 30px;"class=" btn_reply " href="{{ path('app_publication_update_blogClient', {'idp': publication.id}) }}">
+                              <i class="fa-solid fa-pen"></i>
+                            </a>
+                            {% else %}
+                            <i class="fa-solid fa-pen"></i>
+                            {% endif %}
+                          </mark> 
+                           
                       </h3>
                     <p>
-                        {{ publication.contenu|nl2br}}
+                        {% for line in publication.contenu|split("\n") %}
+                        {# Process each line to wrap at 40 characters #}
+                        {% set wrappedLines = [] %}
+                        {% set currentLine = '' %}
+
+                        {# Split the line into individual characters #}
+                        {% set characters = line|split('') %}
+                        {% for char in characters %}
+                            {# Add character to current line and check length #}
+                            {% set currentLine = currentLine ~ char %}
+                            {% if currentLine|length >= 70 %}
+                                {# Append current line to wrappedLines and reset #}
+                                {% set wrappedLines = wrappedLines|merge([currentLine]) %}
+                                {% set currentLine = '' %}
+                            {% endif %}
+                        {% endfor %}
+                        {# Add any remaining characters as a line #}
+                        {% if currentLine|length > 0 %}
+                            {% set wrappedLines = wrappedLines|merge([currentLine]) %}
+                        {% endif %}
+
+                        {# Output the wrapped lines #}
+                        {% for wrappedLine in wrappedLines %}
+                            {{ wrappedLine }}<br>
+                        {% endfor %}
+                    {% endfor %}
+
                     </p>
                     <div class="post_tagsandshare">
                       <div class="row">
@@ -68,7 +103,7 @@
                           <h4 class="wrap_title">Explore Related Topics</h4>
                           <ul class="post_tags unordered_list">
                             {% for souscat in souscategoriesundercat %}
-                            <li><a href="{{ path('app_blogSousCatClient', {'souscat': souscat.id, 'page': 1}) }}">{{ souscat.nom }}</a></li>
+                            <li><a  {% if souscat.id == publication.souscategorie.id %} style="background-color: var(--bs-primary);" {% endif %}href="{{ path('app_blogSousCatClient', {'souscat': souscat.id, 'page': 1}) }}">{{ souscat.nom }}</a></li>
                             {% endfor %}
                           </ul>
                         </div>
@@ -106,16 +141,22 @@
                     <ul class="comment_list_wrap unordered_list_block">
 
                       {% for commentaire in commentaires|sort((a, b) => b.dateM <=> a.dateM)  %}
-                      {% if (showmore == 0 and loop.index <= commentaires|length/2 ) or showmore==1%}
+                      {% if (showmore == 0 and loop.index <= commentaires|length/2) or showmore==1 or commentaires|length ==1%}
                       <li>
                         <div class="comment_item">
                           <div class="author_box">
                             <div class="author_box_image">
-                              <img
+                             <img
+                                {% if commentaire.user.profilePicture %}
+                                 {% set url='uploads/profile_pictures/'~commentaire.user.profilePicture %} 
+                              src="{{ asset(url)  }}"                            
+                              {% else %}                             
                               src="{{ asset("assets/images/meta/author_image_1.png") }}"
-                                alt="Reviewer Image - Talking Minds - Psychotherapist Site Template"
+                              
+                              {% endif %}
                               />
                             </div>
+                            
                             <div class="author_box_content">
                               <h3 class="author_box_name"> {% if(commentaire.anonyme)%}
                               Anonyme
@@ -145,9 +186,6 @@
                             <label for="input_checkbox">
                              Post as Anonyme
                             </label>
-                          </div>
-                          <div >
-                            {{ form_widget(formupdate.User,{'attr' : {'class' : 'd-none'},'value': app.user.id})}}
                           </div>
                           <button type="submit" class="btn btn-primary">
                             <span class="btn_text" data-text="Update Comment">
@@ -182,6 +220,7 @@
                     </ul>             
                     
                   </div>
+                  {% if commentaires|length > 1%}
                   {% if(showmore ==0)%}
                   <a class="btn-link col-lg-12 justify-content-center " href="{{ path('app_blogDetails', {'id': publication.id,'showmore':1}) }}">
                     <span class="btn_text">Show More</span>
@@ -198,10 +237,11 @@
                   </a>
                   {% endif %}
                   {% endif %}
+                  {% endif %}
                   {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and publication.comOuvert and not (app.request.attributes.get('idc'))  %}
                   {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
                   <div class="comment_form pb-0">
-                    <h3 class="comment_area_title">Leave a comment</h3>
+                    <h3 class="comment_area_title">Leave a comment </h3>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
@@ -243,9 +283,9 @@
                            Post as Anonyme
                           </label>
                         </div>
-                        <div >
-                          {{ form_widget(form.User,{'attr' : {'class' : 'd-none'},'value': app.user.id})}}
-                        </div>
+                        {# <div >
+                            {{ form_widget(form.User,{'attr' : {'class' : ''},'value': app.user.id })}}
+                          </div> #}
                         <button type="submit" class="btn btn-primary">
                           <span class="btn_text" data-text="Post Comment">
                             Post Comment
@@ -335,7 +375,8 @@
                             <div class="blog_image">
                               <a class="blog_image_wrap" href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">
                                 <img
-                                src="{{ asset(publication.image) }}"
+                                {% set url='uploads/pub_pictures/'~publication.image %} 
+                                src="{{ asset(url)  }}" 
                                 alt="HelpMeBalance"
                                 />
                               </a>
@@ -379,7 +420,7 @@
                       </h3>
                       <ul class="post_tags unordered_list">
                         {% for souscat in souscategories %}
-                        <li><a href="{{ path('app_blogSousCatClient', {'souscat': souscat.id, 'page': 1}) }}">{{ souscat.nom }}</a></li>
+                        <li><a {% if souscat.id == publication.souscategorie.id %} style="background-color: var(--bs-primary);" {% endif %} href="{{ path('app_blogSousCatClient', {'souscat': souscat.id, 'page': 1}) }}">{{ souscat.nom }}</a></li>
                         {% endfor %}
                       </ul>
                     </div>

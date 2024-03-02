@@ -15,7 +15,7 @@
                     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
                     
                     <div class="comment_form pb-0">
-                      <h3 class="comment_area_title">Express Yourself {{app.user.id}} </h3>
+                      <h3 class="comment_area_title">Express Yourself</h3>
                       <div class="user-profile-picture">
                         <img
                     {% set url='uploads/pub_pictures/'~publication.image %} 
@@ -141,7 +141,8 @@
                             <div class="blog_image">
                               <a class="blog_image_wrap" href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">
                                 <img
-                                src="{{ asset(publication.image) }}"
+                                {% set url='uploads/pub_pictures/'~publication.image %} 
+                                src="{{ asset(url)  }}" 
                                 alt="HelpMeBalance"
                                 />
                               </a>
