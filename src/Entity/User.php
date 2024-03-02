@@ -11,6 +11,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\File; // Add this line
+use DateTimeInterface;
+
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
@@ -389,6 +391,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             }
         }
 
+        return $this;
+    }
+    #[ORM\Column(type: 'boolean')]
+    private $isBanned = false;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private $banExpiresAt;
+
+    public function getIsBanned(): bool
+    {
+        return $this->isBanned;
+    }
+
+    public function setIsBanned(bool $isBanned): self
+    {
+        $this->isBanned = $isBanned;
+        return $this;
+    }
+
+    public function getBanExpiresAt(): ?DateTimeInterface
+    {
+        return $this->banExpiresAt;
+    }
+
+    public function setBanExpiresAt(?DateTimeInterface $banExpiresAt): self
+    {
+        $this->banExpiresAt = $banExpiresAt;
         return $this;
     }
 

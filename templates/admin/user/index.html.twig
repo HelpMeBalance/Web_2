@@ -91,6 +91,36 @@
 
                     {% endif %}
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ role }}</td>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+        {% if user.isBanned %}
+            <!-- Unban User Form -->
+            <form action="{{ path('admin_user_unban', {'id': user.id}) }}" method="post">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('unban_user' ~ user.id) }}">
+                <button type="submit" class="btn btn-warning"><i class="fa-solid fa-ban"></i></button>
+            </form>
+        {% else %}
+            <!-- Ban User Form -->
+        <button class="btn btn-danger" onclick="openModal('banModal{{ user.id }}')"><i class="fa-solid fa-check"></i></button>
+
+        <!-- Ban Modal -->
+        <div id="banModal{{ user.id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onclick="closeModal('banModal{{ user.id }}')">
+            <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white" onclick="event.stopPropagation()">
+                <div class="flex justify-between items-center mb-4">
+                    <h4 class="text-lg font-bold">Ban User</h4>
+                    <span class="close cursor-pointer" onclick="closeModal('banModal{{ user.id }}')">&times;</span>
+                </div>
+
+                <form action="{{ path('admin_user_ban', {'id': user.id}) }}" method="post">
+                    <label for="banDays">Ban Duration (days):</label>
+                    <input type="number" id="banDays{{ user.id }}" 
+                        class="block w-full mt-1 border p-2 my-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    name="banDuration" required>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('ban_user' ~ user.id) }}">
+                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Confirm Ban</button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
                       <button class="text-blue-600 hover:text-blue-900" onclick="openModal('viewModal{{ user.id }}')">
                         <svg version="1.1" class="h-6 w-6" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 442.04 442.04"
