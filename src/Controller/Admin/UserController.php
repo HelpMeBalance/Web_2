@@ -23,10 +23,14 @@ class UserController extends AbstractController
 
     // Show all users
     #[Route('/', name: 'index')]
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $users = $this->entityManager->getRepository(User::class)->findAll();
+    $searchTerm = $request->query->get('search');
+    $sortField = $request->query->get('sort', 'firstname');
+    $sortOrder = $request->query->get('order', 'asc');
 
+    $users = $this->entityManager->getRepository(User::class)->search($searchTerm, $sortField, $sortOrder);
+        
         return $this->render('admin/user/index.html.twig', [
             'users' => $users,
         ]);
