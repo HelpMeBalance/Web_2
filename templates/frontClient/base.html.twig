@@ -10,6 +10,9 @@
     
     <title>{% block title %} {{ titlepage }}HelpMeBalance{% endblock %}</title>
     <link rel="icon" href="{{asset('assets/images/site_logo/iconlogo.png')}}" />
+    {% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.js" integrity="sha256-dHUNnePy81fXq4D/wfu7cPsEIP7zl6MvLb84jtZf+UY=" crossorigin="anonymous"></script>
+{% endblock %}
     {% block css %}
     
     <!-- Fraimwork - CSS Include -->
