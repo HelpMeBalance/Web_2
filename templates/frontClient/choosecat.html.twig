@@ -68,7 +68,7 @@
                         class="form-control"
                         type="search"
                         name="search"
-                        placeholder="Search (coming soon)"
+                        placeholder="Search wala jsp chneya lena (coming soon)"
                         disabled
                       />
                       <button type="submit" class="input_icon" disabled>
@@ -118,7 +118,8 @@
                             <div class="blog_image">
                               <a class="blog_image_wrap" href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">
                                 <img
-                                src="{{ asset(publication.image) }}"
+                                {% set url='uploads/pub_pictures/'~publication.image %} 
+                                src="{{ asset(url)  }}" 
                                 alt="HelpMeBalance"
                                 />
                               </a>

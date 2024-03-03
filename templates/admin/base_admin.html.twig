@@ -101,7 +101,7 @@
           </svg>
           <span class="ml-2"  x-show="menu">Quiz</span>
         </a>
-        <a href="{{ path('app_blogAdmin') }}" class="inline-flex items-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg px-2 {% if currentRoute == 'app_blogAdmin' %}bg-blue-600 text-white{% else %}bg-gray-800 text-gray-500{% endif %}">
+        <a href="{{ path('app_blogAdmin') }}" class="inline-flex items-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg px-2 {% if currentRoute == 'app_blogAdmin' or currentRoute == 'app_blogAdminCom' %}bg-blue-600 text-white{% else %}bg-gray-800 text-gray-500{% endif %}">
           <i class="fa-regular fa-comments  fa-lg"></i>
           <span class="ml-2"  x-show="menu">Blog</span>
         </a>

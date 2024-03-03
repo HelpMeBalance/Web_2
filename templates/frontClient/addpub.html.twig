@@ -133,8 +133,9 @@
                           <div class="blog_item_small">
                             <div class="blog_image">
                               <a class="blog_image_wrap" href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">
-                                <img
-                                src="{{ asset(publication.image) }}"
+                                 <img
+                                {% set url='uploads/pub_pictures/'~publication.image %} 
+                                src="{{ asset(url)  }}" 
                                 alt="HelpMeBalance"
                                 />
                               </a>

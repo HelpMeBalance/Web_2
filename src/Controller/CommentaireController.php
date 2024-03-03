@@ -30,37 +30,14 @@ class CommentaireController extends AbstractController
             'commentaires' => $commentaireRepository->findAll(),
         ]);
     }*/
-    #[Route('/{idc}/validationcom', name: 'app_com_validate', methods: ['GET', 'POST'])]
-    public function validate(Request $request,int $idc, EntityManagerInterface $entityManager,CommentaireRepository $commentaireRepository): Response
-    {
-        $commentaire = new Commentaire();
-        $commentaire = $commentaireRepository->find($idc);
-        $commentaire->setValide(!($commentaire->isValide()));
-        $entityManager->flush();
-        return $this->render('admin/blog/coms.html.twig', [
-            'controller_name' => 'BlogController',
-            'coms' => $commentaire->getpublication()->getCommentaires(),
-            'titre'=>$commentaire->getpublication()->gettitre(),
-        ]);
-    }
    
-    #[Route('/com/{id}', name: 'admin_com_delete',  methods: ['POST'])]
-    public function deleteadmin(Request $request, int $id, EntityManagerInterface $entityManager,CommentaireRepository $commentaireRepository): Response
-    { $idp=$commentaireRepository->find($id)->getpublication()->getid();
-        if ($this->isCsrfTokenValid('delete'.$id, $request->request->get('_token'))) {
-            $entityManager->remove($commentaireRepository->find($id));
-            $entityManager->flush();
-        }
-        if($entityManager->getRepository(Publication::class)->find($idp)->getcommentaires()->isEmpty())
-        return $this->redirectToRoute('app_blogAdmin');
-        else return $this->redirectToRoute('app_blogAdminCom', ['idp'=>$idp], Response::HTTP_SEE_OTHER);
-    }
     #[Route('/{idPublication}/new', name: 'app_commentaire_new', methods: ['GET', 'POST'])]
     public function new(int $idPublication,Request $request, EntityManagerInterface $entityManager,CommentaireRepository $commentaireRepository): Response
     {
         $commentaire = new Commentaire();
         $publication = $entityManager->getRepository(Publication::class)->find($idPublication);
         $commentaire->setPublication($publication);
+       
         $form = $this->createForm(CommentaireType::class, $commentaire);
         $form->handleRequest($request);
 
@@ -101,24 +78,24 @@ class CommentaireController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-    #[Route('/{id}/like', name: 'app_commentaire_like', methods: ['GET', 'POST'])]
-    public function like(Request $request, Commentaire $commentaire, EntityManagerInterface $entityManager): Response
-    {
-        $commentaire->setLikes($commentaire->getLikes()+1);
-        $entityManager->flush();
-        return $this->render('commentaire/show.html.twig', [
-            'commentaire' => $commentaire,'like'=>1
-        ]);
-    }
-    #[Route('/{id}/dislike', name: 'app_commentaire_dislike', methods: ['GET', 'POST'])]
-    public function dislike(Request $request, Commentaire $commentaire, EntityManagerInterface $entityManager): Response
-    {
-        $commentaire->setLikes($commentaire->getLikes()-1);
-        $entityManager->flush();
-        return $this->render('commentaire/show.html.twig', [
-            'commentaire' => $commentaire,'like'=>0
-        ]);
-    }
+    // #[Route('/{id}/like', name: 'app_commentaire_like', methods: ['GET', 'POST'])]
+    // public function like(Request $request, Commentaire $commentaire, EntityManagerInterface $entityManager): Response
+    // {
+    //     $commentaire->setLikes($commentaire->getLikes()+1);
+    //     $entityManager->flush();
+    //     return $this->render('commentaire/show.html.twig', [
+    //         'commentaire' => $commentaire,'like'=>1
+    //     ]);
+    // }
+    // #[Route('/{id}/dislike', name: 'app_commentaire_dislike', methods: ['GET', 'POST'])]
+    // public function dislike(Request $request, Commentaire $commentaire, EntityManagerInterface $entityManager): Response
+    // {
+    //     $commentaire->setLikes($commentaire->getLikes()-1);
+    //     $entityManager->flush();
+    //     return $this->render('commentaire/show.html.twig', [
+    //         'commentaire' => $commentaire,'like'=>0
+    //     ]);
+    // }
     #[Route('/{idc}/{idp}/{showmore}', name: 'app_commentaire_delete', methods: ['POST'])]
     public function delete(Request $request, int $idc, EntityManagerInterface $entityManager,int $showmore,int $idp,CommentaireRepository $commentaireRepository): Response
     {
@@ -128,5 +105,30 @@ class CommentaireController extends AbstractController
         }
 
         return $this->redirectToRoute('app_blogDetails', ['id'=>$idp,'showmore'=>$showmore], Response::HTTP_SEE_OTHER);
+    }
+
+
+
+
+
+    ///////////////////////////////////////////ADMIN////////////////////////
+    #[Route('/{idc}/validationcom', name: 'app_com_validate', methods: ['GET', 'POST'])]
+    public function validate(Request $request,int $idc, EntityManagerInterface $entityManager,CommentaireRepository $commentaireRepository): Response
+    {
+        $commentaire = new Commentaire();
+        $commentaire = $commentaireRepository->find($idc);
+        $commentaire->setValide(!($commentaire->isValide()));
+        $entityManager->flush();
+        return $this->redirectToRoute('app_blogAdminCom', ['idp'=>$commentaire->getpublication()->getId()], Response::HTTP_SEE_OTHER);
+    }
+   
+    #[Route('/com/{id}', name: 'admin_com_delete',  methods: ['POST'])]
+    public function deletecomadmin(Request $request, int $id, EntityManagerInterface $entityManager,CommentaireRepository $commentaireRepository): Response
+    { $idp=$commentaireRepository->find($id)->getpublication()->getid();
+        if ($this->isCsrfTokenValid('delete'.$id, $request->request->get('_token'))) {
+            $entityManager->remove($commentaireRepository->find($id));
+            $entityManager->flush();
+        }
+        return $this->redirectToRoute('app_blogAdminCom', ['idp'=>$idp], Response::HTTP_SEE_OTHER);
     }
 }

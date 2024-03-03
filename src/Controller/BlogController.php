@@ -44,26 +44,6 @@ class BlogController extends AbstractController
             'reccpublications' => $publicationRepository->findAllsortedValide(),
         ]);
     }
-    #[Route('/admin/blog', name: 'app_blogAdmin')]
-    public function indexAdmin(Request $request, PublicationRepository $publicationRepository,CommentaireRepository $commentaireRepository): Response
-    {
-        $publications = $publicationRepository->findAllsorteddate();
-        return $this->render('admin/blog/index.html.twig', [
-            'controller_name' => 'BlogController',
-            'publications' => $publications,
-             'commentaireRepository'=>$commentaireRepository,
-        ]);
-    }
-    #[Route('/admin/{idp}/coms', name: 'app_blogAdminCom')]
-    public function indexAdmincoms(Request $request, PublicationRepository $publicationRepository,int $idp,CommentaireRepository $commentaireRepository): Response
-    {
-        $publication = $publicationRepository->find($idp);
-        return $this->render('admin/blog/coms.html.twig', [
-            'controller_name' => 'BlogController',
-            'coms' =>$commentaireRepository->findAllUnderPublication($publication),
-            'titre'=>$publication->gettitre(),
-        ]);
-    }
     #[Route('/blogSousCat/{souscat}/{page}', name: 'app_blogSousCatClient')]
     public function indexparSousCat(Request $request, PublicationRepository $publicationRepository,int $souscat, int $page,CommentaireRepository $commentaireRepository,SousCategorieRepository $sousCategorieRepository,CategorieRepository $categorieRepository ): Response
     {
@@ -151,6 +131,7 @@ class BlogController extends AbstractController
         if (!$publication) {
             throw $this->createNotFoundException('No publication found for id '.$id);
         }
+        $publication->setVues($publication->getVues()+1);
         $entityManager->flush();
         $Cat=$publication->getCategorie();
         $commentaire = new Commentaire();
@@ -158,6 +139,7 @@ class BlogController extends AbstractController
         $formm = $this->createForm(CommentaireType::class, $commentaire);
         $formm->handleRequest($request);
         if ($formm->isSubmitted() && $formm->isValid()) {
+            $commentaire->setUser($this->getUser());
             $entityManager->persist($commentaire);
             $entityManager->flush();
             return $this->redirectToRoute('app_blogDetails', ['id'=>$publication->getId(),'showmore'=>$showmore], Response::HTTP_SEE_OTHER);
@@ -287,7 +269,7 @@ class BlogController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $pub->setUser($this->getUser());
-            $pub->setValide(0);
+            //$pub->setValide(0);
             $pub->setCategorie($categorieRepository->find($pub->getCategorie()->getId()));
             $pub->setSousCategorie($sousCategorieRepository->find($pub->getSousCategorie()->getId()));
             
@@ -327,6 +309,169 @@ class BlogController extends AbstractController
             'form' => $form->createView(),
             'cat'=>$pub->getCategorie(),
             'souscat'=>$pub->getSousCategorie(),
+        ]);
+    }
+
+
+    ////////////////////////////////////////////////ADMIN////////////////////////
+    #[Route('/admin/blog', name: 'app_blogAdmin')]
+    public function indexAdmin(Request $request, PublicationRepository $publicationRepository,CommentaireRepository $commentaireRepository): Response
+    {
+        $publications = $publicationRepository->findAllsorteddate();
+        return $this->render('admin/blog/index.html.twig', [
+            'controller_name' => 'BlogController',
+            'publications' => $publications,
+             'commentaireRepository'=>$commentaireRepository,
+        ]);
+    }
+    #[Route('/admin/{idp}/coms', name: 'app_blogAdminCom')]
+    public function indexAdmincoms(Request $request, PublicationRepository $publicationRepository,int $idp,CommentaireRepository $commentaireRepository): Response
+    {
+        $publication = $publicationRepository->find($idp);
+        return $this->render('admin/blog/coms.html.twig', [
+            'pub'=>$publication,
+            'controller_name' => 'BlogController',
+            'coms' =>$commentaireRepository->findAllUnderPublication($publication),
+            'titre'=>$publication->gettitre(),
+        ]);
+    }
+    #[Route('/updatepubadmin/{idp}', name: 'app_publication_update__blogAdmin', methods: ['GET', 'POST'])]
+    public function updatepubadmin(int $idp,Request $request, EntityManagerInterface $entityManager,PublicationRepository $publicationRepository,CommentaireRepository $commentaireRepository,SousCategorieRepository $sousCategorieRepository,CategorieRepository $categorieRepository,SluggerInterface $slugger, ParameterBagInterface $params): Response
+    {
+        $pub = new Publication();
+        $pub=$publicationRepository->find($idp);
+        $formUpdate = $this->createForm(PublicationType::class, $pub);
+        $formUpdate->handleRequest($request);
+
+        if ($formUpdate->isSubmitted() && $formUpdate->isValid()) {
+            $pub->setUser($this->getUser());
+            //$pub->setValide(0);
+            $pub->setCategorie($categorieRepository->find($pub->getCategorie()->getId()));
+            $pub->setSousCategorie($sousCategorieRepository->find($pub->getSousCategorie()->getId()));
+            
+
+            $imageFile = $formUpdate->get('imageFile')->getData(); // Ensure 'imageFile' matches your form field name
+            if ($imageFile) {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+    
+                try {
+                    $imageFile->move(
+                        $params->get('pub_pictures_directory'), // Make sure this parameter is defined in your services.yaml
+                        $newFilename
+                    );
+                    $pub->setImage($newFilename); // Update the entity with the new filename
+                } catch (FileException $e) {
+                    // Handle exception if something happens during file upload
+                }
+            }
+            $pub->setDateM(new \DateTimeImmutable());
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_blogAdmin');
+        }
+        return $this->render('admin/blog/index.html.twig', [
+            'controller_name' => 'BlogController',
+            'publications' => $publicationRepository->findAllsorteddate(),
+            'pub'=>$pub,
+            'formUpdate' => $formUpdate->createView(),
+             'commentaireRepository'=>$commentaireRepository,
+        ]);
+    }
+    #[Route('/addpubadmin', name: 'app_publication_add__blogAdmin')]
+    public function addpubadmin(Request $request, EntityManagerInterface $entityManager,PublicationRepository $publicationRepository,CommentaireRepository $commentaireRepository,SousCategorieRepository $sousCategorieRepository,CategorieRepository $categorieRepository,SluggerInterface $slugger, ParameterBagInterface $params): Response
+    {
+        $pub = new Publication();
+        $formAdd = $this->createForm(PublicationType::class, $pub);
+        $formAdd->handleRequest($request);
+        $imageFile = $formAdd->get('imageFile')->getData(); 
+
+        if ($formAdd->isSubmitted() && $formAdd->isValid()) {
+            $pub->setUser($this->getUser());
+            $pub->setDateC(new \DateTimeImmutable());
+             $pub->setValide(1);
+            // $pub->setCategorie($categorieRepository->find($cat));
+            // $pub->setSousCategorie($sousCategorieRepository->find($souscat));
+
+            $imageFile = $formAdd->get('imageFile')->getData(); // Ensure 'imageFile' matches your form field name
+            if ($imageFile) {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+    
+                try {
+                    $imageFile->move(
+                        $params->get('pub_pictures_directory'), // Make sure this parameter is defined in your services.yaml
+                        $newFilename
+                    );
+                    $pub->setImage($newFilename); // Update the entity with the new filename
+                } catch (FileException $e) {
+                    // Handle exception if something happens during file upload
+                }
+            }
+            else 
+            {
+                $imageFile="default.png";
+                $pub->setImage($imageFile);
+            }
+            $entityManager->persist($pub);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_blogAdmin');
+        }
+        return $this->render('admin/blog/index.html.twig', [
+            'controller_name' => 'BlogController',
+            'publications' => $publicationRepository->findAllsorteddate(),
+            'formAdd'=> $formAdd->createView(),
+             'commentaireRepository'=>$commentaireRepository,
+        ]);
+    }
+    #[Route('/addcomadmin/{idp}', name: 'app_com_add__blogAdmin')]
+    public function addcomadmin(int $idp,Request $request, EntityManagerInterface $entityManager,PublicationRepository $publicationRepository,CommentaireRepository $commentaireRepository): Response
+    {
+        $commentaire = new Commentaire();
+        $publication = $entityManager->getRepository(Publication::class)->find($idp);
+        $commentaire->setPublication($publication);
+        $form = $this->createForm(CommentaireType::class, $commentaire);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $commentaire->setUser($this->getUser());
+            $commentaire->setValide(1);
+            $entityManager->persist($commentaire);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_blogAdminCom', ['idp'=>$idp], Response::HTTP_SEE_OTHER);
+        }
+        return $this->render('admin/blog/coms.html.twig', [
+            'pub'=>$publication,
+            'controller_name' => 'BlogController',
+            'formAdd' => $form->createView(),
+            'coms' => $commentaire->getpublication()->getCommentaires(),
+            'titre'=>$commentaire->getpublication()->gettitre(),
+        ]);
+    }
+    #[Route('/updatecomadmin/{idp}/{idc}', name: 'app_com_update__blogAdmin')]
+    public function updatecomadmin(int $idp,int $idc,Request $request, EntityManagerInterface $entityManager,PublicationRepository $publicationRepository,CommentaireRepository $commentaireRepository): Response
+    {
+        $commentaire =  $commentaireRepository->find($idc);
+        $publication = $entityManager->getRepository(Publication::class)->find($idp);
+        $commentaire->setPublication($publication);
+        $formupdate = $this->createForm(CommentaireType::class, $commentaire);
+        $formupdate->handleRequest($request);
+
+        if ($formupdate->isSubmitted() && $formupdate->isValid()) {
+            $commentaire->setUser($this->getUser());
+            $commentaire->setValide(1);
+            $entityManager->persist($commentaire);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_blogAdminCom', ['idp'=>$idp], Response::HTTP_SEE_OTHER);
+        }
+        return $this->render('admin/blog/coms.html.twig', [
+            'pub'=>$publication,
+            'controller_name' => 'BlogController',
+            'formupdate' => $formupdate->createView(),
+            'coms' => $commentaire->getpublication()->getCommentaires(),
+            'titre'=>$commentaire->getpublication()->gettitre(),
         ]);
     }
 }
