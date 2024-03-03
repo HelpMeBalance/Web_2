@@ -1,46 +1,45 @@
-<div class="flex justify-center items-center h-screen bg-blue-400">
     <div class="w-full max-w-md bg-gray-200 p-4 rounded-md">
-        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-            <div class="mb-4">
-                <p 'class': 'block text-gray-700 text-sm font-bold mb-2'>Prix</p>
-                {{ form_widget(form.prix, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}
-            </div>
-            {{ form_errors(form.prix, {'class': 'text-red-200 bg-red-400'}) }}
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'enctype':'multipart/form-data'}}) }}
 
-            <div class="mb-4">
-                <p 'class': 'block text-gray-700 text-sm font-bold mb-2'>nom</p>
-                {{ form_widget(form.nom, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}
-            </div>
-            {{ form_errors(form.nom, {'class': 'text-red-200 bg-red-400'}) }}
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Image</label>
+            {{ form_widget(form.imageFile, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}
+            {{ form_errors(form.imageFile, {'class': 'text-red-500'}) }}
+        </div>
 
-            <div class="mb-4">
-                <p 'class': 'block text-gray-700 text-sm font-bold mb-2'>description</p>
-                {{ form_widget(form.description, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}
-            </div>
-            {{ form_errors(form.description, {'class': 'text-red-200 bg-red-400'}) }}
+        <div class="mb-4">
+            <label for="{{ form.prix.vars.id }}" class="block text-gray-700 text-sm font-bold mb-2">Prix</label>
+            {{ form_widget(form.prix, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}
+            {{ form_errors(form.prix, {'class': 'text-red-500'}) }}
+        </div>
 
-            <div class="mb-4">
-                <p 'class': 'block text-gray-700 text-sm font-bold mb-2'>categorie</p>
-                {{ form_widget(form.categorie, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}
-            </div>
-            {{ form_errors(form.categorie, {'class': 'text-red-200 bg-red-400'}) }}
+        <div class="mb-4">
+            <label for="{{ form.nom.vars.id }}" class="block text-gray-700 text-sm font-bold mb-2">Nom</label>
+            {{ form_widget(form.nom, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}
+            {{ form_errors(form.nom, {'class': 'text-red-500'}) }}
+        </div>
 
-            <div class="mb-4">
-                <p 'class': 'block text-gray-700 text-sm font-bold mb-2'>quantite</p>
-                {{ form_widget(form.quantite, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}
-            </div>
-            {{ form_errors(form.quantite, {'class': 'text-red-200 bg-red-400'}) }}
+        <div class="mb-4">
+            <label for="{{ form.description.vars.id }}" class="block text-gray-700 text-sm font-bold mb-2">Description</label>
+            {{ form_widget(form.description, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}
+            {{ form_errors(form.description, {'class': 'text-red-500'}) }}
+        </div>
 
-             {# <div class="mb-4 hidden">
-                <p 'class': 'block text-gray-700 text-sm font-bold mb-2'>panier</p>
-                {{ form_widget(form.panier, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}
-            </div>
-            {{ form_errors(form.panier, {'class': 'text-red-200 bg-red-400'}) }} #}
+        <div class="mb-4">
+            <label for="{{ form.categorie.vars.id }}" class="block text-gray-700 text-sm font-bold mb-2">Catégorie</label>
+            {{ form_widget(form.categorie, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}
+            {{ form_errors(form.categorie, {'class': 'text-red-500'}) }}
+        </div>
 
+        <div class="mb-4">
+            <label for="{{ form.quantite.vars.id }}" class="block text-gray-700 text-sm font-bold mb-2">Quantité</label>
+            {{ form_widget(form.quantite, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}
+            {{ form_errors(form.quantite, {'class': 'text-red-500'}) }}
+        </div>
 
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">
-                {{ button_label|default('Save') }}
-            </button>
-            {{ form_end(form) }}
-    </div>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">
+            {{ button_label|default('Save') }}
+        </button>
+        
+        {{ form_end(form) }}
     </div>
