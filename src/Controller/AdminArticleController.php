@@ -27,6 +27,9 @@ class AdminArticleController extends AbstractController
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
+        $searchTerm = $request->query->get('search');
+        $sortField = $request->query->get('sort', 'nom');
+        $sortOrder = $request->query->get('order', 'asc');
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($article);
@@ -34,8 +37,10 @@ class AdminArticleController extends AbstractController
 
             return $this->redirectToRoute('admin_article_index', [], Response::HTTP_SEE_OTHER);
         }
+        $articles = $this->entityManager->getRepository(Article::class)->search($searchTerm, $sortField, $sortOrder);
         return $this->render('admin/article/index.html.twig', [
-            'articles' => $articleRepository->findAll(),
+            'articles' => $articles,
+
             'form' => $form->createView()
         ]);
     }
