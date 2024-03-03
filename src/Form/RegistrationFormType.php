@@ -99,14 +99,14 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add("recaptcha", ReCaptchaType::class, [
-                "mapped" => false,
-                "constraints" => [
-                    new NotBlank([
-                        "message" => "Please confirm that you are not a robot."
-                    ])
-                ]
-            ])
+            // ->add("recaptcha", ReCaptchaType::class, [
+            //     "mapped" => false,
+            //     "constraints" => [
+            //         new NotBlank([
+            //             "message" => "Please confirm that you are not a robot."
+            //         ])
+            //     ]
+            // ])
         ;
     }
 

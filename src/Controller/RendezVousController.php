@@ -114,8 +114,10 @@ class RendezVousController extends AbstractController
         #[Route('/rendez/vous/psy/{psyid}', name: 'app_rendez_vous_confirm')]
     public function psyConfirm($psyid, UserRepository $userRepository, RendezVousRepository $rendezVousRepository, Request $request, EntityManagerInterface $entityManager, ConsultationRepository $Conrep): Response
     {
+        $consultationId = $request->request->get('consultationId');
         return $this->render('rendez_vous/psyRVConfirmation.html.twig', [
             'consultations' => $Conrep->findAll(),
+            'consultationId' => $consultationId,
             "rendezvous" => $rendezVousRepository->findBy(['user' => $userRepository->findOneBy(['id' => $psyid])]),
             'title' => 'RendezVous',
             'titlepage' => 'RendezVous',

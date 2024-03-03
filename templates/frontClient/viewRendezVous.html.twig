@@ -48,6 +48,65 @@
         {% endfor %}
       </div>
     </div>
+    <div id='calendar'></div>
+    <!-- Modal Structure -->
+<div class="modal fade" id="eventDetailsModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="eventModalLabel">Appointment Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p id="serviceDetail"></p>
+        <p id="psyNameDetail"></p>
+        <p id="dateDetail"></p>
+        <p id="timeDetail"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
   </div>
 </section>
+{% block script %}
+    <script>document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      events: [
+        {% for rv in rendezvous %}
+          {% if app.user == rv.patient %}
+            {
+              title: '{{ rv.nomService }}',
+              start: '{{ rv.dateR|date("Y-m-d H:i") }}',
+              extendedProps: {
+                time: '{{ rv.dateR|date("H:i") }}',
+                date: '{{ rv.dateR|date("Y-m-d") }}'
+              }
+            },
+          {% endif %}
+        {% endfor %}
+      ],
+      eventClick: function(info) {
+        // Fill in the modal with the event details
+        document.getElementById('serviceDetail').textContent = 'Service: ' + info.event.title;
+        document.getElementById('psyNameDetail').textContent = 'Psy Name: ' + info.event.extendedProps.psyName;
+        document.getElementById('dateDetail').textContent = 'Date: ' + info.event.extendedProps.date;
+        document.getElementById('timeDetail').textContent = 'Time: ' + info.event.extendedProps.time;
+
+        // Show the modal
+        var eventModal = new bootstrap.Modal(document.getElementById('eventDetailsModal'), {
+          keyboard: false
+        });
+        eventModal.show();
+      }
+    });
+    calendar.render();
+  });</script>
+{% endblock script %}
+
 {% endblock %}
