@@ -2,233 +2,146 @@
 {% block body %} 
 <!-- Blog Section - Start
         ================================================== -->
-        <section class="blog_section ">
-            <div class="container">
-              <div class="row">
-                <div class="col-lg-8">
-                  <div class="row">
+<section class="blog_section ">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="row">
                     {% for article in articles %}
                     <div class="col-md-6">
-                      <div class="blog_item">
-                        <div class="blog_image">
-                          <a class="blog_image_wrap" href="{{ path('app_article_show', {'id': article.id}) }}">
-                            {#<img
-                              src="{{ asset(article.image) }}"
-                              alt="HelpMeBalance"
-                            />#}
-                          </a>
+                        <div class="blog_item">
+                            <div class="blog_image">
+                                <a class="blog_image_wrap" href="{{ path('app_article_show', {'id': article.id}) }}">
+                                    {#<img
+                                    src="{{ asset(article.image) }}"
+                                    alt="HelpMeBalance"
+                                    />#}
+                                </a>
+                            </div>
+                            <div class="blog_content">
+                                <ul class="post_category unordered_list">
+                                    <li><a href="{{ path('app_blogCatClient', {'cat': article.categorie.id, 'page': 1}) }}">{{ article.categorie.nom }}</a></li>
+                                </ul>
+                                <ul class="post_meta unordered_list">
+                                    <li>
+
+                                    </li>
+                                </ul>
+                                <h3 class="item_title text-center">
+                                    <a href="{{ path('app_article_show', {'id': article.id}) }}">
+                                        {{ article.nom }}
+                                    </a>
+                                </h3>
+
+
+                                <h4 class="article_price text-center">
+                                    <p>
+                                        {{ article.prix }} $
+                                    </p>
+                                </h4>
+
+
+                                <p class="text-center">
+                                    {{ article.description|slice(0, 40) ~ (article.description|length > 40 ? '...' : '') }}
+
+                                </p>
+
+
+                                <div class="text-center d-flex justify-content-between">
+                                    <a class="btn-link " href="{{ path('app_article_show', {'id': article.id}) }}">
+                                        <span class="btn_text ">Read More</span>
+                                        <span class="btn_icon"
+                                            ><i class="fa-solid fa-arrow-up-right"></i
+                                            ></span>
+                                    </a>
+
+                                    <a class="btn-link" href="{{ path('app_panier_add', {'idA': article.id}) }}">
+                                        <span class="btn_text ">Acheter</span>
+                                        <span class="btn_icon"><i class="fa-solid fa-cart-shopping"></i></span>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="blog_content">
-                          <ul class="post_category unordered_list">
-                            <li><a href="{{ path('app_blogCatClient', {'cat': article.categorie.id, 'page': 1}) }}">{{ article.categorie.nom }}</a></li>
-                          </ul>
-                          <ul class="post_meta unordered_list">
-                            <li>
-                               
-                            </li>
-                        </ul>
-                          <h3 class="item_title text-center">
-                            <a href="{{ path('app_article_show', {'id': article.id}) }}">
-                                {{ article.nom }}
-                            </a>
-                          </h3>
-
-
-                          <h4 class="article_price text-center">
-                          <p>
-                          {{ article.prix }} $
-                          </p>
-                          </h4>
-
-                          
-                          <p class="text-center">
-                            {{ article.description|slice(0, 40) ~ (article.description|length > 40 ? '...' : '') }}
-
-                          </p>
-
-
-                          <div class="text-center d-flex justify-content-between">
-                          <a class="btn-link " href="{{ path('app_article_show', {'id': article.id}) }}">
-                            <span class="btn_text ">Read More</span>
-                            <span class="btn_icon"
-                              ><i class="fa-solid fa-arrow-up-right"></i
-                            ></span>
-                          </a>
-
-                          <a class="btn-link" href="{{ path('app_panier_add', {'idA': article.id}) }}">
-                          <span class="btn_text ">Acheter</span>
-                         <span class="btn_icon"><i class="fa-solid fa-cart-shopping"></i></span>
-                         </a>
-                        </div>
-                        </div>
-                      </div>
                     </div>
                     {% endfor %}
-                  {# </div>
-                  <div class="pagination_wrap  section_space_lg">
-                    <ul class="pagination_nav unordered_list justify-content-center">
-                        {% for page in range(1, totalPages) %}
-                        <li {% if curentPage == page %} class="active" {% endif %}>
-                            <a href="{{ path('app_blogClient', {'page': page}) }}">{{ page }}</a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div> #}
                 </div>
-                </div>
-
-
-
-                <div class="col-lg-4">
-                  <aside class="sidebar ps-lg-4">
-                    <div class="form-group">
-                      <input
-                        id="sidebar_search"
-                        class="form-control"
-                        type="search"
-                        name="search"
-                        placeholder="Search"
-                      />
-                      <button type="submit" class="input_icon">
-                        <i class="fa-regular fa-magnifying-glass"></i>
-                      </button>
-                    </div>
-                    <div class="sidebar_widget">
-                      <h3 class="sidebar_widget_title">
-                        <span class="title_icon">
-                          <img
-                            src="{{asset('assets/images/site_logo/favourite_icon.svg')}}"
-                            alt="Talking Minds - Psychotherapist Site Template"
-                          />
-                        </span>
-                        <span class="title_text">Categories</span>
-                      </h3>
-                      {% for categorie in categorie_produits %}
-                      <ul class="post_category_list unordered_list_block">
-                        <li>
-                          <a href="{{ path('app_categorie_produit_show', {'id': categorie.id}) }}">
-                            <span class="category_name">   
-                             {{ categorie.nom }}
-                            </span>
-                            <span class="category_counter"> {{ categorie.articles|length }}</span>
-                          </a>
-                        </li>
-                      </ul>
-                      {% endfor %}
-                    </div>
-                    <div class="sidebar_widget">
-                      <h3 class="sidebar_widget_title">
-                        <span class="title_icon">
-                          <img
-                            src="{{asset('assets/images/site_logo/favourite_icon.svg')}}"
-                            alt="Talking Minds - Psychotherapist Site Template"
-                          />
-                        </span>
-                        <span class="title_text">Recommended Articles</span>
-                      </h3>
-                      <ul class="reecommended_post_group unordered_list_block">
-                        <li>
-                          <div class="blog_item_small">
-                            <div class="blog_image">
-                              <a class="blog_image_wrap" href="blog_details.html">
-                                <img
-                                  src="{{asset('assets/images/blogs/small_blog_image_1.jpg')}}"
-                                  alt="Talking Minds - Psychotherapist Site Template"
-                                />
-                              </a>
-                            </div>
-                            <div class="blog_content">
-                              <h3 class="item_title">
-                                <a href="blog_details.html">
-                                  The Importance of Parent Involvement
-                                </a>
-                              </h3>
-                              <ul class="post_meta unordered_list">
-                                <li>26 July 2023</li>
-                                <li><a href="#!">120 Views</a></li>
-                                <li><a href="#!">1 Comments</a></li>
-                              </ul>
-                            </div>
-                          </div>
-                        </li>
-                        <li>
-                          <div class="blog_item_small">
-                            <div class="blog_image">
-                              <a class="blog_image_wrap" href="blog_details.html">
-                                <img
-                                  src="{{asset('assets/images/blogs/small_blog_image_2.jpg')}}"
-                                  alt="Talking Minds - Psychotherapist Site Template"
-                                />
-                              </a>
-                            </div>
-                            <div class="blog_content">
-                              <h3 class="item_title">
-                                <a href="blog_details.html">
-                                  Proven techniques to improve memory and remember
-                                  more
-                                </a>
-                              </h3>
-                              <ul class="post_meta unordered_list">
-                                <li>26 July 2023</li>
-                                <li><a href="#!">120 Views</a></li>
-                                <li><a href="#!">1 Comments</a></li>
-                              </ul>
-                            </div>
-                          </div>
-                        </li>
-                        <li>
-                          <div class="blog_item_small">
-                            <div class="blog_image">
-                              <a class="blog_image_wrap" href="blog_details.html">
-                                <img
-                                  src="{{asset('assets/images/blogs/small_blog_image_3.jpg')}}"
-                                  alt="Talking Minds - Psychotherapist Site Template"
-                                />
-                              </a>
-                            </div>
-                            <div class="blog_content">
-                              <h3 class="item_title">
-                                <a href="blog_details.html">
-                                  Establish healthy boundaries at work
-                                </a>
-                              </h3>
-                              <ul class="post_meta unordered_list">
-                                <li>26 July 2023</li>
-                                <li><a href="#!">120 Views</a></li>
-                                <li><a href="#!">1 Comments</a></li>
-                              </ul>
-                            </div>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                    <div class="sidebar_widget">
-                      <h3 class="sidebar_widget_title">
-                        <span class="title_icon">
-                          <img
-                            src="{{asset('assets/images/site_logo/favourite_icon.svg')}}"
-                            alt="Talking Minds - Psychotherapist Site Template"
-                          />
-                        </span>
-                        <span class="title_text">Popular Tags</span>
-                      </h3>
-                      <ul class="post_tags unordered_list">
-                        <li><a href="#!">Family Problem</a></li>
-                        <li><a href="#!">Therapy</a></li>
-                        <li><a href="#!">Teenagers</a></li>
-                        <li><a href="#!">Depression</a></li>
-                        <li><a href="#!">Life Balance</a></li>
-                        <li><a href="#!">Work</a></li>
-                        <li><a href="#!">Couple Problem</a></li>
-                      </ul>
-                    </div>
-                  </aside>
-                </div>
-              </div>
             </div>
-          </section>
 
-          </div>
-          <!-- Blog Section - End
-          ================================================== -->
+
+
+            <div class="col-lg-4">
+                <aside class="sidebar ps-lg-4">
+                    <!-- Add the button here -->
+                    <div class="sidebar_widget">
+                        <a href="{{ path('app_panier_index') }}" class="btn btn-primary btn-block">Show Cart</a>
+                    </div>
+
+                    <div class="form-group">
+                        <input
+                            id="sidebar_search"
+                            class="form-control"
+                            type="search"
+                            name="search"
+                            placeholder="Search"
+                        />
+                        <button type="submit" class="input_icon">
+                            <i class="fa-regular fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar_widget">
+                        <h3 class="sidebar_widget_title">
+                            <span class="title_icon">
+                                <img
+                                    src="{{asset('assets/images/site_logo/favourite_icon.svg')}}"
+                                    alt="Talking Minds - Psychotherapist Site Template"
+                                />
+                            </span>
+                            <span class="title_text">Categories</span>
+                        </h3>
+                        {% for categorie in categorie_produits %}
+                        <ul class="post_category_list unordered_list_block">
+                            <li>
+                                <a href="{{ path('app_categorie_produit_show', {'id': categorie.id}) }}">
+                                    <span class="category_name">   
+                                        {{ categorie.nom }}
+                                    </span>
+                                    <span class="category_counter"> {{ categorie.articles|length }}</span>
+                                </a>
+                            </li>
+                        </ul>
+                        {% endfor %}
+                    </div>
+                    <div class="sidebar_widget">
+                        <h3 class="sidebar_widget_title">
+                            <span class="title_icon">
+                                <img
+                                    src="{{asset('assets/images/site_logo/favourite_icon.svg')}}"
+                                    alt="Talking Minds - Psychotherapist Site Template"
+                                />
+                            </span>
+                            <span class="title_text">Recommended Articles</span>
+                        </h3>
+                        <!-- Your recommended articles widget content -->
+                    </div>
+                    <div class="sidebar_widget">
+                        <h3 class="sidebar_widget_title">
+                            <span class="title_icon">
+                                <img
+                                    src="{{asset('assets/images/site_logo/favourite_icon.svg')}}"
+                                    alt="Talking Minds - Psychotherapist Site Template"
+                                />
+                            </span>
+                            <span class="title_text">Popular Tags</span>
+                        </h3>
+                        <!-- Your popular tags widget content -->
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+</section>
+
+</div>
+<!-- Blog Section - End
+================================================== -->
 {% endblock %}

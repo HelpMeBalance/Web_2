@@ -1,0 +1,11 @@
+{% extends 'frontClient/base.html.twig' %}
+
+{% block title %}Create New Commande{% endblock %}
+
+{% block body %}
+    <h1>Create New Commande</h1>
+
+    {{ include('commande/_form.html.twig', {'form': form}) }}
+
+    <a href="{{ path('app_commande_index') }}"class="btn btn-primary">Back to Commande list</a>
+{% endblock %}

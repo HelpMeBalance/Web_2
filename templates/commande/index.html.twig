@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande index{% endblock %}
+
+{% block body %}
+    <h1>Commande index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Username</th>
+                <th>Address</th>
+                <th>Paymentmethode</th>
+                <th>User ID</th>
+                <th>Status</th> {# Add this line to display the status #}
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for commande in commandes %}
+            <tr>
+                <td>{{ commande.id }}</td>
+                <td>{{ commande.username }}</td>
+                <td>{{ commande.address }}</td>
+                <td>{{ commande.paymentmethode }}</td>
+                <td>{{ commande.user.id }}</td>
+                <td>{{ commande.status }}</td> {# Display the status here #}
+                <td>
+                    <a href="{{ path('app_commande_show', {'id': commande.id}) }}">show</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td> {# Update colspan to match the number of columns #}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_commande_new') }}">Create new</a>
+{% endblock %}

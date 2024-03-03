@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller;
 
 use App\Entity\Panier;
@@ -20,8 +19,19 @@ class PanierController extends AbstractController
     #[Route('/', name: 'app_panier_index', methods: ['GET'])]
     public function index(PanierRepository $panierRepository): Response
     {
+        // Fetch panier items
+        $paniers = $panierRepository->findAll();
+    
+        // Calculate total sum of prices
+        $totalSum = 0;
+        foreach ($paniers as $panier) {
+            $totalSum += $panier->getPrixTot();
+        }
+    
+        // Pass data to the Twig template
         return $this->render('panier/index.html.twig', [
-            'paniers' => $panierRepository->findAll(),
+            'paniers' => $paniers,
+            'totalSum' => $totalSum,
             'title' => 'Panier',
             'titlepage' => 'Panier',
             'controller_name' => 'PanierController',
@@ -138,4 +148,5 @@ class PanierController extends AbstractController
 
         return $this->redirectToRoute('app_shopClient', [], Response::HTTP_SEE_OTHER);
     }
+    
 }

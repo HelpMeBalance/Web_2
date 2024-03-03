@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande{% endblock %}
+
+{% block body %}
+    <h1>Commande</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ commande.id }}</td>
+            </tr>
+            <tr>
+                <th>Username</th>
+                <td>{{ commande.username }}</td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>{{ commande.address }}</td>
+            </tr>
+            <tr>
+                <th>Paymentmethode</th>
+                <td>{{ commande.paymentmethode }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>
+                    {% if commande.status == 0 %}
+                        Pending
+                    {% elseif commande.status == 1 %}
+                        Delivered
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Paniers</th>
+                <td>
+                    <ul>
+                        {% for panier in paniers %}
+                            <li>{{ panier.article.getNom() }} - Prix: {{ panier.PrixTot }} - Quantity: {{ panier.Quantity }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th>Total Price</th>
+                <td>{{ totalPrice }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_commande_index') }}">Back to list</a>
+
+    {{ include('commande/_delete_form.html.twig') }}
+{% endblock %}

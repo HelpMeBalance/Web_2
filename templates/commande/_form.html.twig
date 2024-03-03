@@ -1,0 +1,29 @@
+<div class="flex justify-center items-center h-screen bg-blue-400">
+    <div class="w-full max-w-md bg-gray-200 p-4 rounded-md">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            <div class="mb-4">
+                <p 'class': 'block text-gray-700 text-sm font-bold mb-2'>Username</p>
+                {{ form_widget(form.username, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}
+            </div>
+            {{ form_errors(form.username, {'class': 'text-red-200 bg-red-400'}) }}
+            <div class="mb-4">
+                <p 'class': 'block text-gray-700 text-sm font-bold mb-2'>Address</p>
+                {{ form_widget(form.address, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}
+            </div>
+            {{ form_errors(form.address, {'class': 'text-red-200 bg-red-400'}) }}
+            <div class="mb-4">
+                <p 'class': 'block text-gray-700 text-sm font-bold mb-2'>Payment Methode</p>
+                {{ form_widget(form.paymentmethode, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}
+            </div>
+            {{ form_errors(form.paymentmethode, {'class': 'text-red-200 bg-red-400'}) }}
+            <div class="mb-4">
+                <p 'class': 'block text-gray-700 text-sm font-bold mb-2'>User</p>
+                {{ form_widget(form.user, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}
+            </div>
+            {{ form_errors(form.user, {'class': 'text-red-200 bg-red-400'}) }}
+            <button type="submit" class="btn btn-primary">
+                {{ button_label|default('Ajouter') }}
+            </button>
+            {{ form_end(form) }}
+    </div>
+    </div>
