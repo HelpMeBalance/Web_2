@@ -53,8 +53,8 @@
 
                   {# add recaptcha here  #}
                   <div class="d-flex flex-row align-items-center mb-4">
-                      <div class='text-danger'> {{ form_errors(registrationForm.recaptcha) }}</div>
-                      {{ form_widget(registrationForm.recaptcha, {'attr': {'class': 'p-2 form-control'}}) }}
+                      {# <div class='text-danger'> {{ form_errors(registrationForm.recaptcha) }}</div>
+                      {{ form_widget(registrationForm.recaptcha, {'attr': {'class': 'p-2 form-control'}}) }} #}
                   </div>
                   <div class='text-danger'>
                     {{ form_errors(registrationForm.agreeTerms) }}

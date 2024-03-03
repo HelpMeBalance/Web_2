@@ -106,6 +106,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->publications = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
         $this->rendezVousesP = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->roles = ['ROLE_USER'];
     }
 
     public function getId(): ?int
@@ -399,6 +401,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'datetime', nullable: true)]
     private $banExpiresAt;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
     public function getIsBanned(): bool
     {
         return $this->isBanned;
@@ -418,6 +423,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setBanExpiresAt(?DateTimeInterface $banExpiresAt): self
     {
         $this->banExpiresAt = $banExpiresAt;
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
         return $this;
     }
 

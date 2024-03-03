@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Doctrine\DBAL\Connection;
 
 /**
  * @extends ServiceEntityRepository<User>
@@ -86,5 +87,32 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         
             return $qb->getQuery()->getResult();
         }
+        public function countByRole(string $role): int
+        {
+            return $this->createQueryBuilder('u')
+                ->select('count(u.id)')
+                ->where('u.roles LIKE :roles')
+                ->setParameter('roles', '%"'.$role.'"%') // Make sure the role is wrapped in quotes inside the LIKE statement
+                ->getQuery()
+                ->getSingleScalarResult();
+        }
+        /**
+         * Count users by month and role.
+         *
+         * @return array
+         */
+        public function countUsersByMonthAndRole(): array
+        {
+            $conn = $this->getEntityManager()->getConnection();
 
+            $query = $conn->createQueryBuilder()
+                ->select('COUNT(*) as user_count', 'MONTH(u.createdAt) as month', 'u.roles')
+                ->from('user', 'u')
+                ->where('u.createdAt >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)')
+                ->groupBy('month', 'u.roles')
+                ->orderBy('month', 'ASC')
+                ->execute();
+
+            return $query->fetchAllAssociative();
+        }
 }
