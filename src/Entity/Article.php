@@ -4,6 +4,9 @@ namespace App\Entity;
 
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\File; // Add this line
+
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
@@ -24,6 +27,47 @@ class Article
 
     #[ORM\Column]
     private ?int $quantite = null;
+    
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $articlePicture = null;
+
+    // Temporary store the file in the object
+    #[Assert\File(
+        maxSize: '1024k',
+        mimeTypes: ['image/jpeg', 'image/png'],
+    )]
+    
+    private ?File $articlePictureFile = null;
+
+    public function getArticlePicture(): ?string
+    {
+        return $this->articlePicture;
+    }
+
+    public function setArticlePicture(?string $articlePicture): self
+    {
+        $this->articlePicture = $articlePicture;
+        return $this;
+    }
+
+    public function getArticlePictureFile(): ?File
+    {
+        return $this->articlePictureFile;
+    }
+
+    public function setArticlePictureFile(?File $articlePictureFile = null): self
+    {
+        $this->articlePictureFile = $articlePictureFile;
+        if ($articlePictureFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            // Update an "updatedAt" field here, if you have one
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+        return $this;
+    }
+
+    
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
     #[ORM\JoinColumn(nullable: false)]
