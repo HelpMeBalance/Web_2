@@ -113,11 +113,21 @@ class FormulaireController extends AbstractController
             $entityManager->flush();
 
             if ($idq >= sizeof($questionRepository->findAll()) - 1)
-                return $this->redirectToRoute('app_formulaire_index2');
+                {return $this->redirectToRoute('app_formulaire_index2');}
+                
+            
             else
-                return $this->redirectToRoute('app_rendez_vous_quiz', ['idq' => $idq + 1], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_rendez_vous_quiz', ['idq' => $idq + 1], Response::HTTP_SEE_OTHER);
         }
 
+        if($question->isActive() == false){
+            if($idq >= sizeof($questionRepository->findAll()) - 1){
+                return $this->redirectToRoute('app_formulaire_index2');
+            }
+            else{
+            return $this->redirectToRoute('app_rendez_vous_quiz', ['idq' => $idq + 1], Response::HTTP_SEE_OTHER);
+            }
+        }
 
         return $this->render('frontClient/formulaire.html.twig', [
             'question' => $question,
