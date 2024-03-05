@@ -15,17 +15,17 @@ class QuestionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('question',TextType::class, [
+        ->add('question',TextType::class, [
         'label' => 'question',
         'required' => true,
         'constraints' => [
-           
             new Length([
                 'min' => 6,
                 'minMessage' => 'Le question doit comporter au moins {{ limit }} caractères',
             ]),
         ],
-    ])
+        ])
+   
         ;
     }
 

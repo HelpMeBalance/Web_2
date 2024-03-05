@@ -103,14 +103,21 @@ class ReponseController extends AbstractController
     }
 
     #[Route('/{id}/{idq}', name: 'app_reponse_delete')]
-    public function delete(Request $request, ReponseRepository $reponseRepository, EntityManagerInterface $entityManager,int $id,int $idq): Response
+    public function delete(Request $request, QuestionRepository $questionRepository,ReponseRepository $reponseRepository, EntityManagerInterface $entityManager,int $id,int $idq): Response
     {    
         $reponse = $reponseRepository->find($id);
+        $question = $questionRepository->find($idq);
 
         if (!$reponse) {
             throw $this->createNotFoundException('No response found for id '.$id);
         }
 
+        
+            if (1 > sizeof($reponseRepository->findBy(['question'=>$questionRepository->find($id)])))
+            $question ->setActive(!($question ->isActive()));
+        else
+        $question ->setActive($question ->isActive());
+           
 
             $entityManager->remove($reponse);
             $entityManager->flush();
