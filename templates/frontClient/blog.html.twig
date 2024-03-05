@@ -7,6 +7,33 @@
               <div class="row">
                 <div class="col-lg-8">
                   <div class="row">
+                   {% if publications is empty  %}
+                     
+                        <div style="text-align: center;">
+                          <img width="700" height="500"
+                          src="{{asset('assets/images/gallery/empty.png')}}"
+                            alt="Talking Minds - Psychotherapist Site Template"
+                          />
+                        </div>
+                           <div class="section_heading text-center">
+                          <h2 class="section_heading_text">Be the first to share your thoughts and experiences in Our Blog!</h2>
+                          {% if is_granted('IS_AUTHENTICATED_REMEMBERED')  %}
+                          <a class="btn-link" href="{{ path('app_chooseCatClient') }}">
+                                    <h2 class="btn_text " style="color: var(--bs-primary);">Start Sharing</h2>
+                                    <span class="btn_icon"
+                                      ><i class="fa-solid fa-arrow-up-right"></i
+                                    ></span>
+                                  </a>
+                          {% else %}
+                          <a class="btn-link" href="{{ path('app_login') }}">
+                            <span class="btn_text">Login to start Sharing</span>
+                            <span class="btn_icon"
+                              ><i class="fa-solid fa-right-to-bracket"></i
+                            ></span>
+                          </a>
+                         {% endif %}
+                        </div>
+                     {% else %}   
                     {% for publication in publications %}
                     <div class="col-md-6">
                       <div class="blog_item">
@@ -82,6 +109,7 @@
                       </div>
                     </div>
                     {% endfor %}
+                    {% endif %}
                   </div>
                 </div>
   
@@ -172,7 +200,8 @@
                             <div class="blog_image">
                               <a class="blog_image_wrap" href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">
                                 <img
-                                src="{{ asset(publication.image) }}"
+                                {% set url='uploads/pub_pictures/'~publication.image %} 
+                                src="{{ asset(url)  }}" 
                                 alt="HelpMeBalance"
                                 />
                               </a>

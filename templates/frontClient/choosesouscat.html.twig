@@ -11,8 +11,7 @@
               <div class="row">
                 <div class="col-lg-8">
                   <div class="row">
-                    <div class="message">
-                      {% if categories is not empty %}                      
+                    <div class="message">                    
                         <div style="text-align: center;">
                           <img width="700" height="500"
                           src="{{asset('assets/images/gallery/chooseg.png')}}"
@@ -23,8 +22,7 @@
                           <h2 class="section_heading_text">Share your experiences!</h2>
                       
                           <div class="row justify-content-center " >
-                            {% for categorie in categories %}
-                            {% if categorie.souscategories is not empty %}
+                            {% for souscategorie in souscategories %}
                             <div class="col-lg-4 col-md-6 col-sm-6">
                               <div class="service_item" style="display: flex;justify-content:center;align-items:center;flex-direction:column; ">
                                 <div class="item_icon" >
@@ -34,29 +32,23 @@
                                   />
                                 </div>
                                 <div class="item_contact"  style="display: flex;justify-content:center;align-items:center;flex-direction:column; ">
-                                  <h3 class="item_title">{{categorie.nom}}</h3>
+                                  <h3 class="item_title">{{souscategorie.nom}}</h3>
                                   <p style="text-align:center;">
-                                    {{categorie.description}}
+                                    {{souscategorie.description}}
                                   </p>
-                                  <a class="btn-link" href="{{ path('app_choosesousCatClient', {'cat': categorie.id}) }}">
-                                    <span class="btn_text">Next Step</span>
+                                  <a class="btn-link input_icon" href="{{ path('app_publication_new_blogClient', {'cat': souscategorie.categorie.id,'souscat':souscategorie.id}) }}">
+                                 <span class="btn_text">Start Sharing</span>
                                     <span class="btn_icon"
                                       ><i class="fa-solid fa-arrow-up-right"></i
                                     ></span>
-                                  </a>
+                                  </a> 
                                 </div>
                               </div>
                             </div>
-                            {% endif %}
                             {% endfor %}
                           </div>
                           
-                        </div>
-                        {% else %}
-                          no categories 
-
-                        {% endif %}
-                        
+                        </div>                         
                   </div>
                   </div>                
                 </div>
@@ -119,7 +111,8 @@
                             <div class="blog_image">
                               <a class="blog_image_wrap" href="{{ path('app_blogDetails', {'id': publication.id,'showmore':0}) }}">
                                 <img
-                                src="{{ asset(publication.image) }}"
+                                {% set url='uploads/pub_pictures/'~publication.image %} 
+                                src="{{ asset(url)  }}" 
                                 alt="HelpMeBalance"
                                 />
                               </a>
