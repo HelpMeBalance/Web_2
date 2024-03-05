@@ -33,11 +33,16 @@ class QuestionController extends AbstractController
         $searchTerm = $request->query->get('search');
         $sortField = $request->query->get('sort', 'question');
         $sortOrder = $request->query->get('order', 'asc');
-        $questions = $this->entityManager->getRepository(Question::class)->search($searchTerm, $sortField, $sortOrder);
+        $perPage = 2;
+
+        $currentPage = (int) $request->query->get('page', 1);
+        $questions = $this->entityManager->getRepository(Question::class)->search($searchTerm, $sortField, $sortOrder, $currentPage, $perPage);
+        $totalArticles = count($questions);
+        $totalPages = ceil($totalArticles / $perPage);
         
 
         if ($form->isSubmitted() && $form->isValid()) {
-          
+           $question->setActive(false);
             $entityManager->persist($question);
             $entityManager->flush();
             $id=$question->getId();
@@ -48,7 +53,9 @@ class QuestionController extends AbstractController
         return $this->render('admin/quiz/index.html.twig', [
             'questions' => $questions,
             'form' => $form->createView(),
-            'formel' => $formulaireRepository->findAll()
+            'formel' => $formulaireRepository->findAll(),
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
 
             
         ]);
@@ -188,6 +195,16 @@ class QuestionController extends AbstractController
          
         $form = $this->createForm(QuestionType::class, $question);
         $form->handleRequest($request);
+        $searchTerm = $request->query->get('search');
+        $sortField = $request->query->get('sort', 'question');
+        $sortOrder = $request->query->get('order', 'asc');
+        $perPage = 2;
+
+        $currentPage = (int) $request->query->get('page', 1);
+        $questions = $this->entityManager->getRepository(Question::class)->search($searchTerm, $sortField, $sortOrder, $currentPage, $perPage);
+        $totalArticles = count($questions);
+        $totalPages = ceil($totalArticles / $perPage);
+        
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($question);
@@ -214,6 +231,10 @@ class QuestionController extends AbstractController
               'question'=>$question,
               'form' => $form->createView(),
               'formel' => $formulaireRepository->findAll(),
+              'currentPage' => $currentPage,
+              'totalPages' => $totalPages,
+
+              
         ]);
         
     }
