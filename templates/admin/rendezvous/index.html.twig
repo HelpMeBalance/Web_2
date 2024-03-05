@@ -6,6 +6,14 @@
         <h1 class="text-xl font-semibold">Appointment Management</h1>
     </div>
 
+    <form method="get" class="mb-4" action="{{ path('app_rendezvousAdmin') }}">
+        <input type="text"
+            class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+            name="search" placeholder="Search users..." value="{{ app.request.query.get('search') }}" />
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            type="submit">Search</button>
+    </form>
+
     {% if rendezVou is defined %}
 
     <div id="editModal{{ rendezVou.id }}" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
@@ -17,45 +25,45 @@
             {% if form is defined %}
             <div class="flex justify-center">
                 {{ form_start(form) }}
-            {{ form_row(form.dateR, {
-            'label': 'Date Appointment:',
-            'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm
-            border-gray-300 rounded-md'}
-            }) }}
-        </br>
+                {{ form_row(form.dateR, {
+                'label': 'Date Appointment:',
+                'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm
+                border-gray-300 rounded-md'}
+                }) }}
+                </br>
 
-            {{ form_row(form.nomService, {
-            'label': 'Service Name:',
-            'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm
-            border-gray-300 rounded-md'}
-            }) }}
-        </br>
+                {{ form_row(form.nomService, {
+                'label': 'Service Name:',
+                'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm
+                border-gray-300 rounded-md'}
+                }) }}
+                </br>
 
-            {{ form_row(form.statut, {
-            'label': 'Status:',
-            'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm
-            border-gray-300 rounded-md'}
-            }) }}
-        </br>
+                {{ form_row(form.statut, {
+                'label': 'Status:',
+                'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm
+                border-gray-300 rounded-md'}
+                }) }}
+                </br>
 
-            {{ form_row(form.patient, {
-            'label': 'Patient:',
-            'attr': {'class': 'mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none
-            focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md'}
-            }) }}
-        </br>
+                {{ form_row(form.patient, {
+                'label': 'Patient:',
+                'attr': {'class': 'mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none
+                focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md'}
+                }) }}
+                </br>
 
-            {{ form_row(form.user, {
-            'label': 'Psy:',
-            'attr': {'class': 'mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none
-            focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md'}
-            }) }}
-        </br>
-            <button type="submit"
-                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                Save
-            </button>
-            {{ form_end(form) }}
+                {{ form_row(form.user, {
+                'label': 'Psy:',
+                'attr': {'class': 'mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none
+                focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md'}
+                }) }}
+                </br>
+                <button type="submit"
+                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Save
+                </button>
+                {{ form_end(form) }}
             </div>
             {% endif %}
         </div>
@@ -67,15 +75,16 @@
         <table class="min-w-full leading-normal">
             <thead>
                 <tr>
+                    <th onclick="sortTable(0)" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        <a href="{{ path('app_rendezvousAdmin', {sort: 'patient', order: app.request.query.get('sort') == 'patient' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">Patient<i class="fa-solid fa-sort"></i></a>
+                    </th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Psychyatrist
+                    </th>
                     <th
                         class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Patient</th>
-                    <th
-                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        Psychyatrist</th>
-                    <th
-                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                        DateTime</th>
+                        DateTime
+                    </th>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100"></th>
                 </tr>
             </thead>
@@ -89,8 +98,7 @@
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ rv.dateR|date('Y-m-d H:i') }}
                     </td>
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
-                        <button class="text-blue-600 hover:text-blue-900"
-                            onclick="openModal('viewModal{{ rv.id }}')">
+                        <button class="text-blue-600 hover:text-blue-900" onclick="openModal('viewModal{{ rv.id }}')">
                             <svg version="1.1" class="h-6 w-6" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
                                 xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 442.04 442.04"
                                 xml:space="preserve">
@@ -128,18 +136,20 @@
                             </a>
                         </button>
                         {% if (rv.statut) %}
-                        <button class="text-grey-600 hover:text-red-900" onclick="openModal('deleteModal{{ rv.id }}')" disabled>
-                        {% else %}
-                        <button class="text-red-600 hover:text-red-900" onclick="openModal('deleteModal{{ rv.id }}')" >
-                        {% endif %}
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                        </button>
-                        
-                        
+                        <button class="text-grey-600 hover:text-red-900" onclick="openModal('deleteModal{{ rv.id }}')"
+                            disabled>
+                            {% else %}
+                            <button class="text-red-600 hover:text-red-900"
+                                onclick="openModal('deleteModal{{ rv.id }}')">
+                                {% endif %}
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+
+
                     </td>
                 </tr>
 

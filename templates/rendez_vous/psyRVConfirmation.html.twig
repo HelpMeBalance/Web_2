@@ -2,11 +2,12 @@
 
 {% block body %}
 <div class="container mt-5">
-  <div class="row">
+  {# <div class="row">
     <div class="col-lg-8 mx-auto">
       <div class="card shadow">
         <div class="card-body p-4">
           <h2 class="text-center">RendezVous</h2>
+          <div id="calendar-holder"></div>
           <hr>
           {% for rv in rendezvous %}
           <div class="d-flex justify-content-center">
@@ -35,6 +36,101 @@
         </div>
       </div>
     </div>
+  </div> #}
+{# start_Calander #}
+<div id="calendar-holder"></div>
+{# end_Calander #}
+
+<!-- Appointment Details Modal -->
+<div class="modal fade" id="appointmentDetailsModal" tabindex="-1" aria-labelledby="appointmentDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="appointmentDetailsModalLabel">Appointment Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p id="appointmentService"></p>
+            <p id="appointmentStatus"></p>
+            <p id="appointmentPatient"></p>
+
+          </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" id="dynamicAppointmentBtn"></button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
   </div>
 </div>
+
+
+
+</div>
+{% block script %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar-holder');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      events: [
+        
+        {% for rv in rendezvous %}
+        {% for consultation in consultations %}
+        {% if (consultation.rendezvous == rv) %}
+        {
+          id: '{{ rv.id }}',
+          title: '{{ rv.nomService }} - {{ rv.patient.firstname }} {{ rv.patient.lastname }}',
+          start: '{{ rv.dateR|date("Y-m-d H:i") }}',
+          extendedProps: {
+            status: '{{ rv.statut ? "Confirmed" : "Not Confirmed" }}',
+            consultationId: '{{ consultation.id }}'
+          }
+        },
+        {% endif %}
+                {% endfor %}
+
+        {% if rv.statut == false %}
+        {
+          id: '{{ rv.id }}',
+          title: '{{ rv.nomService }} - {{ rv.patient.firstname }} {{ rv.patient.lastname }}',
+          start: '{{ rv.dateR|date("Y-m-d H:i") }}',
+          color: 'red',
+          extendedProps: {
+            status: '{{ rv.statut ? "Confirmed" : "Not Confirmed" }}'
+          }
+        },
+        {% endif %}
+        {% endfor %}
+      ],
+      eventClick: function(info) {
+        var eventProps = info.event.extendedProps;
+        var dynamicBtn = document.getElementById('dynamicAppointmentBtn');
+
+        if (eventProps.status === 'Not Confirmed') {
+          dynamicBtn.textContent = 'Confirm Appointment';
+          dynamicBtn.onclick = function() {
+            window.location.href = "{{ path('app_rendez_vous_edit_status', {'id': 'PLACEHOLDER'}) }}".replace('PLACEHOLDER', info.event.id);
+          };
+        } else {
+          dynamicBtn.textContent = 'Appointment Info';
+          dynamicBtn.onclick = function() {
+            window.location.href = "{{ path('app_consultation_show', {'id': 'PLACEHOLDER'}) }}".replace('PLACEHOLDER', eventProps.consultationId);
+          };
+        }
+
+        // Populate and show the modal
+        document.getElementById('appointmentService').textContent = 'Service: ' + info.event.title;
+        document.getElementById('appointmentStatus').textContent = 'Status: ' + eventProps.status;
+        var appointmentModal = new bootstrap.Modal(document.getElementById('appointmentDetailsModal'), {
+          keyboard: true
+        });
+        appointmentModal.show();
+      }
+    });
+    calendar.render();
+  });
+</script>
+
+{% endblock script %}
+
 {% endblock %}

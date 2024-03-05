@@ -17,10 +17,12 @@ class RendezVousType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $patient = $options['patient'] ?? null;
         $builder
         ->add('patient', EntityType::class, [
             'class' => User::class,
             'choice_label' => 'firstname',
+            'data' => $patient,
             ])
             ->add('dateR',DateTimeType::class, [
                 'widget' => 'single_text',
@@ -55,6 +57,8 @@ class RendezVousType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => RendezVous::class,
+            'patient' => null,
         ]);
+        $resolver->setRequired('patient');
     }
 }

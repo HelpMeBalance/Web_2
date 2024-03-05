@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Consultation;
 use App\Entity\RendezVous;
+use App\Form\RatingType;
 use App\Form\RendezVousAdminType;
 use App\Form\RendezVousType;
 use App\Form\StringIdType;
@@ -19,10 +20,26 @@ use Symfony\Component\HttpFoundation\Request;
 // #[Route('/rendez/vous')]
 class RendezVousController extends AbstractController
 {
-    #[Route('/rendez/vous/', name: 'app_rendez_vous_index', methods: ['GET'])]
+    #[Route('/rendez/vous/', name: 'app_rendez_vous_index')]
     public function index(RendezVousRepository $rendezVousRepository, Request $request, EntityManagerInterface $entityManager, ConsultationRepository $Conrep): Response
     {
+        // $cons = new Consultation();
+        $form = $this->createForm(RatingType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formData = $form->getData(); // Get submitted data as an array
+
+            // Access individual form data attributes
+            $idrv = $formData['idrv'];
+            $rating = $formData['rating'];
+            $cons = $Conrep->findOneBy(['rendezvous' => $rendezVousRepository->find($idrv)]);
+            $cons->setAvisPatient($rating);
+            $entityManager->persist($cons);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_rendez_vous_index');
+        }
         return $this->render('frontClient/viewRendezVous.html.twig', [
+            'form' => $form->createView(),
             'consultation' => $Conrep->findAll(),
             "rendezvous" => $rendezVousRepository->findAll(),
             'title' => 'RendezVous',
@@ -34,17 +51,27 @@ class RendezVousController extends AbstractController
         ]);
     }
 
-    #[Route('/rendez/vous/new', name: 'app_rendez_vous_new')]
-    public function new(UserRepository $Urep, Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/rendez/vous/consultation/{id}/{rating}', name: 'app_rendez_vous_form')]
+    public function form(RendezVousRepository $rendezVousRepository, Request $request, EntityManagerInterface $entityManager, ConsultationRepository $Conrep, $id, $rating): Response
+    {
+        $consultation = $Conrep->find($id);
+        $consultation->setAvisPatient($rating);
+        $entityManager->persist($consultation);
+        $entityManager->flush();
+        return $this->redirectToRoute('app_rendez_vous_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/rendez/vous/new/{idp}', name: 'app_rendez_vous_new')]
+    public function new(UserRepository $Urep, Request $request, EntityManagerInterface $entityManager, $idp): Response
     {
         $rendezVou = new RendezVous();
         $rendezVou->setDateR(new \DateTime());
-        $form = $this->createForm(RendezVousType::class, $rendezVou);
+        $form = $this->createForm(RendezVousType::class, $rendezVou, ['patient' => $Urep->find($idp)]);
         $form->handleRequest($request);
         $errordate = "";
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
+
             $rendezVou->setStatut(false);
             //$rendezVou->setPatient($Urep->find(?????????));
             $entityManager->persist($rendezVou);
@@ -62,7 +89,7 @@ class RendezVousController extends AbstractController
 
             return $this->redirectToRoute('app_rendez_vous_index', [], Response::HTTP_SEE_OTHER);
         }
-        
+
         return $this->render('frontClient/rendezvous.html.twig', [
             'rendez_vou' => $rendezVou,
             'form' => $form->createView(),
@@ -74,7 +101,7 @@ class RendezVousController extends AbstractController
             'errordate' => $errordate,
         ]);
     }
-    
+
     #[Route('/rendez/vous/{id}', name: 'app_rendez_vous_show', methods: ['GET'])]
     public function show(RendezVousRepository $rendezVousRepository, $id): Response
     {
@@ -105,17 +132,19 @@ class RendezVousController extends AbstractController
     #[Route('/rendez/vous/{id}', name: 'app_rendez_vous_delete', methods: ['POST'])]
     public function delete(Request $request, RendezVousRepository $rendezVou, EntityManagerInterface $entityManager, $id): Response
     {
-            $entityManager->remove($rendezVou->find($id));
-            $entityManager->flush();
+        $entityManager->remove($rendezVou->find($id));
+        $entityManager->flush();
 
         return $this->redirectToRoute('app_rendez_vous_index', [], Response::HTTP_SEE_OTHER);
     }
 
-        #[Route('/rendez/vous/psy/{psyid}', name: 'app_rendez_vous_confirm')]
+    #[Route('/rendez/vous/psy/{psyid}', name: 'app_rendez_vous_confirm')]
     public function psyConfirm($psyid, UserRepository $userRepository, RendezVousRepository $rendezVousRepository, Request $request, EntityManagerInterface $entityManager, ConsultationRepository $Conrep): Response
     {
+        $consultationId = $request->request->get('consultationId');
         return $this->render('rendez_vous/psyRVConfirmation.html.twig', [
             'consultations' => $Conrep->findAll(),
+            'consultationId' => $consultationId,
             "rendezvous" => $rendezVousRepository->findBy(['user' => $userRepository->findOneBy(['id' => $psyid])]),
             'title' => 'RendezVous',
             'titlepage' => 'RendezVous',
@@ -145,15 +174,20 @@ class RendezVousController extends AbstractController
         $entityManager->persist($consultation);
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_rendez_vous_confirm', ['psyid'=>$rendezVou->getUser()->getId()]);
+        return $this->redirectToRoute('app_rendez_vous_confirm', ['psyid' => $rendezVou->getUser()->getId()]);
     }
 
     #[Route('/admin/rendez/vous', name: 'app_rendezvousAdmin')]
     public function indexAdmin(RendezVousRepository $RVrep, Request $request, EntityManagerInterface $entityManager): Response
     {
+        $searchTerm = $request->query->get('search');
+        $sortField = $request->query->get('sort', 'firstname');
+        $sortOrder = $request->query->get('order', 'asc');
+        $rvs = $entityManager->getRepository(RendezVous::class)->search($searchTerm, $sortField, $sortOrder);
+
         return $this->render('admin/rendezvous/index.html.twig', [
-            "rendezvouses" => $RVrep->findall(),  
-            
+            "rendezvouses" => $rvs,
+
         ]);
     }
 
@@ -173,7 +207,7 @@ class RendezVousController extends AbstractController
         return $this->render('admin/rendezvous/index.html.twig', [
             'rendezVou' => $rendezVou,
             'form' => $form->createView(),
-            "rendezvouses" => $RVrep->findall(), 
+            "rendezvouses" => $RVrep->findall(),
         ]);
     }
 
