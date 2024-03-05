@@ -73,6 +73,7 @@
     var calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: 'dayGridMonth',
       events: [
+        
         {% for rv in rendezvous %}
         {% for consultation in consultations %}
         {% if (consultation.rendezvous == rv) %}
@@ -93,6 +94,7 @@
           id: '{{ rv.id }}',
           title: '{{ rv.nomService }} - {{ rv.patient.firstname }} {{ rv.patient.lastname }}',
           start: '{{ rv.dateR|date("Y-m-d H:i") }}',
+          color: 'red',
           extendedProps: {
             status: '{{ rv.statut ? "Confirmed" : "Not Confirmed" }}'
           }

@@ -1,11 +1,12 @@
 {% extends 'frontClient/base.html.twig' %}
 {% set stars = 0 %}
+{% set idC = 0 %}
 {% block body %}
 <section class="testimonial_section section_space_lg">
   <div class="container">
     <div class="section_heading text-center">
       <h2 class="section_heading_text">Appointment Managment</h2>
-      <a href="{{ path('app_rendez_vous_new') }}">Create new appointment</a>
+      <a href="{{ path('app_rendez_vous_new', {'idp':app.user.id}) }}">Create new appointment</a>
       <p class="section_heading_description mb-0">
         {{app.user.firstname}} {{app.user.lastname}}
       </p>
@@ -20,15 +21,39 @@
             {% for c in consultation %}
             {% if c.rendezvous == rv %}
             {% set stars = c.avisPatient %}
+            {% set idC = c.id %}
             {% endif %}
             {% endfor %}
+            {% if stars is null %}
+            <p class="rating_star unordered_list">
+              {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+              <div class="d-none">
+              <label for="select_therapy">idrendezvous</label>
+                {{ form_widget(form.idrv, {'attr': {'class': 'form-select'}, 'value':rv.id}) }}
+                {{ form_errors(form.idrv, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
+              </div>
+              <div class="form-group">
+                <label for="select_therapy">rating</label>
+                  {{ form_widget(form.rating, {'attr': {'class': 'form-select'}}) }}
+                  {{ form_errors(form.rating, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
+                </div>
+              <button type="submit" class="btn btn-primary">
+                <span class="btn_text" data-text="Get A Consultation">
+                  {{ button_label|default('Save') }}
+                </span>
+                <span class="btn_icon">
+                  <i class="fa-solid fa-arrow-up-right"></i>
+                </span>
+              </button>
+              {{ form_end(form) }}
+            </p>
+            {% else %} 
             <ul class="rating_star unordered_list">
-              {% for _ in range(0,stars ) %}
+              {% for _ in range(1,stars ) %}
               <li><i class="fa-solid fa-star"></i></li>
               {% endfor %}
             </ul>
-            {% else %}
-            {#print form for avisPatient here#}
+            {% endif %}
             {% endif %}
             <div class="author_box">
               <div class="author_box_image">
@@ -50,30 +75,30 @@
     </div>
     <div id='calendar'></div>
     <!-- Modal Structure -->
-<div class="modal fade" id="eventDetailsModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="eventModalLabel">Appointment Details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p id="serviceDetail"></p>
-        <p id="psyNameDetail"></p>
-        <p id="dateDetail"></p>
-        <p id="timeDetail"></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <div class="modal fade" id="eventDetailsModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="eventModalLabel">Appointment Details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p id="serviceDetail"></p>
+            <p id="psyNameDetail"></p>
+            <p id="dateDetail"></p>
+            <p id="timeDetail"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
   </div>
 </section>
 {% block script %}
-    <script>document.addEventListener('DOMContentLoaded', function() {
+<script>document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: 'dayGridMonth',
@@ -81,31 +106,36 @@
         {% for rv in rendezvous %}
           {% if app.user == rv.patient %}
             {
-              title: '{{ rv.nomService }}',
-              start: '{{ rv.dateR|date("Y-m-d H:i") }}',
-              extendedProps: {
-                time: '{{ rv.dateR|date("H:i") }}',
-                date: '{{ rv.dateR|date("Y-m-d") }}'
-              }
-            },
-          {% endif %}
-        {% endfor %}
-      ],
-      eventClick: function(info) {
-        // Fill in the modal with the event details
-        document.getElementById('serviceDetail').textContent = 'Service: ' + info.event.title;
-        document.getElementById('psyNameDetail').textContent = 'Psy Name: ' + info.event.extendedProps.psyName;
-        document.getElementById('dateDetail').textContent = 'Date: ' + info.event.extendedProps.date;
-        document.getElementById('timeDetail').textContent = 'Time: ' + info.event.extendedProps.time;
+              {% if rv.statut == false %}
+  color: 'red',
+    {% endif %}
+  title: '{{ rv.nomService }}',
+    start: '{{ rv.dateR|date("Y-m-d H:i") }}',
+      psyName: '{{ rv.user.firstname }}',
 
-        // Show the modal
-        var eventModal = new bootstrap.Modal(document.getElementById('eventDetailsModal'), {
-          keyboard: false
-        });
-        eventModal.show();
-      }
+        extendedProps: {
+    time: '{{ rv.dateR|date("H:i") }}',
+      date: '{{ rv.dateR|date("Y-m-d") }}'
+  }
+            },
+  {% endif %}
+  {% endfor %}
+      ],
+  eventClick: function(info) {
+    // Fill in the modal with the event details
+    document.getElementById('serviceDetail').textContent = 'Service: ' + info.event.title;
+    document.getElementById('psyNameDetail').textContent = 'Psy Name: ' + info.event.extendedProps.psyName;
+    document.getElementById('dateDetail').textContent = 'Date: ' + info.event.extendedProps.date;
+    document.getElementById('timeDetail').textContent = 'Time: ' + info.event.extendedProps.time;
+
+    // Show the modal
+    var eventModal = new bootstrap.Modal(document.getElementById('eventDetailsModal'), {
+      keyboard: false
     });
-    calendar.render();
+    eventModal.show();
+  }
+    });
+  calendar.render();
   });</script>
 {% endblock script %}
 
