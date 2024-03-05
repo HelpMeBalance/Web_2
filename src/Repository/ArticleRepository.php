@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Article;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @extends ServiceEntityRepository<Article>
@@ -22,7 +23,7 @@ class ArticleRepository extends ServiceEntityRepository
     }
 
 
-    public function search($searchTerm, $sortField = 'nom', $sortOrder = 'asc')
+    public function search($searchTerm, $sortField = 'nom', $sortOrder = 'asc', $currentPage = 1, $perPage = 2)
     {
         $qb = $this->createQueryBuilder('u');
 
@@ -43,7 +44,12 @@ class ArticleRepository extends ServiceEntityRepository
 
         $qb->orderBy('u.' . $sortField, $sortOrder);
 
-        return $qb->getQuery()->getResult();
+        
+        $query = $qb->getQuery()
+        ->setFirstResult(($currentPage - 1) * $perPage)
+        ->setMaxResults($perPage);
+
+    return new Paginator($query, true);
     }
 
 
