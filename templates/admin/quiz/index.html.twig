@@ -145,11 +145,6 @@
                             
                             </p>
                             {% endfor %}
-                               <div class="flex justify-center items-center">
-                            {% if(not(question.active)) %}
-                            <strong>ecrre deux reponse pour Validate</strong>
-                            {% endif %}
-                        </div>
                             <a class="text-lg font-bold" href="{{ path('app_question_show', {'id': question.id}) }}"><strong>edit reponses</strong></a>
                         </div>
                     </div>
