@@ -100,21 +100,11 @@ class ArticleType extends AbstractType
                 'class' => CategorieProduit::class,
                 'choice_label' => 'nom',
             ])
-            ->add('imageFile', FileType::class, [
-                'label' => 'Article Image',
-                'mapped' => true, // This field is not mapped to any entity property
+            ->add('articlePictureFile', FileType::class, [
+                                'label' => 'Profile Picture',
+                'mapped' => false, // This field is not mapped to any entity property
                 'required' => false,
-                'constraints' => [
-                    new File([
-                        'maxSize' => '1024k',
-                        'mimeTypes' => [
-                            'image/png',
-                            'image/jpeg',
-                            'image/jpg',
-                        ],
-                        'mimeTypesMessage' => 'Please upload a valid image file',
-                    ])
-                ],
+
         ]);
     }
 

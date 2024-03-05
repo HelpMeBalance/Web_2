@@ -28,44 +28,45 @@ class Article
     #[ORM\Column]
     private ?int $quantite = null;
     
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $imageName = null;
-    
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $articlePicture = null;
+
+    // Temporary store the file in the object
     #[Assert\File(
         maxSize: '1024k',
         mimeTypes: ['image/jpeg', 'image/png'],
     )]
-    private ?File $imageFile = null;
+    
+    private ?File $articlePictureFile = null;
 
-    // Add getter and setter for imageName
-    public function getImageName(): ?string
+    public function getArticlePicture(): ?string
     {
-        return $this->imageName;
-    }
-        public function getImageFile(): ?File
-    {
-        return $this->imageFile;
+        return $this->articlePicture;
     }
 
-    
-    public function setImageName(?string $imageName): self
+    public function setArticlePicture(?string $articlePicture): self
     {
-        $this->imageName = $imageName;
-    
+        $this->articlePicture = $articlePicture;
         return $this;
     }
-    public function setImageFile(?File $imageFile = null): self
+
+    public function getArticlePictureFile(): ?File
     {
-        $this->imageFile = $imageFile;
-    
-        if (null !== $imageFile) {
+        return $this->articlePictureFile;
+    }
+
+    public function setArticlePictureFile(?File $articlePictureFile = null): self
+    {
+        $this->articlePictureFile = $articlePictureFile;
+        if ($articlePictureFile) {
             // It is required that at least one field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
-            $this->dateM = new \DateTimeImmutable();
+            // Update an "updatedAt" field here, if you have one
+            $this->updatedAt = new \DateTimeImmutable();
         }
-    
         return $this;
     }
+
     
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
