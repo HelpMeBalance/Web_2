@@ -21,6 +21,32 @@ class ConsultationRepository extends ServiceEntityRepository
         parent::__construct($registry, Consultation::class);
     }
 
+    public function search($searchTerm, $sortField = 'Patient', $sortOrder = 'asc')
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        if ($searchTerm) {
+            $qb->innerJoin('u.Patient', 'p')
+                ->innerJoin('u.Psychiatre', 'psy')
+                ->where('p.firstname LIKE :searchTerm OR psy.firstname LIKE :searchTerm OR u.note LIKE :searchTerm')
+                ->setParameter('searchTerm', '%' . $searchTerm . '%');
+        }
+
+        // Ensure the sortField is one of the valid fields
+        if (!in_array($sortField, ['Patient', 'Psychiatre','note'])) {
+            $sortField = 'Patient'; // Default field to sort by
+        }
+
+        // Ensure the sortOrder is either 'asc' or 'desc'
+        if (!in_array($sortOrder, ['asc', 'desc'])) {
+            $sortOrder = 'asc'; // Default sort order
+        }
+
+        $qb->orderBy('u.' . $sortField, $sortOrder);
+
+        return $qb->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return Consultation[] Returns an array of Consultation objects
 //     */
