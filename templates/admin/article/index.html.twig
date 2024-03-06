@@ -61,6 +61,9 @@
         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
     type="submit">Search</button>
    </form>
+    <button class="text-red-600 hover:text-red-900" onclick="openModal('statModal{{ 'stats' }}')">
+                            <i class="fa-solid fa-chart-simple"></i>
+                        </button>
 
 
     <div class="bg-white shadow-md rounded-lg">
@@ -209,6 +212,66 @@
                 </a>
             </li>
             {% endfor %}
+            {# Statistics model#}
+            {% set tabCat = [] %}
+            {% set tab = {} %}
+
+            {% for cats in catigories %}
+                {% set tabCat = tabCat | merge([cats.nom]) %}
+                {% set tab = tab | merge({(cats.nom): 0}) %}
+            {% endfor %}
+
+            {% for a in articleStat %}
+                {% set tab = tab | merge({(a.categorie.nom): (tab[a.categorie.nom] + a.quantite)}) %}
+            {% endfor %}
+
+            {% set totaleS = tabCat | length %}
+                <div>
+                    {# Stat Modal - Simplified for demonstration #}
+                    <div id="statModal{{ 'stats' }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
+                        onclick="closeModal('statModal{{ 'stats' }}')">
+                        <!-- Modal content -->
+                        <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white"
+                            onclick="event.stopPropagation()">
+                            <div class="flex justify-between items-center mb-4">
+                                <h4 class="text-lg font-bold">Stat rating</h4>
+                                {% for k,v in tab %}
+                                    {{ k }}: {{ v }}
+                                {% endfor %}
+                                <span class="close cursor-pointer" onclick="closeModal('statModal{{ 'stats' }}')">&times;</span>
+                            </div>
+                            <div class="shadow-lg rounded-lg overflow-hidden w-full dividiv">
+                                <div class="py-3 px-5 bg-gray-50">Stat Rating</div>
+                                <canvas class="p-10" id="chartPie{{ 'stats' }}"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <script>
+                    const dataPie{{ 'stats' }} = {
+                        labels: [{% for key, value in tab %}"{{ key }}",{% endfor %}],
+                        datasets: [{
+                            label: "Rating",
+                            data: [{% for key, value in tab %}{{ value }}, {% endfor %}],
+                            backgroundColor: [
+                                "rgb(255, 99, 132)",
+                                "rgb(54, 162, 235)",
+                                "rgb(255, 205, 86)",
+                                "rgb(50, 205, 50)",
+                                "rgb(152, 75, 161)",
+                            ],
+                            hoverOffset: 4,
+                        }],
+                    };
+                
+                    const configPie{{ 'stats' }} = {
+                        type: "pie",
+                        data: dataPie{{ 'stats' }},
+                        options: {},
+                    };
+                    var chartPie{{ 'stats' }} = new Chart(document.getElementById("chartPie{{ 'stats' }}"), configPie{{ 'stats' }});
+                </script>
 
             {% if currentPage < totalPages %}
             <li>
