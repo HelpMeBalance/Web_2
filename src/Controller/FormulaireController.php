@@ -30,8 +30,8 @@ class FormulaireController extends AbstractController
             'titlepage' => 'Formulaire - ',
         ]);
     }
-    #[Route('/index2', name: 'app_formulaire_index2', methods: ['GET'])]
-    public function index2(FormulaireRepository $formulaireRepository,): Response
+    #[Route('/index2/{rv}', name: 'app_formulaire_index2', methods: ['GET'])]
+    public function index2(FormulaireRepository $formulaireRepository,$rv, RendezVousRepository $RVrep): Response
     {
         return $this->render('formulaire/index2.html.twig', [
             'formulaires' => $formulaireRepository->findAll(),
@@ -40,6 +40,7 @@ class FormulaireController extends AbstractController
             'part' => 5,
             'title' => "Formulaire" ,
             'titlepage' => 'Formulaire - ',
+            'rv'=> $RVrep->find($rv) ,
         ]);
     }
     #[Route('/new', name: 'app_formulaire_new', methods: ['GET', 'POST'])]
@@ -98,12 +99,14 @@ class FormulaireController extends AbstractController
 
         return $this->redirectToRoute('app_formulaire_index', [], Response::HTTP_SEE_OTHER);
     }
-    #[Route('/quiz/{idq}', name: 'app_rendez_vous_quiz')]
-    public function quiz(RendezVousRepository $rendezVousRepository, Request $request, EntityManagerInterface $entityManager, QuestionRepository $questionRepository, ReponseRepository $reposeRepository, $idq): Response
+    #[Route('/quiz/{idq}/{idr}', name: 'app_rendez_vous_quiz')]
+    public function quiz(RendezVousRepository $rendezVousRepository, Request $request,$idr, EntityManagerInterface $entityManager, QuestionRepository $questionRepository, ReponseRepository $reposeRepository, $idq): Response
     {
         $question = $questionRepository->findAll()[$idq];
         $formulaire = new Formulaire();
+        $formulaire->setRendezVous($rendezVousRepository->find($idr));
 //        $form = $this->createForm(QuizType::class, $formulaire, ['question' => $question]);
+        $rv=$rendezVousRepository->find($idr);
         $form = $this->createForm(FormulaireType::class, $formulaire, ['question' => $question]);
         $form->handleRequest($request);
 
@@ -113,19 +116,19 @@ class FormulaireController extends AbstractController
             $entityManager->flush();
 
             if ($idq >= sizeof($questionRepository->findAll()) - 1)
-                {return $this->redirectToRoute('app_formulaire_index2');}
+                {return $this->redirectToRoute('app_formulaire_index2', ['rv'=>$idr]);}
                 
             
             else
-            return $this->redirectToRoute('app_rendez_vous_quiz', ['idq' => $idq + 1], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_rendez_vous_quiz', ['idq' => $idq + 1, 'idr'=>$idr], Response::HTTP_SEE_OTHER);
         }
 
         if($question->isActive() == false){
             if($idq >= sizeof($questionRepository->findAll()) - 1){
-                return $this->redirectToRoute('app_formulaire_index2');
+                return $this->redirectToRoute('app_formulaire_index2',['rv' => $idr]);
             }
             else{
-            return $this->redirectToRoute('app_rendez_vous_quiz', ['idq' => $idq + 1], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_rendez_vous_quiz', ['idq' => $idq + 1, 'idr'=>$idr], Response::HTTP_SEE_OTHER);
             }
         }
 
@@ -138,6 +141,7 @@ class FormulaireController extends AbstractController
             'controller_name' => 'RendezVousController',
             'service' => 1,
             'part' => 69,
+            'rv' => $rv,
         ]);
 
     }

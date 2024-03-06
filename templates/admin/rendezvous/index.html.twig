@@ -72,7 +72,7 @@
     {% endif %}
 
     {% if rendezvouses is defined %}
-    
+
 
     <div class="bg-white shadow-md rounded-lg">
         <table class="min-w-full leading-normal">
@@ -87,8 +87,8 @@
                     <th
                         class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                         <a
-                        href="{{ path('app_rendezvousAdmin', {sort: 'user', order: app.request.query.get('sort') == 'user' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">Psychyatrist<i
-                            class="fa-solid fa-sort"></i></a>
+                            href="{{ path('app_rendezvousAdmin', {sort: 'user', order: app.request.query.get('sort') == 'user' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">Psychyatrist<i
+                                class="fa-solid fa-sort"></i></a>
                     </th>
                     <th
                         class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -103,7 +103,11 @@
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ rv.patient.firstname }} {{
                         rv.patient.lastname }}</td>
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ rv.user.firstname}} {{
-                        rv.user.lastname}}</td>
+                        rv.user.lastname}}
+                        <button class="text-red-600 hover:text-red-900" onclick="openModal('statModal{{ rv.id }}')">
+                            <i class="fa-solid fa-chart-simple"></i>
+                        </button>
+                    </td>
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ rv.dateR|date('Y-m-d H:i') }}
                     </td>
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
@@ -173,7 +177,9 @@
                             <span class="close cursor-pointer"
                                 onclick="closeModal('viewModal{{ rv.id }}')">&times;</span>
                         </div>
-                        <center><p class="mb-5">Appointment</p></center>
+                        <center>
+                            <p class="mb-5">Appointment</p>
+                        </center>
                         <p class="mb-2">date: {{ rv.dateR|date('Y-m-d H:i') }}</p>
                         <p class="mb-2">Service: {{ rv.nomService }}</p>
                         <p class="mb-2">Status: {{ rv.statut ? "confirmed":"not confirmed" }}</p>
@@ -182,14 +188,19 @@
                         {% if rv.statut %}
                         {% for cons in consultations %}
                         {% if cons.rendezvous == rv %}
-                        <center><p class="mb-5">Consultation</p></center>
+                        <center>
+                            <p class="mb-5">Consultation</p>
+                        </center>
                         <p class="mb-2">notes: {{ cons.note }}</p>
-                        <p class="mb-2">RecommandationSuivi: {{ cons.RecommandationSuivi ? "recommand":"not necessary" }}</p>
+                        <p class="mb-2">RecommandationSuivi: {{ cons.RecommandationSuivi ? "recommand":"not necessary"
+                            }}</p>
                         {% endif %}
                         {% endfor %}
                         {% endif %}
-                        
-                        {# <a class="text-lg font-bold" href="{{ path('app_consultation_show', {'idrv': rv.id}) }}"><strong>Show consultation info</strong></a> #}
+
+                        {# <a class="text-lg font-bold"
+                            href="{{ path('app_consultation_show', {'idrv': rv.id}) }}"><strong>Show consultation
+                                info</strong></a> #}
                     </div>
                 </div>
 
@@ -239,21 +250,97 @@
                     </div>
                 </div>
 
+                {# Statistics model#}
+                {% if rv.statut %}
+                <div>
+                    {# Stat Modal - Simplified for demonstration #}
+                    <div id="statModal{{ rv.id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
+                        onclick="closeModal('statModal{{ rv.id }}')">
+                        <!-- Modal content -->
+                        <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white"
+                            onclick="event.stopPropagation()">
+                            <div class="flex justify-between items-center mb-4">
+                                <h4 class="text-lg font-bold">Stat rating</h4>
+                                <span class="close cursor-pointer" onclick="closeModal('statModal{{ rv.id }}')">&times;</span>
+                            </div>
+                            <div class="shadow-lg rounded-lg overflow-hidden w-full dividiv">
+                                <div class="py-3 px-5 bg-gray-50">Stat Rating</div>
+                                <canvas class="p-10" id="chartPie{{ rv.id }}"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% set nbr5S = 0 %} 
+                {% set nbr4S = 0 %} 
+                {% set nbr3S = 0 %} 
+                {% set nbr2S = 0 %} 
+                {% set nbr1S = 0 %}
+                
+                {% for c in consultations %}
+                    {% if c.Psychiatre == rv.user %}
+                        {% if c.avisPatient == 1 %}
+                            {% set nbr1S = nbr1S + 1 %}
+                        {% elseif c.avisPatient == 2 %}
+                            {% set nbr2S = nbr2S + 1 %}
+                        {% elseif c.avisPatient == 3 %}
+                            {% set nbr3S = nbr3S + 1 %}
+                        {% elseif c.avisPatient == 4 %}
+                            {% set nbr4S = nbr4S + 1 %}
+                        {% elseif c.avisPatient == 5 %}
+                            {% set nbr5S = nbr5S + 1 %}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                
+                {% set totaleS =  nbr1S + nbr2S + nbr3S + nbr4S + nbr5S %} 
+                
+                <script>
+                    const dataPie{{ rv.id }} = {
+                        labels: ["1 Star", "2 Stars", "3 Stars", "4 Stars", "5 Stars"], // Adjust labels as needed
+                        datasets: [{
+                            label: "Rating",
+                            data: [
+                                {% if totaleS != 0 %}
+                                    {{ (nbr1S / totaleS) * 100 }},
+                                    {{ (nbr2S / totaleS) * 100 }},
+                                    {{ (nbr3S / totaleS) * 100 }},
+                                    {{ (nbr4S / totaleS) * 100 }},
+                                    {{ (nbr5S / totaleS) * 100 }}
+                                {% endif %}
+                            ],
+                            backgroundColor: [
+                                "rgb(255, 99, 132)",
+                                "rgb(54, 162, 235)",
+                                "rgb(255, 205, 86)",
+                                "rgb(50, 205, 50)",
+                                "rgb(152, 75, 161)",
+                            ],
+                            hoverOffset: 4,
+                        }],
+                    };
+                
+                    const configPie{{ rv.id }} = {
+                        type: "pie",
+                        data: dataPie{{ rv.id }},
+                        options: {},
+                    };
+                    var chartPie{{ rv.id }} = new Chart(document.getElementById("chartPie{{ rv.id }}"), configPie{{ rv.id }});
+                </script>
+                {% endif %}
                 {% endfor %}
             </tbody>
         </table>
         {% else %}
         <div class="flex justify-center">
-            <img width="600" height="500"
-            src="{{asset('assets/images/gallery/Search.png')}}"
-            alt="Talking Minds - Psychotherapist Site Template"
-            />
+            <img width="600" height="500" src="{{asset('assets/images/gallery/Search.png')}}"
+                alt="Talking Minds - Psychotherapist Site Template" />
         </div>
         <div class="section_heading text-center">
             <h2 class="text-lg font-bold text-sky-700">Ups!... no Publications found</h2>
         </div>
-       
-    {% endif %}
+
+        {% endif %}
     </div>
 </div>
 {% endblock %}

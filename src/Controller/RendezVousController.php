@@ -12,6 +12,7 @@ use App\Repository\ConsultationRepository;
 use App\Repository\RendezVousRepository;
 use App\Repository\UserRepository;
 use DateTime;
+use Doctrine\DBAL\Driver\Mysqli\Initializer\Options;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -67,6 +68,7 @@ class RendezVousController extends AbstractController
     ): Response
     {
         $rendezVou = new RendezVous();
+        // $rendezVou->setCertificat(false);
         $serviceName = $searchTerm = $request->query->get('type');
         if($serviceName != null)
             $rendezVou->setNomService($serviceName);
@@ -93,7 +95,7 @@ class RendezVousController extends AbstractController
                 ]);
             }
 
-            return $this->redirectToRoute('app_rendez_vous_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_rendez_vous_quiz', ['idq'=>0,'idr'=>$rendezVou->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('frontClient/rendezvous.html.twig', [
@@ -188,6 +190,17 @@ class RendezVousController extends AbstractController
         return $this->redirectToRoute('app_rendez_vous_confirm', ['psyid' => $rendezVou->getUser()->getId()]);
     }
 
+    #[Route('/rendez/vous/{id}/edit/certificat', name: 'app_rendez_vous_edit_certificat')]
+    public function editC(Request $request, RendezVousRepository $RVrep, EntityManagerInterface $entityManager, $id): Response
+    {
+        $rendezVou = $RVrep->find($id);
+        $rendezVou->setCertificat(true);
+        $entityManager->persist($rendezVou);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_rendez_vous_confirm', ['psyid' => $rendezVou->getUser()->getId()]);
+    }
+
     #[Route('/admin/rendez/vous', name: 'app_rendezvousAdmin')]
     public function indexAdmin(RendezVousRepository $RVrep, ConsultationRepository $Crep, Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -236,6 +249,38 @@ class RendezVousController extends AbstractController
             "rendezvouses" => $RVrep->findall(),
             "consultations"=> $Crep->findAll(),
         ]);
+    }
+
+    #[Route('/exportpdf', name: 'app_generer_pdf_historique')]
+    public function exportPdf(): Response
+    {
+
+    // $users = $userRepository->findAll();
+
+    // Créez une instance de Dompdf avec les options nécessaires
+    $pdfOptions = new Options();
+    $pdfOptions->set('defaultFont', 'Arial');
+
+    $dompdf = new Dompdf($pdfOptions);
+
+    // Générez le HTML pour représenter la table d'utilisateurs
+    $html = $this->renderView('rendez_vous/show.html.twig', []);
+
+    // Chargez le HTML dans Dompdf et générez le PDF
+    $dompdf->loadHtml($html);
+    $dompdf->setPaper('A4', 'portrait');
+    $dompdf->render();
+
+    // Générer un nom de fichier pour le PDF
+    $filename = 'user_list.pdf';
+
+    // Streamer le PDF vers le navigateur
+    $response = new Response($dompdf->output());
+    $response->headers->set('Content-Type', 'application/pdf');
+    $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
+
+    // Retournez la réponse
+    return $response;
     }
 
 }
