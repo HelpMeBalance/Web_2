@@ -20,6 +20,34 @@ class CommandeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Commande::class);
     }
+    public function countAll(): int
+    {
+        return $this->createQueryBuilder('c')
+            ->select('COUNT(c.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    // Custom method to sum total amount of all commandes
+    public function sumTotalAmount(): float
+    {
+        return $this->createQueryBuilder('c')
+            ->select('SUM(c.amount)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    // Custom method to retrieve statistics about payment methods
+    public function getPaymentMethodStatistics(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->select('c.paymentMethod, COUNT(c.id) as count')
+            ->groupBy('c.paymentMethod')
+            ->getQuery()
+            ->getResult();
+    }
+
+    // Add more custom methods as needed...
+
 
 //    /**
 //     * @return Commande[] Returns an array of Commande objects

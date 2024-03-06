@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Commande Details</title>
+    <style>
+        /* Define your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+        .page_wrapper {
+            background-color: #f9f9f9;
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+        .site_logo img {
+            max-width: 100%;
+            height: auto;
+        }
+        .page_content {
+            background-color: #fff;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .footer {
+            background-color: #000;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        .footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="page_wrapper">
+        <header class="site_header">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-2 col-5">
+                        <div class="site_logo">
+                            <a class="site_link" href="{{ path('app_homeClient') }}">
+                                <img src="{{ asset('assets/images/site_logo/logo.png') }}" alt="HelpMeBalance Logo">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main class="page_content">
+            <h1>Commande Details</h1>
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <td>{{ commande.id }}</td>
+                </tr>
+                <tr>
+                    <th>Username</th>
+                    <td>{{ commande.username }}</td>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <td>{{ commande.address }}</td>
+                </tr>
+                <tr>
+                    <th>Payment Method</th>
+                    <td>{{ commande.paymentmethode }}</td>
+                </tr>
+                <tr>
+                    <th>Articles</th>
+                    <td>
+                        <ul>
+                            {% for article in commande.articles %}
+                                <li>{{ article.nom }} - Prix: {{ article.prix }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Total Price</th>
+                    <td>{{ commande.totalPrice }}</td>
+                </tr>
+            </table>
+        </main>
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; 2024 HelpMeBalance All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

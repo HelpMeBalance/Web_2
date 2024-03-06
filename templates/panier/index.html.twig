@@ -8,7 +8,7 @@
     <table class="table">
         <thead>
             <tr>
-                <th>PrixTot</th>
+                <th>Prix Total</th> {# Updated column header to "Prix Total" #}
                 <th>Quantité</th>
                 <th>Article</th>
                 <th>Actions</th>
@@ -17,8 +17,8 @@
         <tbody>
             {% for panier in paniers %}
                 <tr>
-                    <td>{{ panier.PrixTot }}</td>
-                    <td>{{ panier.Quantity }}</td>
+                    <td>{{ panier.prixTot }}</td> {# Updated property name to "prixTot" #}
+                    <td>{{ panier.quantity }}</td> {# Updated property name to "quantity" #}
                     <td>{{ panier.article.nom }}</td> {# Access article properties directly #}
                     <td>
                         <a href="{{ path('app_panier_delete', {'id': panier.id}) }}">Delete</a>
@@ -27,20 +27,19 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="5">No records found</td>
+                    <td colspan="4">No records found</td> {# Adjusted colspan to match the number of columns #}
                 </tr>
             {% endfor %}
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="4"></td> {# Colspan to fill the entire row #}
+                <td colspan="3"></td> {# Colspan to fill the entire row #}
                 <td>Total: {{ totalSum }}</td> {# Display total sum here #}
             </tr>
         </tfoot>
     </table>
 
-    <a href="{{ path('app_panier_new') }}"class="btn btn-primary">Ajouter un article</a>
     
     {# Button to go to Commande page #}
-    <a href="{{ path('app_commande_index') }}" class="btn btn-primary">Commander</a>
+    <a href="{{ path('app_commande_new') }}" class="btn btn-primary">Commander</a> {# Updated path to "app_commande_new" #}
 {% endblock %}

@@ -34,23 +34,41 @@
                 </td>
             </tr>
             <tr>
-                <th>Paniers</th>
+                <th>Articles</th>
                 <td>
                     <ul>
-                        {% for panier in paniers %}
-                            <li>{{ panier.article.getNom() }} - Prix: {{ panier.PrixTot }} - Quantity: {{ panier.Quantity }}</li>
+                        {% for article in commande.articles %}
+                            <li>{{ article.nom }} - Prix: {{ article.prix }}</li>
                         {% endfor %}
                     </ul>
                 </td>
             </tr>
             <tr>
                 <th>Total Price</th>
-                <td>{{ totalPrice }}</td>
+                <td>
+                    {% set totalPrice = 0 %}
+                    {% for article in commande.articles %}
+                        {% set totalPrice = totalPrice + article.prix %}
+                    {% endfor %}
+                    {{ totalPrice }}
+                </td>
+            </tr>
+            <tr>
+                <th>Discounted Price</th>
+                <td>
+                    {% set saleCode = commande.saleCode %}
+                    {% if saleCode == '20242024' %}
+                        {% set discountedPrice = totalPrice * 0.8 %}
+                        {{ discountedPrice }}
+                    {% else %}
+                        No discount applied
+                    {% endif %}
+                </td>
             </tr>
         </tbody>
     </table>
 
     <a href="{{ path('app_commande_index') }}">Back to list</a>
+    <a href="{{ path('commande_pdf', {'id': commande.id}) }}" class="btn btn-primary">Generate PDF</a>
 
-    {{ include('commande/_delete_form.html.twig') }}
 {% endblock %}
