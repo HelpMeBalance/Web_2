@@ -364,6 +364,36 @@
       </tbody>
    </table>
 </div>
+<div class="mt-4">
+    <nav class="block">
+        <ul class="flex pl-0 rounded list-none flex-wrap">
+            {% if currentPage > 1 %}
+            <li>
+                <a href="{{ path('app_blogAdmin', {page: currentPage - 1}) }}" class="first:ml-0 text-xs font-semibold flex w-full items-center justify-center px-4 py-3 rounded-l-lg border border-r-0 border-gray-200 bg-white text-gray-500 hover:bg-gray-100">
+                    Previous
+                </a>
+            </li>
+            {% endif %}
+            
+            {% for i in 1..totalPages %}
+            <li>
+                <a href="{{ path('app_blogAdmin', {page: i}) }}" class="text-xs font-semibold flex w-full items-center justify-center px-4 py-3 leading-tight border border-gray-200 bg-white text-gray-500 hover:bg-gray-100 {{ currentPage == i ? 'bg-gray-300' : '' }}">
+                    {{ i }}
+                </a>
+            </li>
+            {% endfor %}
+            
+            {% if currentPage < totalPages %}
+            <li>
+                <a href="{{ path('app_blogAdmin', {page: currentPage + 1}) }}" class="text-xs font-semibold flex w-full items-center justify-center px-4 py-3 rounded-r-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-100">
+                    Next
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
 {# chart  #}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
  <div  class="flex justify-center items-center mb-8">

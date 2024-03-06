@@ -119,7 +119,7 @@ class PublicationRepository extends ServiceEntityRepository
 
         return new Paginator($query, $fetchJoinCollection = true);
     }
-    public function search($searchTerm, $sortField = 'dateM', $sortOrder = 'desc')
+    public function search($searchTerm, $sortField = 'dateM', $sortOrder = 'desc', $currentPage = 1, $perPage = 5)
     {
         $qb = $this->createQueryBuilder('p');
         if ($searchTerm) {
@@ -145,20 +145,16 @@ class PublicationRepository extends ServiceEntityRepository
             ->addOrderBy('comment_count', $sortOrder); // Then order by the count of comments
         }
          else 
-        //  if ($sortField === 'lastname') {
-        //    // Order by the last name of the user who posted the publication
-        // $qb->leftJoin('p.User', 'u')
-        // ->orderBy('u.lastname', $sortOrder); // Use the correct association name and field name
-        // }
-         
-         
-         
+      
          {
             // Sort by other fields
             $qb->orderBy('p.' . $sortField, $sortOrder);
         }
 
-        return $qb->getQuery()->getResult();
+        $query =  $qb->getQuery()
+                 ->setFirstResult(($currentPage - 1) * $perPage)
+                 ->setMaxResults($perPage);
+         return new Paginator($query, true);
     }
     
 //    /**

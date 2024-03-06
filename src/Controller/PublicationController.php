@@ -129,16 +129,6 @@ class PublicationController extends AbstractController
 
 /////////////////////////ADMIN////////////////////////////////////////////
 
-    #[Route('/pubadmin/{idp}', name: 'admin_publication_delete', methods: ['POST'])]
-    public function deleteadmin(Request $request, int $idp, EntityManagerInterface $entityManager,PublicationRepository $publicationRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$idp, $request->request->get('_token'))) {
-            $entityManager->remove($publicationRepository->find($idp));
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_blogAdmin');
-    }
     #[Route('/admin/{id}', name: 'admin_pub_delete',  methods: ['POST'])]
     public function deletepubadmin(Request $request, int $id, EntityManagerInterface $entityManager,PublicationRepository $publicationRepository): Response
     {
