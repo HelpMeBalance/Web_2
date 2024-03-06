@@ -35,6 +35,35 @@ public function findAllUnderPublication(Publication $publication): array
     ->getQuery()
     ->getResult();
 }
+public function search($searchTerm, $sortField = 'dateM', $sortOrder = 'desc',$idp)
+    {
+        $qb = $this->createQueryBuilder('c')
+        ->join('c.Publication','p')
+        ->andWhere('p.id = :val')
+        ->setParameter('val', $idp);
+        if ($searchTerm) {
+            $qb
+                ->andwhere('c.contenu LIKE :searchTerm ')
+                ->setParameter('searchTerm', $searchTerm . '%');
+        }
+
+        // Ensure the sortField is one of the valid fields
+        if (!in_array($sortField, ['contenu','valide','dateC','dateM','User'])) {
+            $sortField = 'dateM'; // Default field to sort by
+        }
+
+        // Ensure the sortOrder is either 'asc' or 'desc'
+        if (!in_array($sortOrder, ['asc', 'desc'])) {
+            $sortOrder = 'desc'; // Default sort order
+        }
+         else 
+         {
+            // Sort by other fields
+            $qb->orderBy('c.' . $sortField, $sortOrder);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 public function findAllValidatedUnderPublication(Publication $publication): array
 {
     return $this->createQueryBuilder('c')
