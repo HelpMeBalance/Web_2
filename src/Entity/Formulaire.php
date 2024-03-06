@@ -28,6 +28,9 @@ class Formulaire
     #[ORM\OneToOne(inversedBy: 'formulaire', cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
+    #[ORM\ManyToOne(inversedBy: 'formulaires')]
+    private ?RendezVous $RendezVous = null;
+
     public function __construct()
     {
         $this->Question = new ArrayCollection();
@@ -95,6 +98,18 @@ class Formulaire
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getRendezVous(): ?RendezVous
+    {
+        return $this->RendezVous;
+    }
+
+    public function setRendezVous(?RendezVous $RendezVous): static
+    {
+        $this->RendezVous = $RendezVous;
 
         return $this;
     }

@@ -58,6 +58,20 @@
             <div class="modal-footer">
               <button type="button" class="btn btn-primary" id="dynamicAppointmentBtn"></button>
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              
+              {% for rv in rendezvous %}
+        {% if app.user == rv.user %}
+        {% for consultation in consultations %}
+        {% if (consultation.rendezvous == rv) %}
+              {% if not(consultation.rendezvous.certificat) and (consultation.rendezvous.statut == true) %}
+              <form action="{{ path('app_rendez_vous_edit_certificat', {"id": rv.id}) }}">
+                <button type="submit" class="btn btn-info" id="newButton">New Button</button>
+              </form>
+              {% endif %}
+              {% endif %}
+              {% endfor %}
+          {% endif %}
+          {% endfor %}             
             </div>
           </div>
   </div>
