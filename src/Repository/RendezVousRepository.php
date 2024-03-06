@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\RendezVous;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,7 +22,7 @@ class RendezVousRepository extends ServiceEntityRepository
         parent::__construct($registry, RendezVous::class);
     }
 
-    public function search($searchTerm, $sortField = 'patient', $sortOrder = 'asc')
+    public function search($searchTerm, $sortField = 'patient', $sortOrder = 'asc', $currentPage = 1, $perPage = 2)
     {
         $qb = $this->createQueryBuilder('u');
 
@@ -44,7 +45,11 @@ class RendezVousRepository extends ServiceEntityRepository
 
         $qb->orderBy('u.' . $sortField, $sortOrder);
 
-        return $qb->getQuery()->getResult();
+        $query = $qb->getQuery()
+            ->setFirstResult(($currentPage - 1) * $perPage)
+            ->setMaxResults($perPage);
+
+        return new Paginator($query, true);
     }
 
     //    /**

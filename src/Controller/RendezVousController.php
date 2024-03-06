@@ -194,11 +194,19 @@ class RendezVousController extends AbstractController
         $searchTerm = $request->query->get('search');
         $sortField = $request->query->get('sort', 'firstname');
         $sortOrder = $request->query->get('order', 'asc');
-        $rvs = $entityManager->getRepository(RendezVous::class)->search($searchTerm, $sortField, $sortOrder);
+        $perPage = 2;
+
+        $currentPage = (int) $request->query->get('page', 1);
+        $rvs = $RVrep->search($searchTerm, $sortField, $sortOrder, $currentPage, $perPage);
+        $totalArticles = count($rvs);
+        $totalPages = ceil($totalArticles / $perPage);
+        
 
         return $this->render('admin/rendezvous/index.html.twig', [
             "rendezvouses" => $rvs,
             "consultations"=> $Crep->findAll(),
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
         ]);
     }
 
