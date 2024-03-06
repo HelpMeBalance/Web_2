@@ -38,6 +38,7 @@ class QuestionController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
           
+            $question->setActive(false);
             $entityManager->persist($question);
             $entityManager->flush();
             $id=$question->getId();
@@ -65,7 +66,6 @@ class QuestionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
             $entityManager->persist($question);
             $entityManager->flush();
             $id=$question->getId();
