@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @extends ServiceEntityRepository<User>
@@ -64,7 +65,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 //            ->getOneOrNullResult()
 //        ;
 //    }
-        public function search($searchTerm, $sortField = 'firstname', $sortOrder = 'asc')
+        public function search($searchTerm, $sortField = 'firstname', $sortOrder = 'asc', $currentPage = 1, $perPage = 2)
         {
             $qb = $this->createQueryBuilder('u');
         
@@ -84,9 +85,13 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             }
         
             $qb->orderBy('u.' . $sortField, $sortOrder);
-        
-            return $qb->getQuery()->getResult();
+            $query = $qb->getQuery()
+                ->setFirstResult(($currentPage - 1) * $perPage)
+                ->setMaxResults($perPage);
+
+            return new Paginator($query, true);
         }
+        
         public function countByRole(string $role): int
         {
             return $this->createQueryBuilder('u')

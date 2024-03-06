@@ -2,27 +2,62 @@
 
 namespace App\Controller;
 
+use App\Entity\RendezVous;
+use App\Form\RendezVousType;
 use App\Repository\ArticleRepository;
 use App\Entity\Article;
 use App\Entity\CategorieProduit;
 use App\Repository\CategorieProduitRepository;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_homeClient')]
-    public function index(): Response
+    public function index(UserRepository $Urep, Request $request, EntityManagerInterface $entityManager): Response
     {
+
+        $rendezVou = new RendezVous();
+        $rendezVou->setDateR(new \DateTime());
+        // $form = $this->createForm(RendezVousType::class, $rendezVou, ['patient' => $Urep->find($idp)]);
+        $form = $this->createForm(RendezVousType::class, $rendezVou, ['patient' => $this->getUser()]);
+        $form->handleRequest($request);
+        $errordate = "";
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $rendezVou->setStatut(false);
+            //$rendezVou->setPatient($Urep->find(?????????));
+            $entityManager->persist($rendezVou);
+            $entityManager->flush();
+            // Check if the selected date is before today
+            if ($rendezVou->getDateR() < new \DateTime('today')) {
+                $form->get('dateR')->addError(new \Symfony\Component\Form\FormError('Please select a date equal to or after today.'));
+                $errordate = "Please select a date equal to or after today.";
+                return $this->render('rendez_vous/new.html.twig', [
+                    'rendez_vou' => $rendezVou,
+                    'form' => $form->createView(),
+                    'errordate' => $errordate,
+                ]);
+            }
+
+            return $this->redirectToRoute('app_rendez_vous_index', [], Response::HTTP_SEE_OTHER);
+        }
+
         return $this->render('frontClient/index.html.twig', [
             'controller_name' => 'HomeController',
             'service' => 0,
             'part' => 1,
             'title' => '',
             'titlepage' => '',
+            'form'=> $form->createView(),
         ]);
     }
+
     #[Route('/aboutClient', name: 'app_aboutClient')]
     public function aboutClient(): Response
     {

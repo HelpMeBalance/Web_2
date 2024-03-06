@@ -25,7 +25,7 @@ class UserType extends AbstractType
                     // Add other roles as needed
                 ],
                 'expanded' => true, // for checkboxes
-    'multiple' => false, // False for radio buttons, true for checkboxes
+                'multiple' => false, // False for radio buttons, true for checkboxes
             ]);
         ;
         $builder->get('roles')

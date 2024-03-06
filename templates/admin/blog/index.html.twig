@@ -346,4 +346,24 @@
        
     {% endif %}
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const categorieSelect = document.querySelector('#publication_Categorie');
+    const sousCategorieSelect = document.querySelector('#publication_SousCategorie');
+
+    categorieSelect.addEventListener('change', function() {
+        const categoryId = this.value;
+        fetch(`/subcategories/${categoryId}`)
+            .then(response => response.json())
+            .then(data => {
+                sousCategorieSelect.innerHTML = ''; // Clear existing options
+                data.forEach(subcategory => {
+                    let option = new Option(subcategory.name, subcategory.id);
+                    sousCategorieSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    });
+});
+</script>
 {% endblock %}

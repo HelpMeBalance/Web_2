@@ -108,6 +108,11 @@
         <a href="{{ path('app_rendezvousAdmin') }}" class="inline-flex items-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg px-2 {% if currentRoute == 'app_rendezvousAdmin' %}bg-blue-600 text-white{% else %}bg-gray-800 text-gray-500{% endif %}">
           <i class="fa-solid fa-calendar-check fa-lg"></i>
           <span class="ml-2"  x-show="menu">Apponitments</span>
+        </a>
+        <a href="{{ path('app_consultationAdmin') }}" class="inline-flex items-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg px-2 {% if currentRoute == 'app_consultationAdmin' %}bg-blue-600 text-white{% else %}bg-gray-800 text-gray-500{% endif %}">
+          <i class="fa-solid fa-notes-medical"></i>
+          <span class="ml-2"  x-show="menu">Consultations</span>
+        </a>
         <a href="{{ path('admin_article_index') }}" class="inline-flex items-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg px-2 {% if currentRoute == 'admin_article_index' %}bg-blue-600 text-white{% else %}bg-gray-800 text-gray-500{% endif %}">
           <i class="fa-solid fa-shop"></i>
           <span class="ml-2"  x-show="menu">Articles</span>

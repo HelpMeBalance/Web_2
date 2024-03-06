@@ -6,11 +6,73 @@
   <div class="container">
     <div class="section_heading text-center">
       <h2 class="section_heading_text">Appointment Managment</h2>
-      <a href="{{ path('app_rendez_vous_new', {'idp':app.user.id}) }}">Create new appointment</a>
+      <a href="{{ path('app_rendez_vous_new') }}">Create new appointment</a>
       <p class="section_heading_description mb-0">
         {{app.user.firstname}} {{app.user.lastname}}
       </p>
     </div>
+<div class="container mx-auto px-4 py-8">
+    {% if rendezVou is defined %}
+
+    <div id="editModal{{ rendezVou.id }}" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+      <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="flex justify-between items-center mb-4">
+          <h4 class="text-lg font-bold">Edit Appointment</h4>
+          <span class="close cursor-pointer" onclick="closeModal('editModal{{ rendezVou.id }}')">&times;</span>
+        </div>
+        {% if form is defined %}
+        <div class="flex justify-center">
+          {{ form_start(form) }}
+          {{ form_row(form.dateR, {
+          'label': 'Date Appointment:',
+          'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm
+          border-gray-300 rounded-md'}
+          }) }}
+          </br>
+
+          {{ form_row(form.nomService, {
+          'label': 'Service Name:',
+          'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm
+          border-gray-300 rounded-md'}
+          }) }}
+          </br>
+
+          <div class="d-none">
+            {{ form_row(form.statut, {
+            'label': 'Status:',
+            'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm
+            border-gray-300 rounded-md'}
+            }) }}
+            </br>
+          </div>
+
+          <div class="d-none">
+            {{ form_row(form.patient, {
+            'label': 'Patient:',
+            'attr': {'class': 'mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none
+            focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md'}
+            }) }}
+            </br>
+          </div>
+
+          {{ form_row(form.user, {
+          'label': 'Psy:',
+          'attr': {'class': 'mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none
+          focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md'}
+          }) }}
+          </br>
+          <button type="submit"
+            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            Save
+          </button>
+          {{ form_end(form) }}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    {% endif %}
+
     <div class="testimonial_carousel">
       <div class="carousel_2col row" data-slick='{"arrows":false}'>
         {% for rv in rendezvous %}
@@ -25,18 +87,17 @@
             {% endif %}
             {% endfor %}
             {% if stars is null %}
-            <p class="rating_star unordered_list">
+            <ul class="rating_star unordered_list">
               {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
               <div class="d-none">
-              <label for="select_therapy">idrendezvous</label>
+                <label for="select_therapy">idrendezvous</label>
                 {{ form_widget(form.idrv, {'attr': {'class': 'form-select'}, 'value':rv.id}) }}
-                {{ form_errors(form.idrv, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
               </div>
               <div class="form-group">
                 <label for="select_therapy">rating</label>
-                  {{ form_widget(form.rating, {'attr': {'class': 'form-select'}}) }}
-                  {{ form_errors(form.rating, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
-                </div>
+                {{ form_widget(form.rating, {'attr': {'class': 'form-control p-1'}}) }}
+                {{ form_errors(form.rating, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
+              </div>
               <button type="submit" class="btn btn-primary">
                 <span class="btn_text" data-text="Get A Consultation">
                   {{ button_label|default('Save') }}
@@ -46,14 +107,21 @@
                 </span>
               </button>
               {{ form_end(form) }}
-            </p>
-            {% else %} 
+            </ul>
+            {% else %}
             <ul class="rating_star unordered_list">
               {% for _ in range(1,stars ) %}
               <li><i class="fa-solid fa-star"></i></li>
               {% endfor %}
             </ul>
             {% endif %}
+            {% else %}
+            <ul class="rating_star unordered_list">
+              <li><a href="{{ path('app_rendez_vous_edit', {'id': rv.id}) }}"><i
+                    class="fa-solid fa-pen-to-square"></i></a></li>
+              <li><a href="{{ path('app_rendez_vous_delete', {'id': rv.id}) }}"><i class="fa-solid fa-trash"></i></a>
+              </li>
+            </ul>
             {% endif %}
             <div class="author_box">
               <div class="author_box_image">
@@ -74,6 +142,7 @@
       </div>
     </div>
     <div id='calendar'></div>
+
     <!-- Modal Structure -->
     <div class="modal fade" id="eventDetailsModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
       <div class="modal-dialog">

@@ -6,6 +6,7 @@
 parameters:
   profile_pictures_directory: "%kernel.project_dir%/public/uploads/profile_pictures"
   pub_pictures_directory: "%kernel.project_dir%/public/uploads/pub_pictures"
+  articles_directory: '%kernel.project_dir%/public/uploads/articles'
 
 services:
     # default configuration for services in *this* file

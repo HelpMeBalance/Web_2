@@ -15,9 +15,21 @@ class ConsultationType extends AbstractType
     {
         $builder
             // ->add('duree')
+            ->add('Patient', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'firstname',
+                ])
             ->add('note')
-            // ->add('avisPatient')
+            ->add('avisPatient')
             ->add('RecommandationSuivi')
+            ->add('Psychiatre', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'firstname',
+                ])
+            ->add('rendezvous', EntityType::class, [
+                'class' => RendezVous::class,
+                'choice_label' => 'id',
+                ])
         ;
     }
 
