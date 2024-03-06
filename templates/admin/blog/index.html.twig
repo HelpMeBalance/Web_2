@@ -2,7 +2,7 @@
 {# templates/admin/user/index.html.twig #}
 {% block content %}
 <div class="container mx-auto px-4 py-8">
-   <div class="mb-4">
+   <div  class="flex justify-center items-center mb-4">
       <h1 class="text-xl font-semibold">Blog Management 
       <button class="text-blue-600 hover:text-blue-900" onclick="openModal('addModal')">
       <a class="text-sky-700"href="{{ path('app_publication_add__blogAdmin') }}"> <i class="fa-regular fa-square-plus fa-lg"></i></a>
@@ -60,15 +60,17 @@
                   <label for="input_checkbox">
                   Post as Anonyme
                   </label>
-                  <div >
+                  {# <div >
                      {{ form_widget(formUpdate.User,{'attr' : {'class' : 'hidden'},'value': app.user.id})}}
-                  </div>
-                  <div >
+                  </div> #}
+                  {# <div >
+                  {{pub.categorie.id}}
                      {{ form_widget(formUpdate.Categorie,{'attr' : {'class' : 'hidden'},'value': pub.categorie.id})}} 
                   </div>
                   <div >
+                  {{pub.souscategorie.id}}
                      {{ form_widget(formUpdate.SousCategorie,{'attr' : {'class' : 'hidden'},'value': pub.souscategorie.id})}} 
-                  </div>
+                  </div> #}
                </div>
                <button type="submit"
                 class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
@@ -140,19 +142,46 @@
    </div>
 {# </div> #}
 {% endif %}
+<form method="get" class="mb-4" action="{{ path('app_blogAdmin') }}" id="searchForm">
+    <input type="text"
+        class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+        name="search" id="searchInput" placeholder="Search (any occurrence)..." value="{{ app.request.query.get('search') }}" />
+    <!-- Remove the submit button -->
+</form>
+<script>
+    // Get the search input element
+    var searchInput = document.getElementById('searchInput');
+
+    // Add event listener for input change
+    searchInput.addEventListener('input', function() {
+        // Submit the form when the input value changes
+        document.getElementById('searchForm').submit();
+    });
+    // Set focus on the search input after the page loads
+     window.addEventListener('load', function() {
+        searchInput.focus();
+    });
+      // Restore cursor position after form submission
+    window.addEventListener('DOMContentLoaded', function() {
+        // Set cursor position to the end of the input value
+        searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+    });
+</script>
 {% if publications|length >0%}
+
 <div class="bg-white shadow-md rounded-lg">
    <table class="min-w-full leading-normal">
       <thead>
          <tr>
-            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Title</th>
-            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Content</th>
-            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Posted By</th>
-            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">State</th>
-            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Views</th>
-            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Comments</th>
-            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Updated At</th>
-            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100"></th>
+            <th onclick="sortTable(0)" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdmin', {sort: 'titre', order: app.request.query.get('sort') == 'titre' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">Title   <i class="fa-solid fa-sort"></i></a></th>
+            <th onclick="sortTable(1)" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdmin', {sort: 'contenu', order: app.request.query.get('sort') == 'contenu' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">Content<i class="fa-solid fa-sort"></i></a></th>
+            <th onclick="sortTable(2)"  class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdmin', {sort: 'User', order: app.request.query.get('sort') == 'User' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">Posted By<i class="fa-solid fa-sort"></i></a></th>
+            <th onclick="sortTable(3)" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdmin', {sort: 'valide', order: app.request.query.get('sort') == 'valide' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">State <i class="fa-solid fa-sort"></i></a></th>
+            <th onclick="sortTable(4)" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdmin', {sort: 'vues', order: app.request.query.get('sort') == 'vues' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">Views <i class="fa-solid fa-sort"></i></a></th>
+            <th onclick="sortTable(5)"  class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdmin', {sort: 'comments', order: app.request.query.get('sort') == 'comments' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">Comments <i class="fa-solid fa-sort"></i></a></th>
+            <th onclick="sortTable(6)" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdmin', {sort: 'dateC', order: app.request.query.get('sort') == 'dateC' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">Posted At <i class="fa-solid fa-sort"></i></a></th>
+            <th onclick="sortTable(7)" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdmin', {sort: 'dateM', order: app.request.query.get('sort') == 'dateM' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">Updated At <i class="fa-solid fa-sort"></i></a></th>
+            <th                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100"></th>
          </tr>
       </thead>
       <tbody>
@@ -179,6 +208,7 @@
                {% endif %}
                {% endif %}
             </td>
+            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ publication.dateC|date('j F Y H:i:s') }}</td>
             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ publication.dateM|date('j F Y H:i:s') }}</td>
             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
                <button class="text-blue-600 hover:text-blue-900" onclick="openModal('viewModal{{ publication.id }}')">

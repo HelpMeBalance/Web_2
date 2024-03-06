@@ -113,10 +113,10 @@ class PublicationController extends AbstractController
     //     ]);
     // }
     #[Route('/{id}', name: 'app_publication_delete', methods: ['POST'])]
-    public function delete(Request $request, Publication $publication, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request,  int $id, EntityManagerInterface $entityManager,PublicationRepository $publicationRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$publication->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($publication);
+        if ($this->isCsrfTokenValid('delete'.$id, $request->request->get('_token'))) {
+            $entityManager->remove($publicationRepository->find($id));
             $entityManager->flush();
         }
 

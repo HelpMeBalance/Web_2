@@ -7,6 +7,7 @@ use App\Form\PublicationType;
 use App\Entity\SousCategorie;
 use App\Entity\Commentaire;
 use App\Form\CommentaireType;
+use App\Form\EditPublicationType;
 use App\Repository\PublicationRepository;
 use App\Repository\CommentaireRepository;
 use App\Repository\SousCategorieRepository;
@@ -264,14 +265,14 @@ class BlogController extends AbstractController
     {
         $pub = new Publication();
         $pub=$publicationRepository->find($idp);
-        $form = $this->createForm(PublicationType::class, $pub);
+        $form = $this->createForm(EditPublicationType::class, $pub);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $pub->setUser($this->getUser());
+            // $pub->setUser($this->getUser());
             //$pub->setValide(0);
-            $pub->setCategorie($categorieRepository->find($pub->getCategorie()->getId()));
-            $pub->setSousCategorie($sousCategorieRepository->find($pub->getSousCategorie()->getId()));
+            // $pub->setCategorie($categorieRepository->find($pub->getCategorie()->getId()));
+            // $pub->setSousCategorie($sousCategorieRepository->find($pub->getSousCategorie()->getId()));
             
 
             $imageFile = $form->get('imageFile')->getData(); // Ensure 'imageFile' matches your form field name
@@ -315,9 +316,13 @@ class BlogController extends AbstractController
 
     ////////////////////////////////////////////////ADMIN////////////////////////
     #[Route('/admin/blog', name: 'app_blogAdmin')]
-    public function indexAdmin(Request $request, PublicationRepository $publicationRepository,CommentaireRepository $commentaireRepository): Response
+    public function indexAdmin(Request $request, EntityManagerInterface $entityManager,CommentaireRepository $commentaireRepository): Response
     {
-        $publications = $publicationRepository->findAllsorteddate();
+        $searchTerm = $request->query->get('search');
+        $sortField = $request->query->get('sort', 'dateM');
+        $sortOrder = $request->query->get('order', 'desc');
+    $publications = $entityManager->getRepository(Publication::class)->search($searchTerm, $sortField, $sortOrder);
+        //$publications = $publicationRepository->findAllsorteddate();
         return $this->render('admin/blog/index.html.twig', [
             'controller_name' => 'BlogController',
             'publications' => $publications,
@@ -340,14 +345,15 @@ class BlogController extends AbstractController
     {
         $pub = new Publication();
         $pub=$publicationRepository->find($idp);
-        $formUpdate = $this->createForm(PublicationType::class, $pub);
+        $formUpdate = $this->createForm(EditPublicationType::class, $pub);
         $formUpdate->handleRequest($request);
-
         if ($formUpdate->isSubmitted() && $formUpdate->isValid()) {
-            $pub->setUser($this->getUser());
+            // $pub->setUser($this->getUser());
             //$pub->setValide(0);
-            $pub->setCategorie($categorieRepository->find($pub->getCategorie()->getId()));
-            $pub->setSousCategorie($sousCategorieRepository->find($pub->getSousCategorie()->getId()));
+            // $categorie = $categorieRepository->find($formUpdate->get('Categorie')->getData());
+            // $pub->setCategorie($categorie);
+            // $souscategorie = $sousCategorieRepository->find($formUpdate->get('SousCategorie')->getData());
+            // $pub->setSousCategorie($souscategorie);
             
 
             $imageFile = $formUpdate->get('imageFile')->getData(); // Ensure 'imageFile' matches your form field name
@@ -464,6 +470,7 @@ public function addpubadmin(Request $request, EntityManagerInterface $entityMana
 
         if ($formupdate->isSubmitted() && $formupdate->isValid()) {
             $commentaire->setUser($this->getUser());
+            $commentaire->setDateM(new \DateTimeImmutable());
             $commentaire->setValide(1);
             $entityManager->persist($commentaire);
             $entityManager->flush();
