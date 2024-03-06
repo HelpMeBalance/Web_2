@@ -12,12 +12,13 @@ use App\Repository\ConsultationRepository;
 use App\Repository\RendezVousRepository;
 use App\Repository\UserRepository;
 use DateTime;
-use Doctrine\DBAL\Driver\Mysqli\Initializer\Options;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 // #[Route('/rendez/vous')]
 class RendezVousController extends AbstractController
@@ -68,7 +69,7 @@ class RendezVousController extends AbstractController
     ): Response
     {
         $rendezVou = new RendezVous();
-        // $rendezVou->setCertificat(false);
+         $rendezVou->setCertificat(false);
         $serviceName = $searchTerm = $request->query->get('type');
         if($serviceName != null)
             $rendezVou->setNomService($serviceName);
@@ -266,20 +267,22 @@ class RendezVousController extends AbstractController
         ]);
     }
 
-    #[Route('/exportpdf', name: 'app_generer_pdf_historique')]
-    public function exportPdf(): Response
+    #[Route('/exportpdf/{id}', name: 'app_generer_pdf_historique')]
+    public function exportPdf( RendezVousRepository $rev,$id): Response
     {
+        $rend=$rev->find($id);
 
     // $users = $userRepository->findAll();
 
     // Créez une instance de Dompdf avec les options nécessaires
+
     $pdfOptions = new Options();
     $pdfOptions->set('defaultFont', 'Arial');
 
     $dompdf = new Dompdf($pdfOptions);
 
     // Générez le HTML pour représenter la table d'utilisateurs
-    $html = $this->renderView('rendez_vous/show.html.twig', []);
+    $html = $this->renderView('rendez_vous/show.html.twig', ['rv' => $rend]);
 
     // Chargez le HTML dans Dompdf et générez le PDF
     $dompdf->loadHtml($html);

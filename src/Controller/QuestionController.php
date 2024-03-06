@@ -191,6 +191,7 @@ class QuestionController extends AbstractController
     public function edit(Request $request, int $id, QuestionRepository $questionRepository,FormulaireRepository $formulaireRepository, EntityManagerInterface $entityManager): Response
     {
         $question = $questionRepository->find($id);
+        $question->setDate(new \DateTime());
          
         $form = $this->createForm(QuestionType::class, $question);
         $form->handleRequest($request);

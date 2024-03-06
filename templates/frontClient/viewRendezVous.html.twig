@@ -135,12 +135,12 @@
             <p class="mb-0 d-flex justify-content-center">
               {{rv.nomService}}
             </p>
-            {# {% if rv.certificat %}
+            {% if rv.certificat %}
             <p class="mb-0 d-flex justify-content-center">
               Certificat
-              <a href="{{ path('app_generer_pdf_historique') }}"><i class="fa-solid fa-download"></i></a>
+              <a href="{{ path('app_generer_pdf_historique',{'id': rv.id}) }}"><i class="fa-solid fa-download"></i></a>
             </p>
-            {% endif %} #}
+            {% endif %}
           </div>
         </div>
         {% endif %}
