@@ -37,6 +37,9 @@ class RendezVous
     #[ORM\OneToMany(mappedBy: 'RendezVous', targetEntity: Formulaire::class)]
     private Collection $formulaires;
 
+    #[ORM\Column]
+    private ?bool $certificat = null;
+
     public function __construct()
     {
         $this->formulaires = new ArrayCollection();
@@ -141,6 +144,18 @@ class RendezVous
                 $formulaire->setRendezVous(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isCertificat(): ?bool
+    {
+        return $this->certificat;
+    }
+
+    public function setCertificat(bool $certificat): static
+    {
+        $this->certificat = $certificat;
 
         return $this;
     }
