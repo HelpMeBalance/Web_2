@@ -72,18 +72,43 @@
       {{ form_end(formupdate) }}
    </div>
 {% endif %}
+<form method="get" class="mb-4" action="{{ path('app_blogAdminCom',{'idp': pub.id}) }}" id="searchForm">
+    <input type="text"
+        class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+        name="search" id="searchInput" placeholder="Search (starts with)..." value="{{ app.request.query.get('search') }}" />
+    <!-- Remove the submit button -->
+</form>
+<script>
+    // Get the search input element
+    var searchInput = document.getElementById('searchInput');
+
+    // Add event listener for input change
+    searchInput.addEventListener('input', function() {
+        // Submit the form when the input value changes
+        document.getElementById('searchForm').submit();
+    });
+    // Set focus on the search input after the page loads
+     window.addEventListener('load', function() {
+        searchInput.focus();
+    });
+      // Restore cursor position after form submission
+    window.addEventListener('DOMContentLoaded', function() {
+        // Set cursor position to the end of the input value
+        searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+    });
+</script>
 {% if coms|length >0%}
     <div class="bg-white shadow-md rounded-lg">
         <table class="min-w-full leading-normal">
             <thead>
                 <tr>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Content</th>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Posted By</th>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">State</th>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Created At</th>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Updated At</th>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 "></th>
-                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100"></th>
+                    <th onclick="sortTable(0)"  class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdminCom', {sort: 'contenu', order: app.request.query.get('sort') == 'contenu' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc', 'idp':pub.id}) }}">Content<i class="fa-solid fa-sort"></i></a></th>
+                    <th onclick="sortTable(1)"  class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdminCom', {sort: 'User', order: app.request.query.get('sort') == 'User' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc', 'idp':pub.id}) }}">Posted By<i class="fa-solid fa-sort"></i></a></th>
+                    <th onclick="sortTable(2)"  class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdminCom', {sort: 'valide', order: app.request.query.get('sort') == 'valide' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc', 'idp':pub.id}) }}">State <i class="fa-solid fa-sort"></i></a></th>
+                    <th onclick="sortTable(3)"  class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdminCom', {sort: 'dateC', order: app.request.query.get('sort') == 'dateC' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc', 'idp':pub.id}) }}">Posted At <i class="fa-solid fa-sort"></i></a></th>
+                    <th onclick="sortTable(4)"  class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdminCom', {sort: 'dateM', order: app.request.query.get('sort') == 'dateM' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc', 'idp':pub.id}) }}">Updated At <i class="fa-solid fa-sort"></i></a></th>
+                    <th  class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 "></th>
+                    <th  class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100"></th>
                 </tr>
             </thead>
             <tbody>
