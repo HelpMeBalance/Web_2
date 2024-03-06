@@ -71,12 +71,25 @@ class UserController extends AbstractController
             return $this->redirectToRoute('admin_user_index');
         }
 
-        $users = $this->entityManager->getRepository(User::class)->findAll();
+        
+    $searchTerm = $request->query->get('search');
+    $sortField = $request->query->get('sort', 'firstname');
+    $sortOrder = $request->query->get('order', 'asc');
+    $perPage = 2; // You can make this a parameter or a constant
+
+    $currentPage = (int) $request->query->get('page', 1);
+
+    $users = $this->entityManager->getRepository(User::class)->search($searchTerm, $sortField, $sortOrder , $currentPage, $perPage);
+    $totalUsers = count($users);
+    $totalPages = ceil($totalUsers / $perPage);
     
         return $this->render('admin/user/index.html.twig', [
             'user_edit' => $user,
             'formUpdate' => $formUpdate->createView(),
             'users' => $users,
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
+            
         ]);
     }
     
