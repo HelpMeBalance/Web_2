@@ -2,7 +2,3 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 # config/routes.yaml
-app_panier_add:
-    path: /panier/add/{idA}
-    controller: App\Controller\PanierController::add
-    methods: ['GET', 'POST']

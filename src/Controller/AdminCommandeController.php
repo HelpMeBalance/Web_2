@@ -62,38 +62,28 @@ public function delete(Request $request, Commande $commande): Response
     // Redirect to the index page after deletion
     return $this->redirectToRoute('admin_commandes_index');
 }
-public function indexx(CommandeRepository $commandeRepository): Response
+public function indeex(CommandeRepository $commandeRepository): Response
 {
-    // Fetch commandes data and calculate statistics
-    $commandes = $commandeRepository->findAll();
-    $paymentMethodData = $this->calculatePaymentMethodStatistics($commandes);
+    // Fetch commandes associated with the authenticated user
+    $commandes = $commandeRepository->findBy(['user' => $this->getUser()]);
 
-    // Pass data to Twig template
+    // Calculate the percentages
+    $cardPercentage = $this->calculatePaymentMethodPercentage($commandes, 'card');
+    $cashPercentage = $this->calculatePaymentMethodPercentage($commandes, 'cash');
+
     return $this->render('admin/commande/index.html.twig', [
-        'paymentMethodData' => $paymentMethodData,
-        // Other data...
+        'commandes' => $commandes,
+        'cardPercentage' => $cardPercentage,
+        'cashPercentage' => $cashPercentage,
     ]);
 }
 
-private function calculatePaymentMethodStatistics(array $commandes): array
+private function calculatePaymentMethodPercentage($commandes, $paymentMethod)
 {
-    // Calculate payment method statistics
-    $paymentMethodCounts = [];
-    foreach ($commandes as $commande) {
-        $paymentMethod = $commande->getPaymentMethod();
-        if (!isset($paymentMethodCounts[$paymentMethod])) {
-            $paymentMethodCounts[$paymentMethod] = 0;
-        }
-        $paymentMethodCounts[$paymentMethod]++;
-    }
+    $filteredCommandes = array_filter($commandes, function ($commande) use ($paymentMethod) {
+        return $commande->getPaymentMethod() === $paymentMethod;
+    });
 
-    // Prepare data for Chart.js
-    $labels = array_keys($paymentMethodCounts);
-    $values = array_values($paymentMethodCounts);
-
-    return [
-        'labels' => $labels,
-        'values' => $values,
-    ];
+    return count($filteredCommandes) / count($commandes) * 100;
 }
 }

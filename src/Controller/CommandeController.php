@@ -14,8 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use Stripe\Charge;
-use Stripe\Stripe;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 #[Route('/commande')]
 class CommandeController extends AbstractController
@@ -32,7 +32,7 @@ class CommandeController extends AbstractController
     }
 
     #[Route('/new', name: 'app_commande_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, PanierRepository $panierRepository): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, PanierRepository $panierRepository, MailerInterface $mailer): Response
     {
         $commande = new Commande();
         $form = $this->createForm(CommandeType::class, $commande);
@@ -74,7 +74,14 @@ class CommandeController extends AbstractController
                 $entityManager->remove($panier);
             }
             $entityManager->flush();
-        
+            
+            $email = (new Email())
+            ->from('maklaziz829@gmail.com') // Set the sender email
+            ->to('amakhlouf69@gmail.com') // Set the recipient email (admin email)
+            ->subject('New Commande Created') // Set the subject
+            ->html('<p>A new commande has been created. Please check the admin panel for details.</p>'); // Set the email body
+
+             $mailer->send($email); // Send the email
             return $this->redirectToRoute('app_commande_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -168,5 +175,6 @@ public function show(int $id, CommandeRepository $commandeRepository): Response
             'Content-Disposition' => 'inline; filename="commande_' . $commande->getId() . '.pdf"',
         ]);
     }
+    
     
 }
