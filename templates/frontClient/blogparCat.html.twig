@@ -198,9 +198,9 @@
                         class="form-control"
                         type="search"
                         name="search"
-                        placeholder="Share Your Thoughts"
+                        placeholder=" Add New Publication "
                         disabled
-                      />  
+                      />      
                       {% if app.request.attributes.get('souscat')  %}      
                       <a class="btn-link input_icon" href="{{ path('app_publication_new_blogClient', {'cat': cat.id,'souscat':app.request.attributes.get('souscat')}) }}">
                         <i class="fa-solid fa-pen-line"></i>

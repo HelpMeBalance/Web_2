@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Publication;
+use App\Entity\Like;
 use App\Form\PublicationType;
 use App\Repository\PublicationRepository;
 use App\Repository\CommentaireRepository;
@@ -94,15 +95,16 @@ class PublicationController extends AbstractController
     }
     
    
-    // #[Route('/{id}/like', name: 'app_publication_like', methods: ['GET', 'POST'])]
-    // public function like(Request $request, Publication $publication, EntityManagerInterface $entityManager): Response
-    // {
-    //     $publication->setLikes($publication->getLikes()+1);
-    //     $entityManager->flush();
-    //     return $this->render('publication/show.html.twig', [
-    //         'publication' => $publication,'like'=>1
-    //     ]);
-    // }
+    #[Route('/{idp}/like', name: 'app_publication_like', methods: ['GET', 'POST'])]
+    public function like(Request $request, int $idp, EntityManagerInterface $entityManager): Response
+    {
+        // $like = new Like();
+        // $like->setUser($this->getUser());
+        // $like->setPublication($entityManager->getRepository(Publication::class)->find($idp));
+        // $entityManager->persist($like);
+        // $entityManager->flush();
+        return $this->redirectToRoute('app_blogClient', ['page'=>1], Response::HTTP_SEE_OTHER);
+    }
     // #[Route('/{id}/dislike', name: 'app_publication_dislike', methods: ['GET', 'POST'])]
     // public function dislike(Request $request, Publication $publication, EntityManagerInterface $entityManager): Response
     // {
