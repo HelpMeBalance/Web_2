@@ -56,10 +56,10 @@
     <input type="text"
         class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
         name="search" id="searchInput" placeholder="Search (any occurrence)..." value="{{ app.request.query.get('search') }}" />
+</form>
     <button class="text-red-600 hover:text-red-900" onclick="openModal('statModal{{ 'stats' }}')">
                             <i class="fa-solid fa-chart-simple"></i>
                         </button>
-</form>
 <script>
     // Get the search input element
     var searchInput = document.getElementById('searchInput');
