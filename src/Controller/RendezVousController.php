@@ -30,12 +30,8 @@ class RendezVousController extends AbstractController
     {
 
         $email = (new Email())
-            ->from('hello@example.com')
-            ->to('yabdelbakikacem2015@gmail.com')
-            //->cc('cc@example.com')
-            //->bcc('bcc@example.com')
-            //->replyTo('fabien@example.com')
-            //->priority(Email::PRIORITY_HIGH)
+            ->from('no-reply@nftun.com')
+            ->to('abdelbaki.kacem.2023@gmail.com')
             ->subject('Time for Symfony Mailer!')
             ->text('Sending emails is fun again!')
             ->html('<p>See Twig integration for better HTML integration!</p>');
@@ -295,7 +291,7 @@ class RendezVousController extends AbstractController
     {
         $rend = $rev->find($id);
 
-        // $users = $userRepository->findAll();
+        
 
         // Créez une instance de Dompdf avec les options nécessaires
 
@@ -313,7 +309,7 @@ class RendezVousController extends AbstractController
         $dompdf->render();
 
         // Générer un nom de fichier pour le PDF
-        $filename = 'user_list.pdf';
+        $filename = 'certificat.pdf';
 
         // Streamer le PDF vers le navigateur
         $response = new Response($dompdf->output());
