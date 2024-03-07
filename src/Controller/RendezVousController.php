@@ -107,9 +107,14 @@ class RendezVousController extends AbstractController
             if ($rendezVou->getDateR() < new \DateTime('today')) {
                 $form->get('dateR')->addError(new \Symfony\Component\Form\FormError('Please select a date equal to or after today.'));
                 $errordate = "Please select a date equal to or after today.";
-                return $this->render('rendez_vous/new.html.twig', [
+                return $this->render('frontClient/rendezvous.html.twig', [
                     'rendez_vou' => $rendezVou,
                     'form' => $form->createView(),
+                    'title' => 'RendezVous',
+                    'titlepage' => 'RendezVous',
+                    'controller_name' => 'RendezVousController',
+                    'service' => 1,
+                    'part' => 69,
                     'errordate' => $errordate,
                 ]);
             }
