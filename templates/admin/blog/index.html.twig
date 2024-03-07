@@ -9,6 +9,7 @@
       </button>
       </h1>
    </div>
+
    {% if pub is defined %}
    <div id="editModal{{ pub.id }}" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
       <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
@@ -82,8 +83,7 @@
       {{ form_end(formUpdate) }}
       {% endif %}
    </div>
-{% endif %}
- {% if formAdd is defined %}
+ {% elseif formAdd is defined %}
    <div id="addModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
       <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
          <div class="flex justify-between items-center mb-4">
@@ -140,8 +140,8 @@
         </div>
       {{ form_end(formAdd) }}
    </div>
-{# </div> #}
-{% endif %}
+{% else %}
+
 <form method="get" class="mb-4" action="{{ path('app_blogAdmin') }}" id="searchForm">
     <input type="text"
         class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
@@ -167,9 +167,10 @@
         searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
     });
 </script>
+{% endif %}
 {% if publications|length >0%}
 
-<div class="bg-white shadow-md rounded-lg">
+<div class="bg-white shadow-md rounded-lg  mb-8">
    <table class="min-w-full leading-normal">
       <thead>
          <tr>
@@ -363,6 +364,98 @@
       </tbody>
    </table>
 </div>
+<div class="mt-4">
+    <nav class="block">
+        <ul class="flex pl-0 rounded list-none flex-wrap">
+            {% if currentPage > 1 %}
+            <li>
+                <a href="{{ path('app_blogAdmin', {page: currentPage - 1}) }}" class="first:ml-0 text-xs font-semibold flex w-full items-center justify-center px-4 py-3 rounded-l-lg border border-r-0 border-gray-200 bg-white text-gray-500 hover:bg-gray-100">
+                    Previous
+                </a>
+            </li>
+            {% endif %}
+            
+            {% for i in 1..totalPages %}
+            <li>
+                <a href="{{ path('app_blogAdmin', {page: i}) }}" class="text-xs font-semibold flex w-full items-center justify-center px-4 py-3 leading-tight border border-gray-200 bg-white text-gray-500 hover:bg-gray-100 {{ currentPage == i ? 'bg-gray-300' : '' }}">
+                    {{ i }}
+                </a>
+            </li>
+            {% endfor %}
+            
+            {% if currentPage < totalPages %}
+            <li>
+                <a href="{{ path('app_blogAdmin', {page: currentPage + 1}) }}" class="text-xs font-semibold flex w-full items-center justify-center px-4 py-3 rounded-r-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-100">
+                    Next
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
+{# chart  #}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ <div  class="flex justify-center items-center mb-8">
+      <h1 class="text-xl font-semibold">Publication Metrics
+      </h1>
+   </div>
+<div class="container mx-auto px-4 py-6">
+    <canvas id="myChart"></canvas>
+</div>
+
+<script>
+    // Extract publication titles, views, comments, and likes from the publications array
+    const publicationTitles = [];
+    const views = [];
+    const comments = [];
+    const likes = [];
+
+    {% for publication in publications %}
+        publicationTitles.push("{{ publication.titre }}");
+        views.push({{ publication.vues }});
+        comments.push({{ publication.commentaires|length }});
+        likes.push({{ publication.likes|length }});
+    {% endfor %}
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: publicationTitles, // Use publication titles as labels
+            datasets: [{
+                label: 'Views',
+                data: views,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            },
+            {
+                label: 'Comments',
+                data: comments,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            },
+            {
+                label: 'Likes',
+                data: likes,
+                backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                borderColor: 'rgba(255, 206, 86, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+{# end chart  #}
  {% else %}
         <div class="flex justify-center">
             <img width="600" height="500"

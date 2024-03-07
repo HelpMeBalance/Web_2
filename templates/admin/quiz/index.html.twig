@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container mx-auto px-4 py-8">
     <div class="mb-4">
-        <h1 class="text-xl font-semibold">formulaire </h1>
+        <h1 class="text-xl font-semibold">Quiz Management </h1>
     </div>
     {% if question is defined %}
 
@@ -34,24 +34,39 @@
     {% endif %}
 
 {{ include('question/_form.html.twig') }}
-<form method="get"
-    class="mb-4"
- action="{{ path('app_question_index') }}">
-    <input type="text"
-              class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
-     name="search" placeholder="Search users..." value="{{ app.request.query.get('search') }}"/>
-    <button 
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-    type="submit">Search</button>
-</form>
 
+<form method="get" class="mb-4" action="{{ path('app_question_index') }}" id="searchForm">
+    <input type="text"
+        class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+        name="search" id="searchInput" placeholder="Search (any occurrence)..." value="{{ app.request.query.get('search') }}" />
+    <!-- Remove the submit button -->
+</form>
+<script>
+    // Get the search input element
+    var searchInput = document.getElementById('searchInput');
+
+    // Add event listener for input change
+    searchInput.addEventListener('input', function() {
+        // Submit the form when the input value changes
+        document.getElementById('searchForm').submit();
+    });
+    // Set focus on the search input after the page loads
+     window.addEventListener('load', function() {
+        searchInput.focus();
+    });
+      // Restore cursor position after form submission
+    window.addEventListener('DOMContentLoaded', function() {
+        // Set cursor position to the end of the input value
+        searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+    });
+</script>
+{% if questions|length >0%}
     <div class="bg-white shadow-md rounded-lg"> 
         <table class="min-w-full leading-normal">
             <thead>
                 <tr>
                     <th onclick="sortTable(0)" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     <a href="{{ path('app_question_index', {sort: 'question', order: app.request.query.get('sort') == 'question' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">question<i class="fa-solid fa-sort"></i></a>
-                    question
                     </th>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">date</th>
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">active</th>
@@ -132,7 +147,7 @@
                             {% endfor %}
                             <div class="flex justify-center items-center">
                             {% if(not(question.active)) %}
-                            <strong>ecrire au moin deux reponse pour Validate</strong>
+                            <strong>Write at least two answers to Validate</strong>
                             {% endif %}
                         </div>
 
@@ -148,7 +163,7 @@
                         <!-- Modal content -->
                         <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white" onclick="event.stopPropagation()">
                             <div class="flex justify-between items-center mb-4">
-                                <h4 class="text-lg font-bold">Edit User</h4>
+                                <h4 class="text-lg font-bold">Edit Question</h4>
                                 <span class="close cursor-pointer" onclick="closeModal('editModal{{ question.id }}')">&times;</span>
                             </div>
                             {% if formUpdate is defined %}
@@ -237,7 +252,7 @@
                     <div id="deleteModal{{ question.id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto justify-center items-center h-full w-full" onclick="closeModal('deleteModal{{ question.id }}')">
                         <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white" onclick="event.stopPropagation()">
                             <div class="flex justify-between items-center mb-4">
-                                <h4 class="text-lg font-bold">Confirm Deletion</h4>
+                                <h4 class="text-lg font-bold">Confirm Delete</h4>
                                 <span class="close cursor-pointer" onclick="closeModal('deleteModal{{ question.id }}')">&times;</span>
                             </div>
                             <p class="mb-4">Are you sure you want to delete {{ question.question }}?</p>
@@ -285,6 +300,18 @@
         </ul>
     </nav>
 </div>
+{% else %}
+        <div class="flex justify-center">
+            <img width="600" height="500"
+            src="{{asset('assets/images/gallery/Search.png')}}"
+            alt="Talking Minds - Psychotherapist Site Template"
+            />
+        </div>
+        <div class="section_heading text-center">
+            <h2 class="text-lg font-bold text-sky-700">Ups!... no Questions found</h2>
+        </div>
+       
+    {% endif %}
 </div>
 
 {% endblock %}

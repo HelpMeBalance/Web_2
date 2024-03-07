@@ -321,22 +321,35 @@ class BlogController extends AbstractController
         $searchTerm = $request->query->get('search');
         $sortField = $request->query->get('sort', 'dateM');
         $sortOrder = $request->query->get('order', 'desc');
-    $publications = $entityManager->getRepository(Publication::class)->search($searchTerm, $sortField, $sortOrder);
+        $perPage = 5; // You can make this a parameter or a constant
+
+    $currentPage = (int) $request->query->get('page', 1);
+
+    $publications = $entityManager->getRepository(Publication::class)->search($searchTerm, $sortField, $sortOrder, $currentPage, $perPage);
         //$publications = $publicationRepository->findAllsorteddate();
+        $totalPublications = count($publications);
+        $totalPages = ceil($totalPublications / $perPage);
+    
         return $this->render('admin/blog/index.html.twig', [
             'controller_name' => 'BlogController',
             'publications' => $publications,
              'commentaireRepository'=>$commentaireRepository,
+             'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
         ]);
     }
     #[Route('/admin/{idp}/coms', name: 'app_blogAdminCom')]
-    public function indexAdmincoms(Request $request, PublicationRepository $publicationRepository,int $idp,CommentaireRepository $commentaireRepository): Response
+    public function indexAdmincoms(Request $request, PublicationRepository $publicationRepository,int $idp, EntityManagerInterface $entityManager): Response
     {
         $publication = $publicationRepository->find($idp);
+        $searchTerm = $request->query->get('search');
+        $sortField = $request->query->get('sort', 'dateM');
+        $sortOrder = $request->query->get('order', 'desc');
+        $coms = $entityManager->getRepository(Commentaire::class)->search($searchTerm, $sortField, $sortOrder,$idp);
         return $this->render('admin/blog/coms.html.twig', [
             'pub'=>$publication,
             'controller_name' => 'BlogController',
-            'coms' =>$commentaireRepository->findAllUnderPublication($publication),
+            'coms' =>$coms,
             'titre'=>$publication->gettitre(),
         ]);
     }

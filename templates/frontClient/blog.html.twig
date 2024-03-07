@@ -79,19 +79,30 @@
                             </a>
                           </h3>
                         </li>
-                          {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and publication.user.id== app.user.id %}
-                        
+                          {% if is_granted('IS_AUTHENTICATED_REMEMBERED')%}
+                        {% if  publication.user.id== app.user.id  %}
                         <li>
+                        
                         <form method="post" action="{{ path('app_publication_delete', {'id': publication.id}) }}" onsubmit="return confirm('Are you sure you want to delete this Publication ?');">
                           <input  type="hidden" name="_token" value="{{ csrf_token('delete' ~ publication.id) }}">
                           <button class=" btn_reply"><i class="fa-solid fa-trash"></i></button>
-                      </form>
+                       </form>
                         </li>
                         <li>
                           <a style="margin-right: 30px;"class=" btn_reply " href="{{ path('app_publication_update_blogClient', {'idp': publication.id}) }}">
                             <i class="fa-solid fa-edit"></i>
                           </a>   
                         </li>
+                         {% else %}
+                          <li>
+                            {% set userLikedPublication = publication.likes|filter(like => like.user.id == app.user.id)|length > 0 %}
+
+                            {# Render the heart icon based on whether the user has liked the publication #}
+                            <a style="margin-right: 30px;" class="btn_reply" href="{{ path(userLikedPublication ? 'app_publication_dislike' : 'app_publication_like', {'idp': publication.id,'page':curentPage}) }}">
+                                <i class="{{ userLikedPublication ? 'fa-solid' : 'fa-regular' }} fa-heart fa-lg"></i> {# Use filled heart icon for unlike action, outline heart icon for like action #}
+                            </a>
+                        </li>
+                        {% endif %}
                         </ul>       
                         {% endif %}
                         </ul>
@@ -129,13 +140,13 @@
                       </button>                     
                     </div> #}
                     {% if is_granted('IS_AUTHENTICATED_REMEMBERED')  %}
-                    <div class="form-group">
+                   <div class="form-group">
                       <input
                         id="sidebar_search"
                         class="form-control"
                         type="search"
                         name="search"
-                        placeholder="Share Your Thoughts"
+                        placeholder=" Add New Publication "
                         disabled
                       />        
                       <a class="btn-link input_icon" href="{{ path('app_chooseCatClient') }}">

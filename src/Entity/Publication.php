@@ -38,8 +38,8 @@ class Publication
     #[ORM\Column]
     private ?bool $anonyme = null;
 
-    #[ORM\Column]
-    private ?int $likes = 0;
+    // #[ORM\Column]
+    // private ?int $likes = 0;
 
     #[ORM\Column]
     private ?bool $valide = FALSE;
@@ -97,12 +97,16 @@ class Publication
     
     private ?File $imageFile = null;
 
+    #[ORM\OneToMany(mappedBy: 'Publication', targetEntity: Like::class)]
+    private Collection $Likes;
+
 
     public function __construct()
     {
         $this->commentaires = new ArrayCollection();
         $this->dateC =  new \DateTimeImmutable();
         $this->dateM = new \DateTimeImmutable();
+        $this->Likes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -146,17 +150,17 @@ class Publication
         return $this;
     }
 
-    public function getLikes(): ?int
-    {
-        return $this->likes;
-    }
+    // public function getLikes(): ?int
+    // {
+    //     return $this->likes;
+    // }
 
-    public function setLikes(int $likes): static
-    {
-        $this->likes = $likes;
+    // public function setLikes(int $likes): static
+    // {
+    //     $this->likes = $likes;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function isValide(): ?bool
     {
@@ -308,6 +312,36 @@ class Publication
             // Update an "updatedAt" field here, if you have one
             $this->updatedAt = new \DateTimeImmutable();
         }
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Like>
+     */
+    public function getLikes(): Collection
+    {
+        return $this->Likes;
+    }
+
+    public function addLike(Like $like): static
+    {
+        if (!$this->Likes->contains($like)) {
+            $this->Likes->add($like);
+            $like->setPublication($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Like $like): static
+    {
+        if ($this->Likes->removeElement($like)) {
+            // set the owning side to null (unless already changed)
+            if ($like->getPublication() === $this) {
+                $like->setPublication(null);
+            }
+        }
+
         return $this;
     }
 

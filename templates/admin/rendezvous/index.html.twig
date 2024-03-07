@@ -4,16 +4,33 @@
 <div class="container mx-auto px-4 py-8">
     <div class="mb-4">
         <h1 class="text-xl font-semibold">Appointment Management</h1>
+
     </div>
+<form method="get" class="mb-4" action="{{ path('app_rendezvousAdmin') }}" id="searchForm">
+    <input type="text"
+        class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+        name="search" id="searchInput" placeholder="Search (any occurrence)..." value="{{ app.request.query.get('search') }}" />
+    <!-- Remove the submit button -->
+</form>
+<script>
+    // Get the search input element
+    var searchInput = document.getElementById('searchInput');
 
-    <form method="get" class="mb-4" action="{{ path('app_rendezvousAdmin') }}">
-        <input type="text"
-            class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
-            name="search" placeholder="Search users..." value="{{ app.request.query.get('search') }}" />
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            type="submit">Search</button>
-    </form>
-
+    // Add event listener for input change
+    searchInput.addEventListener('input', function() {
+        // Submit the form when the input value changes
+        document.getElementById('searchForm').submit();
+    });
+    // Set focus on the search input after the page loads
+     window.addEventListener('load', function() {
+        searchInput.focus();
+    });
+      // Restore cursor position after form submission
+    window.addEventListener('DOMContentLoaded', function() {
+        // Set cursor position to the end of the input value
+        searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+    });
+</script>
     {% if rendezVou is defined %}
 
     <div id="editModal{{ rendezVou.id }}" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
@@ -71,8 +88,7 @@
 
     {% endif %}
 
-    {% if rendezvouses is defined %}
-
+    {% if rendezvouses|length >0%}
 
     <div class="bg-white shadow-md rounded-lg">
         <table class="min-w-full leading-normal">
@@ -331,16 +347,44 @@
                 {% endfor %}
             </tbody>
         </table>
+    </div>
+    <div class="mt-4">
+    <nav class="block">
+        <ul class="flex pl-0 rounded list-none flex-wrap">
+            {% if currentPage > 1 %}
+            <li>
+                <a href="{{ path('app_rendezvousAdmin', {page: currentPage - 1}) }}" class="first:ml-0 text-xs font-semibold flex w-full items-center justify-center px-4 py-3 rounded-l-lg border border-r-0 border-gray-200 bg-white text-gray-500 hover:bg-gray-100">
+                    Previous
+                </a>
+            </li>
+            {% endif %}
+            
+            {% for i in 1..totalPages %}
+            <li>
+                <a href="{{ path('app_rendezvousAdmin', {page: i}) }}" class="text-xs font-semibold flex w-full items-center justify-center px-4 py-3 leading-tight border border-gray-200 bg-white text-gray-500 hover:bg-gray-100 {{ currentPage == i ? 'bg-gray-300' : '' }}">
+                    {{ i }}
+                </a>
+            </li>
+            {% endfor %}
+            
+            {% if currentPage < totalPages %}
+            <li>
+                <a href="{{ path('app_rendezvousAdmin', {page: totalPages + 1}) }}" class="text-xs font-semibold flex w-full items-center justify-center px-4 py-3 rounded-r-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-100">
+                    Next
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
         {% else %}
         <div class="flex justify-center">
             <img width="600" height="500" src="{{asset('assets/images/gallery/Search.png')}}"
                 alt="Talking Minds - Psychotherapist Site Template" />
         </div>
         <div class="section_heading text-center">
-            <h2 class="text-lg font-bold text-sky-700">Ups!... no Publications found</h2>
+            <h2 class="text-lg font-bold text-sky-700">Ups!... no Appointments found</h2>
         </div>
-
         {% endif %}
-    </div>
 </div>
 {% endblock %}
