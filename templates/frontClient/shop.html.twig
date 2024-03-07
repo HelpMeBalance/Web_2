@@ -63,7 +63,42 @@
                         </div>
                       </div>
                     </div>
+
                     {% endfor %}
+
+
+                        <div class="pagination_wrap  section_space_lg col-lg-8">
+                <ul class="pagination_nav unordered_list justify-content-center">
+            {% if currentPage > 1 %}
+            <li>
+                <a href="{{ path('app_shopClient', {page: currentPage - 1}) }}">
+                    Previous
+                </a>
+            </li>
+            {% endif %}
+
+            
+           
+            {% for i in 1..totalPages %}
+                <li >
+                <a class="active" href="{{ path('app_shopClient', {page: i}) }}"  >
+                    {{ i }}
+                </a>
+                 </li>
+                 {% endfor %}
+           
+           
+
+            {% if currentPage < totalPages %}
+            <li>
+                <a href="{{ path('app_shopClient', {page: currentPage + 1}) }}" >
+                    Next
+                </a>
+          </li>
+            {% endif %}
+        </ul>
+</div>
+
                   {# </div>
                   <div class="pagination_wrap  section_space_lg">
                     <ul class="pagination_nav unordered_list justify-content-center">
