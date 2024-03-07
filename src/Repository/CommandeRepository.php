@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Commande;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+
 
 /**
  * @extends ServiceEntityRepository<Commande>
@@ -73,4 +75,31 @@ class CommandeRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+public function search($searchTerm, $sortField = 'id', $sortOrder = 'asc', $currentPage = 1, $perPage = 10)
+{
+    $qb = $this->createQueryBuilder('c');
+
+    if ($searchTerm) {
+        $qb->andWhere('c.id LIKE :searchTerm')
+            ->setParameter('searchTerm', '%' . $searchTerm . '%');
+    }
+
+    // Ensure the sortField is one of the valid fields
+    if (!in_array($sortField, ['id', 'username', 'address', 'paymentMethod', 'status', 'totalPrice'])) {
+        $sortField = 'id'; // Default field to sort by
+    }
+
+    // Ensure the sortOrder is either 'asc' or 'desc'
+    if (!in_array($sortOrder, ['asc', 'desc'])) {
+        $sortOrder = 'asc'; // Default sort order
+    }
+
+    $qb->orderBy('c.' . $sortField, $sortOrder);
+
+    $query = $qb->getQuery()
+        ->setFirstResult(($currentPage - 1) * $perPage)
+        ->setMaxResults($perPage);
+
+    return new Paginator($query, true);
+}
 }

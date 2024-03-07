@@ -16,7 +16,7 @@
                 {{ form_widget(form.paymentmethode, {'attr': {'class': 'form-input w-full p-2 rounded-md'}, 'id': form.paymentmethode.vars.id}) }}
             </div>
             {{ form_errors(form.paymentmethode, {'class': 'text-red-200 bg-red-400'}) }}
-            <div class="mb-4">
+            <div class="d-none">
                 <label for="{{ form.user.vars.id }}" class="block text-gray-700 text-sm font-bold mb-2">User</label>
                 {{ form_widget(form.user, {'attr': {'class': 'form-input w-full p-2 rounded-md'}, 'id': form.user.vars.id}) }}
             </div>
