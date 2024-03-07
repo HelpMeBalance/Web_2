@@ -76,7 +76,11 @@
                       </div>
                     </div>
                     <div class="btn_wrap pb-0">
+                        {% if 'IS_AUTHENTICATED_REMEMBERED' %}
+                        <a class="btn btn-primary" href="{{ path('app_serviceClient') }}">
+                        {% else %}
                         <a class="btn btn-primary" href="{{ path('app_login') }}">
+                        {% endif %}
                             <span class="btn_text" data-text="Help Me Balance">
                                 Start Your Journey
                             </span>
@@ -179,7 +183,12 @@
                     <div class="col-md-6 col-sm-6">
                       <div class="work_process_item">
                         <div class="serial_number">01</div>
+                        {% if 'IS_AUTHENTICATED_REMEMBERED' %}
                         <a class="btn-link item_title" href="{{ path('app_serviceClient') }}">
+                          {% else %}
+                          <a class="btn-link item_title" href="{{ path('app_login') }}">
+                        </a>
+                        {% endif %}
                             <span class="btn_text">Get a Consultation</span>
                             <span class="btn_icon"
                               ><i class="fa-solid fa-arrow-up-right"></i

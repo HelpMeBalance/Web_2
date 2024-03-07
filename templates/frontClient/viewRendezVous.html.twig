@@ -95,10 +95,12 @@
               </div>
               <div class="form-group">
                 <label for="select_therapy">rating</label>
-                {{ form_widget(form.rating, {'attr': {'class': 'form-control p-1'}}) }}
+                {{ form_widget(form.rating, {'attr': {'class': 'form-control form-control-sm'}}) }}
                 {{ form_errors(form.rating, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
               </div>
-              <button type="submit" class="btn btn-primary">
+              
+              <button type="submit" style="background-color: white;
+              color: #a9cd71;" >
                 <span class="btn_text" data-text="Get A Consultation">
                   {{ button_label|default('Save') }}
                 </span>
