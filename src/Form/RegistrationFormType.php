@@ -81,24 +81,34 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('plainPassword', PasswordType::class, [
-                'mapped' => false,
-                'attr' => [
-                    'autocomplete' => 'new-password',
-                    'class' => 'form-control'
+            ->add('plainPassword', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'first_options' => [
+                    'attr' => [
+                        'class' => 'form-control'
+                    ],
+                    'label' => 'Password',
                 ],
+                'second_options' => [
+                    'attr' => [
+                        'class' => 'form-control'
+                    ],
+                    'label' => 'Repeat Password',
+                ],
+                'invalid_message' => 'The password fields should match.',
+                'mapped' => false,
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password',
+                        'message' => 'Please enter a password.',
                     ]),
                     new Length([
-                        'min' => 8,
-                        'max' => 50,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        'maxMessage' => 'Your password should be no more than {{ limit }} characters'
+                        'min' => 6,
+                        'minMessage' => 'Your password should be at least {{ limit }} characters.',
+                        'max' => 4096,
                     ]),
                 ],
             ])
+
             // ->add("recaptcha", ReCaptchaType::class, [
             //     "mapped" => false,
             //     "constraints" => [

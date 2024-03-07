@@ -43,8 +43,16 @@
                 <input type="checkbox" class="form-check-input me-2" id="chk1" /><label for="chk1"
                   >Remmeber me</label
                 >
+                                <div class="d-flex">
+
                 <div class="form-button mt-4">
                   <button id="submit" type="submit" class="btn btn-primary btn-lg px-4 py-2">Login</button>
+                                    <a href="/reset-password">Forget password?</a>
+                <a href="{{ path('connect_google') }}" class="btn btn-danger p-2 google-button">
+                  <i class="fab fa-google px-2"></i> Signin with Google
+                </a>
+                </div>
+
                   <a href="forget.html">Forget password?</a>
                 </div>
               </form>
