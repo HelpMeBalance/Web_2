@@ -56,8 +56,8 @@
                             </a>
                           </h3>
                         </li>
-                          {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and publication.user.id== app.user.id %}
-                        
+                          {% if is_granted('IS_AUTHENTICATED_REMEMBERED')  %}
+                        {% if  publication.user.id== app.user.id%}
                         <li>
                         <form method="post" action="{{ path('app_publication_deleteCat', {'id': publication.id,'idcat':publication.categorie.id}) }}" onsubmit="return confirm('Are you sure you want to delete this Publication ?');">
                           <input  type="hidden" name="_token" value="{{ csrf_token('delete' ~ publication.id) }}">
@@ -69,6 +69,16 @@
                             <i class="fa-solid fa-edit"></i>
                           </a> 
                         </li>
+                        {% else %}
+                          <li>
+                            {% set userLikedPublication = publication.likes|filter(like => like.user.id == app.user.id)|length > 0 %}
+
+                            {# Render the heart icon based on whether the user has liked the publication #}
+                            <a style="margin-right: 30px;" class="btn_reply" href="{{ path(userLikedPublication ? 'app_publication_dislike' : 'app_publication_like', {'idp': publication.id,'cat':app.request.attributes.get('cat'),'souscat':app.request.attributes.get('souscat'),'page':curentPage}) }}">
+                                <i class="{{ userLikedPublication ? 'fa-solid' : 'fa-regular' }} fa-heart fa-lg"></i> {# Use filled heart icon for unlike action, outline heart icon for like action #}
+                            </a>
+                        </li>
+                        {% endif %}
                         </ul>       
                         {% endif %}
                         </ul>
