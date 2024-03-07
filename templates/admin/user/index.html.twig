@@ -6,7 +6,8 @@
 {% block content %}
 <div class="container mx-auto px-4 py-8">
     <div class="mb-4">
-        <h1 class="text-xl font-semibold">User Management</h1>
+        <h1 class="text-xl font-semibold">User Management
+        </h1>
     </div>
     {% if user_edit is defined %}
 
@@ -73,7 +74,7 @@
         searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
     });
 </script>
-
+{% if users|length >0%}
     <div class="bg-white shadow-md rounded-lg">
         <table class="min-w-full leading-normal">
             <thead>
@@ -263,7 +264,18 @@
         </ul>
     </nav>
 </div>
-
+{% else %}
+        <div class="flex justify-center">
+            <img width="600" height="500"
+            src="{{asset('assets/images/gallery/Search.png')}}"
+            alt="Talking Minds - Psychotherapist Site Template"
+            />
+        </div>
+        <div class="section_heading text-center">
+            <h2 class="text-lg font-bold text-sky-700">Ups!... no Users found</h2>
+        </div>
+       
+    {% endif %}
 </div>
 
 {% endblock %}
