@@ -114,23 +114,32 @@ class HomeController extends AbstractController
 
     // shop : Affichage catégorie 
     #[Route('/shopClient/categrie/produit/{id}', name: 'app_categorie_produit_show', methods: ['GET'])]
-    public function showcatprod($id, ArticleRepository $articleRepository, CategorieProduitRepository $categorieProduitRepository): Response
+    public function showcatprod(Request $request, $id, ArticleRepository $articleRepository, CategorieProduitRepository $categorieProduitRepository): Response
     {
+        $article = new Article();
+        $form = $this->createForm(ArticleType::class, $article);
+        $form->handleRequest($request);
+        $perPage = 2;
+        $currentPage = (int) $request->query->get('page', 1);
         $categorieProduit = $categorieProduitRepository->find($id);
-        if (!$categorieProduit) {
-            throw $this->createNotFoundException('Category not found');
-        }
-
-        // Get articles for the specified category
         $articles = $articleRepository->findBy(['categorie' => $categorieProduit]);
+
+        $offset = ($currentPage - 1) * $perPage;
+        $paginatedArticles = array_slice($articles, $offset, $perPage);
+        $totalArticles = count($articles);
+        $totalPages = ceil($totalArticles / $perPage);
 
         return $this->render('frontClient/articlesparCat.html.twig', [
             'categorie_produits' => $categorieProduitRepository->findAll(),
-            'articles' => $articles,
+            'articles' => $paginatedArticles,
             'service' => 0,
             'part' => 3,
             'title' => 'Store',
             'titlepage' => 'Store - ',
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
+            'categorieProduit' => $categorieProduit, // Include categorieProduit variable
+
         ]);
     }
 
