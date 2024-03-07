@@ -9,7 +9,6 @@ use App\Entity\Article;
 use App\Entity\CategorieProduit;
 use App\Repository\CategorieProduitRepository;
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -62,7 +61,7 @@ class HomeController extends AbstractController
             'part' => 1,
             'title' => '',
             'titlepage' => '',
-            'form'=> $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 
