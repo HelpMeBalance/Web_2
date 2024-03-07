@@ -1,0 +1,23 @@
+{# templates/password_reset/reset.html.twig #}
+
+{% extends 'frontClient/base.html.twig' %}
+
+{% block title %}Choose a new password{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-center items-align-center p-4">
+   <div class="card card-outline-secondary">
+      <div class="card-header">
+         <h3 class="mb-0">Choose Password</h3>
+      </div>
+      <div class="card-body ">
+         {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+         <div class="mb-4">
+         
+            {{ form_row(form.plainPassword, {'attr': {'class': 'form-control'}}) }}
+         </div>
+         <button type="submit" class="flex justify-content-end btn-lg btn btn-primary btn-lg px-4 py-2">Modifier</button>
+         {{ form_end(form) }}
+      </div>
+   </div>
+{% endblock %}
