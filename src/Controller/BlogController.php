@@ -7,6 +7,7 @@ use App\Form\PublicationType;
 use App\Entity\SousCategorie;
 use App\Entity\Commentaire;
 use App\Form\CommentaireType;
+use App\Form\EditPublicationType;
 use App\Repository\PublicationRepository;
 use App\Repository\CommentaireRepository;
 use App\Repository\SousCategorieRepository;
@@ -264,14 +265,14 @@ class BlogController extends AbstractController
     {
         $pub = new Publication();
         $pub=$publicationRepository->find($idp);
-        $form = $this->createForm(PublicationType::class, $pub);
+        $form = $this->createForm(EditPublicationType::class, $pub);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $pub->setUser($this->getUser());
+            // $pub->setUser($this->getUser());
             //$pub->setValide(0);
-            $pub->setCategorie($categorieRepository->find($pub->getCategorie()->getId()));
-            $pub->setSousCategorie($sousCategorieRepository->find($pub->getSousCategorie()->getId()));
+            // $pub->setCategorie($categorieRepository->find($pub->getCategorie()->getId()));
+            // $pub->setSousCategorie($sousCategorieRepository->find($pub->getSousCategorie()->getId()));
             
 
             $imageFile = $form->get('imageFile')->getData(); // Ensure 'imageFile' matches your form field name
@@ -315,39 +316,57 @@ class BlogController extends AbstractController
 
     ////////////////////////////////////////////////ADMIN////////////////////////
     #[Route('/admin/blog', name: 'app_blogAdmin')]
-    public function indexAdmin(Request $request, PublicationRepository $publicationRepository,CommentaireRepository $commentaireRepository): Response
+    public function indexAdmin(Request $request, EntityManagerInterface $entityManager,CommentaireRepository $commentaireRepository): Response
     {
-        $publications = $publicationRepository->findAllsorteddate();
+        $searchTerm = $request->query->get('search');
+        $sortField = $request->query->get('sort', 'dateM');
+        $sortOrder = $request->query->get('order', 'desc');
+        $perPage = 5; // You can make this a parameter or a constant
+
+    $currentPage = (int) $request->query->get('page', 1);
+
+    $publications = $entityManager->getRepository(Publication::class)->search($searchTerm, $sortField, $sortOrder, $currentPage, $perPage);
+        //$publications = $publicationRepository->findAllsorteddate();
+        $totalPublications = count($publications);
+        $totalPages = ceil($totalPublications / $perPage);
+    
         return $this->render('admin/blog/index.html.twig', [
             'controller_name' => 'BlogController',
             'publications' => $publications,
              'commentaireRepository'=>$commentaireRepository,
+             'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
         ]);
     }
     #[Route('/admin/{idp}/coms', name: 'app_blogAdminCom')]
-    public function indexAdmincoms(Request $request, PublicationRepository $publicationRepository,int $idp,CommentaireRepository $commentaireRepository): Response
+    public function indexAdmincoms(Request $request, PublicationRepository $publicationRepository,int $idp, EntityManagerInterface $entityManager): Response
     {
         $publication = $publicationRepository->find($idp);
+        $searchTerm = $request->query->get('search');
+        $sortField = $request->query->get('sort', 'dateM');
+        $sortOrder = $request->query->get('order', 'desc');
+        $coms = $entityManager->getRepository(Commentaire::class)->search($searchTerm, $sortField, $sortOrder,$idp);
         return $this->render('admin/blog/coms.html.twig', [
             'pub'=>$publication,
             'controller_name' => 'BlogController',
-            'coms' =>$commentaireRepository->findAllUnderPublication($publication),
+            'coms' =>$coms,
             'titre'=>$publication->gettitre(),
         ]);
     }
-    #[Route('/updatepubadmin/{idp}', name: 'app_publication_update__blogAdmin', methods: ['GET', 'POST'])]
+    #[Route('/admin/updatepubadmin/{idp}', name: 'app_publication_update__blogAdmin', methods: ['GET', 'POST'])]
     public function updatepubadmin(int $idp,Request $request, EntityManagerInterface $entityManager,PublicationRepository $publicationRepository,CommentaireRepository $commentaireRepository,SousCategorieRepository $sousCategorieRepository,CategorieRepository $categorieRepository,SluggerInterface $slugger, ParameterBagInterface $params): Response
     {
         $pub = new Publication();
         $pub=$publicationRepository->find($idp);
-        $formUpdate = $this->createForm(PublicationType::class, $pub);
+        $formUpdate = $this->createForm(EditPublicationType::class, $pub);
         $formUpdate->handleRequest($request);
-
         if ($formUpdate->isSubmitted() && $formUpdate->isValid()) {
-            $pub->setUser($this->getUser());
+            // $pub->setUser($this->getUser());
             //$pub->setValide(0);
-            $pub->setCategorie($categorieRepository->find($pub->getCategorie()->getId()));
-            $pub->setSousCategorie($sousCategorieRepository->find($pub->getSousCategorie()->getId()));
+            // $categorie = $categorieRepository->find($formUpdate->get('Categorie')->getData());
+            // $pub->setCategorie($categorie);
+            // $souscategorie = $sousCategorieRepository->find($formUpdate->get('SousCategorie')->getData());
+            // $pub->setSousCategorie($souscategorie);
             
 
             $imageFile = $formUpdate->get('imageFile')->getData(); // Ensure 'imageFile' matches your form field name
@@ -379,54 +398,57 @@ class BlogController extends AbstractController
              'commentaireRepository'=>$commentaireRepository,
         ]);
     }
-    #[Route('/addpubadmin', name: 'app_publication_add__blogAdmin')]
-    public function addpubadmin(Request $request, EntityManagerInterface $entityManager,PublicationRepository $publicationRepository,CommentaireRepository $commentaireRepository,SousCategorieRepository $sousCategorieRepository,CategorieRepository $categorieRepository,SluggerInterface $slugger, ParameterBagInterface $params): Response
-    {
-        $pub = new Publication();
-        $formAdd = $this->createForm(PublicationType::class, $pub);
-        $formAdd->handleRequest($request);
-        $imageFile = $formAdd->get('imageFile')->getData(); 
-
-        if ($formAdd->isSubmitted() && $formAdd->isValid()) {
-            $pub->setUser($this->getUser());
-            $pub->setDateC(new \DateTimeImmutable());
-             $pub->setValide(1);
-            // $pub->setCategorie($categorieRepository->find($cat));
-            // $pub->setSousCategorie($sousCategorieRepository->find($souscat));
-
-            $imageFile = $formAdd->get('imageFile')->getData(); // Ensure 'imageFile' matches your form field name
-            if ($imageFile) {
-                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+#[Route('/admin/addpubadmin', name: 'app_publication_add__blogAdmin')]
+public function addpubadmin(Request $request, EntityManagerInterface $entityManager,PublicationRepository $publicationRepository,CommentaireRepository $commentaireRepository,SousCategorieRepository $sousCategorieRepository,CategorieRepository $categorieRepository,SluggerInterface $slugger, ParameterBagInterface $params): Response
+{
+    $pub = new Publication();
+    $formAdd = $this->createForm(PublicationType::class, $pub);
+    $formAdd->handleRequest($request);
     
-                try {
-                    $imageFile->move(
-                        $params->get('pub_pictures_directory'), // Make sure this parameter is defined in your services.yaml
-                        $newFilename
-                    );
-                    $pub->setImage($newFilename); // Update the entity with the new filename
-                } catch (FileException $e) {
-                    // Handle exception if something happens during file upload
-                }
+    if ($formAdd->isSubmitted() && $formAdd->isValid()) {
+        $pub->setUser($this->getUser()); // Set the user (author) of the publication
+        $pub->setDateC(new \DateTimeImmutable()); // Set the creation date
+        $pub->setValide(1); // Mark the publication as validated
+
+        $imageFile = $formAdd->get('imageFile')->getData();
+        if ($imageFile) {
+            $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeFilename = $slugger->slug($originalFilename);
+            $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+
+            
+            try {
+                $imageFile->move(
+                    $params->get('pub_pictures_directory'),
+                    $newFilename
+                );
+                $pub->setImage($newFilename);
+            } catch (FileException $e) {
+                // Handle exception if something happens during file upload
+                // Consider setting an error message or logging the error
             }
-            else 
-            {
-                $imageFile="default.png";
-                $pub->setImage($imageFile);
-            }
-            $entityManager->persist($pub);
-            $entityManager->flush();
-            return $this->redirectToRoute('app_blogAdmin');
+        } else {
+            $pub->setImage("default.png"); // Set a default image if no image is uploaded
         }
-        return $this->render('admin/blog/index.html.twig', [
-            'controller_name' => 'BlogController',
-            'publications' => $publicationRepository->findAllsorteddate(),
-            'formAdd'=> $formAdd->createView(),
-             'commentaireRepository'=>$commentaireRepository,
-        ]);
+        $categorie = $categorieRepository->find($formAdd->get('Categorie')->getData());
+        $pub->setCategorie($categorie);
+        $souscategorie = $sousCategorieRepository->find($formAdd->get('SousCategorie')->getData());
+        $pub->setSousCategorie($souscategorie);
+            
+        $entityManager->persist($pub);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_blogAdmin'); // Redirect after successful submission
     }
-    #[Route('/addcomadmin/{idp}', name: 'app_com_add__blogAdmin')]
+
+    return $this->render('admin/blog/index.html.twig', [
+        'controller_name' => 'BlogController',
+        'publications' => $publicationRepository->findAllsorteddate(),
+        'formAdd'=> $formAdd->createView(),
+        'commentaireRepository'=>$commentaireRepository,
+    ]);
+}
+    #[Route('/admin/addcomadmin/{idp}', name: 'app_com_add__blogAdmin')]
     public function addcomadmin(int $idp,Request $request, EntityManagerInterface $entityManager,PublicationRepository $publicationRepository,CommentaireRepository $commentaireRepository): Response
     {
         $commentaire = new Commentaire();
@@ -450,7 +472,7 @@ class BlogController extends AbstractController
             'titre'=>$commentaire->getpublication()->gettitre(),
         ]);
     }
-    #[Route('/updatecomadmin/{idp}/{idc}', name: 'app_com_update__blogAdmin')]
+    #[Route('/admin/updatecomadmin/{idp}/{idc}', name: 'app_com_update__blogAdmin')]
     public function updatecomadmin(int $idp,int $idc,Request $request, EntityManagerInterface $entityManager,PublicationRepository $publicationRepository,CommentaireRepository $commentaireRepository): Response
     {
         $commentaire =  $commentaireRepository->find($idc);
@@ -461,6 +483,7 @@ class BlogController extends AbstractController
 
         if ($formupdate->isSubmitted() && $formupdate->isValid()) {
             $commentaire->setUser($this->getUser());
+            $commentaire->setDateM(new \DateTimeImmutable());
             $commentaire->setValide(1);
             $entityManager->persist($commentaire);
             $entityManager->flush();

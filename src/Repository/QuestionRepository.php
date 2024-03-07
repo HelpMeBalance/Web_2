@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Question;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @extends ServiceEntityRepository<Question>
@@ -45,7 +46,7 @@ class QuestionRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
-        public function search($searchTerm, $sortField = 'question', $sortOrder = 'asc')
+        public function search($searchTerm, $sortField = 'question', $sortOrder = 'asc', $currentPage = 1, $perPage = 2)
         {
             $qb = $this->createQueryBuilder('u');
 
@@ -66,8 +67,13 @@ class QuestionRepository extends ServiceEntityRepository
 
             $qb->orderBy('u.' . $sortField, $sortOrder);
 
-            return $qb->getQuery()->getResult();
+            $query = $qb->getQuery()
+            ->setFirstResult(($currentPage - 1) * $perPage)
+            ->setMaxResults($perPage);
+    
+        return new Paginator($query, true);
         }
+        
 
 
 }

@@ -119,6 +119,43 @@ class PublicationRepository extends ServiceEntityRepository
 
         return new Paginator($query, $fetchJoinCollection = true);
     }
+    public function search($searchTerm, $sortField = 'dateM', $sortOrder = 'desc', $currentPage = 1, $perPage = 5)
+    {
+        $qb = $this->createQueryBuilder('p');
+        if ($searchTerm) {
+            $qb
+                ->where('p.contenu LIKE :searchTerm OR p.vues LIKE :searchTerm OR p.titre LIKE :searchTerm')
+                ->setParameter('searchTerm', '%' . $searchTerm . '%');
+        }
+
+        // Ensure the sortField is one of the valid fields
+        if (!in_array($sortField, ['titre', 'contenu','valide','vues','dateC','dateM','comments','User'])) {
+            $sortField = 'dateM'; // Default field to sort by
+        }
+
+        // Ensure the sortOrder is either 'asc' or 'desc'
+        if (!in_array($sortOrder, ['asc', 'desc'])) {
+            $sortOrder = 'desc'; // Default sort order
+        }
+        if ($sortField === 'comments') {
+            $qb->leftJoin('p.commentaires', 'c')
+            ->addGroupBy('p.id') // Group by publication to count comments per publication
+            ->addSelect('COUNT(c) AS HIDDEN comment_count') // Select the count of comments
+            ->orderBy('p.comOuvert', 'DESC') // Order by comOuvert field in descending order
+            ->addOrderBy('comment_count', $sortOrder); // Then order by the count of comments
+        }
+         else 
+      
+         {
+            // Sort by other fields
+            $qb->orderBy('p.' . $sortField, $sortOrder);
+        }
+
+        $query =  $qb->getQuery()
+                 ->setFirstResult(($currentPage - 1) * $perPage)
+                 ->setMaxResults($perPage);
+         return new Paginator($query, true);
+    }
     
 //    /**
 //     * @return Publication[] Returns an array of Publication objects

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Publication;
+use App\Entity\Like;
 use App\Form\PublicationType;
 use App\Repository\PublicationRepository;
 use App\Repository\CommentaireRepository;
@@ -94,29 +95,53 @@ class PublicationController extends AbstractController
     }
     
    
-    // #[Route('/{id}/like', name: 'app_publication_like', methods: ['GET', 'POST'])]
-    // public function like(Request $request, Publication $publication, EntityManagerInterface $entityManager): Response
-    // {
-    //     $publication->setLikes($publication->getLikes()+1);
-    //     $entityManager->flush();
-    //     return $this->render('publication/show.html.twig', [
-    //         'publication' => $publication,'like'=>1
-    //     ]);
-    // }
-    // #[Route('/{id}/dislike', name: 'app_publication_dislike', methods: ['GET', 'POST'])]
-    // public function dislike(Request $request, Publication $publication, EntityManagerInterface $entityManager): Response
-    // {
-    //     $publication->setLikes($publication->getLikes()-1);
-    //     $entityManager->flush();
-    //     return $this->render('publication/show.html.twig', [
-    //         'publication' => $publication,'like'=>0
-    //     ]);
-    // }
-    #[Route('/{id}', name: 'app_publication_delete', methods: ['POST'])]
-    public function delete(Request $request, Publication $publication, EntityManagerInterface $entityManager): Response
+    #[Route('/{idp}/like', name: 'app_publication_like', methods: ['GET', 'POST'])]
+    public function like(Request $request, int $idp, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$publication->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($publication);
+        $like = new Like();
+        $like->setUser($this->getUser());
+        $like->setPublication($entityManager->getRepository(Publication::class)->find($idp));
+        $entityManager->persist($like);
+        $entityManager->flush();
+        $page = $request->query->get('page');
+        $cat = $request->query->get('cat');
+        $souscat = $request->query->get('souscat');
+        if($cat !=null){
+            return $this->redirectToRoute('app_blogCatClient', ['page'=>$page,'cat'=>$cat], Response::HTTP_SEE_OTHER); 
+        }
+        else
+        if($souscat !=null){
+            return $this->redirectToRoute('app_blogSousCatClient', ['page'=>$page,'souscat'=>$souscat], Response::HTTP_SEE_OTHER); 
+        }
+       else  return $this->redirectToRoute('app_blogClient', ['page'=>$page], Response::HTTP_SEE_OTHER); 
+    }
+    #[Route('/{idp}/dislike', name: 'app_publication_dislike', methods: ['GET', 'POST'])]
+    public function dislike(Request $request, int $idp, EntityManagerInterface $entityManager): Response
+    {
+        $like = ($entityManager->getRepository(Like::class)->findOneBy(['Publication'=>$idp,'user'=>$this->getUser()->getId()]));
+       
+        if ( $like != null) {
+            $entityManager->remove($like);
+            $entityManager->flush();
+        }
+        $page = $request->query->get('page');
+        $cat = $request->query->get('cat');
+        $souscat = $request->query->get('souscat');
+        if($cat !=null){
+            return $this->redirectToRoute('app_blogCatClient', ['page'=>$page,'cat'=>$cat], Response::HTTP_SEE_OTHER); 
+        }
+        else
+        if($souscat !=null){
+            return $this->redirectToRoute('app_blogSousCatClient', ['page'=>$page,'souscat'=>$souscat], Response::HTTP_SEE_OTHER); 
+        }
+       else  return $this->redirectToRoute('app_blogClient', ['page'=>$page], Response::HTTP_SEE_OTHER); 
+    }
+    
+    #[Route('/{id}', name: 'app_publication_delete', methods: ['POST'])]
+    public function delete(Request $request,  int $id, EntityManagerInterface $entityManager,PublicationRepository $publicationRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$id, $request->request->get('_token'))) {
+            $entityManager->remove($publicationRepository->find($id));
             $entityManager->flush();
         }
 
@@ -129,16 +154,6 @@ class PublicationController extends AbstractController
 
 /////////////////////////ADMIN////////////////////////////////////////////
 
-    #[Route('/pubadmin/{idp}', name: 'admin_publication_delete', methods: ['POST'])]
-    public function deleteadmin(Request $request, int $idp, EntityManagerInterface $entityManager,PublicationRepository $publicationRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$idp, $request->request->get('_token'))) {
-            $entityManager->remove($publicationRepository->find($idp));
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_blogAdmin');
-    }
     #[Route('/admin/{id}', name: 'admin_pub_delete',  methods: ['POST'])]
     public function deletepubadmin(Request $request, int $id, EntityManagerInterface $entityManager,PublicationRepository $publicationRepository): Response
     {

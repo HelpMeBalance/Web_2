@@ -1,20 +1,27 @@
 <div class="w-100 d-flex justify-content-center">
     <div class="w-full max-w-md bg-gray-200 p-4 rounded-md">
         {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-            <div class="mb-4">
-                <p class="block text-gray-700 text-sm font-bold mb-2">note</p>
-                {{ form_widget(form.note, {'attr': {'class': 'form-input w-full p-2 rounded-md'}}) }}
-                {{ form_errors(form.note, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
-            </div>
+        <div class="mb-4">
+            <p class="block text-gray-700 text-sm font-bold mb-2">note</p>
+            {{ form_widget(form.note, {'attr': {'class': 'form-control w-full p-5 rounded-md'}}) }}
+            {{ form_errors(form.note, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
+        </div>
 
-            <div class="mb-4 flex">
-                {{ form_label(form.RecommandationSuivi, null, {'class': 'block text-gray-700 text-sm font-bold mb-2'}) }}
-                {{ form_widget(form.RecommandationSuivi, {'attr': {'class': 'px- 4 form-input'}}) }}
-            </div>
+        <div class="mb-4 flex">
+            {{ form_label(form.RecommandationSuivi, null, {'class': 'block text-gray-700 text-sm font-bold mb-2'}) }}
+            {{ form_widget(form.RecommandationSuivi, {'attr': {'class': 'px- 4 form-input'}}) }}
+        </div>
 
+        {{ form_widget(form.Patient, {'attr': {'class': 'd-none form-control w-full p-5 rounded-md'}}) }}
+        {{ form_widget(form.avisPatient, {'attr': {'class': 'd-none form-control w-full p-5 rounded-md'}}) }}
+        {{ form_widget(form.Psychiatre, {'attr': {'class': 'd-none form-control w-full p-5 rounded-md'}}) }}
+        {{ form_widget(form.rendezvous, {'attr': {'class': 'd-none form-control w-full p-5 rounded-md'}}) }}
+
+        <center>
             <button type="submit" class="btn btn-primary btn-lg px-4 py-2">
                 {{ button_label|default('Save') }}
             </button>
+        </center>
         {{ form_end(form) }}
     </div>
 </div>

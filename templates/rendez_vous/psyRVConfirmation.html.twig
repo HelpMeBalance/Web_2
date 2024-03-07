@@ -75,6 +75,7 @@
       events: [
         
         {% for rv in rendezvous %}
+        {% if app.user == rv.user %}
         {% for consultation in consultations %}
         {% if (consultation.rendezvous == rv) %}
         {
@@ -99,6 +100,7 @@
             status: '{{ rv.statut ? "Confirmed" : "Not Confirmed" }}'
           }
         },
+        {% endif %}
         {% endif %}
         {% endfor %}
       ],

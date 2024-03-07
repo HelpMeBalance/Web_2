@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\RendezVousRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -31,6 +33,17 @@ class RendezVous
 
     #[ORM\ManyToOne(inversedBy: 'rendezVousesP')]
     private ?User $patient = null;
+
+    #[ORM\OneToMany(mappedBy: 'RendezVous', targetEntity: Formulaire::class)]
+    private Collection $formulaires;
+
+    #[ORM\Column]
+    private ?bool $certificat = null;
+
+    public function __construct()
+    {
+        $this->formulaires = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -101,6 +114,48 @@ class RendezVous
     public function setPatient(?User $patient): static
     {
         $this->patient = $patient;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Formulaire>
+     */
+    public function getFormulaires(): Collection
+    {
+        return $this->formulaires;
+    }
+
+    public function addFormulaire(Formulaire $formulaire): static
+    {
+        if (!$this->formulaires->contains($formulaire)) {
+            $this->formulaires->add($formulaire);
+            $formulaire->setRendezVous($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFormulaire(Formulaire $formulaire): static
+    {
+        if ($this->formulaires->removeElement($formulaire)) {
+            // set the owning side to null (unless already changed)
+            if ($formulaire->getRendezVous() === $this) {
+                $formulaire->setRendezVous(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isCertificat(): ?bool
+    {
+        return $this->certificat;
+    }
+
+    public function setCertificat(bool $certificat): static
+    {
+        $this->certificat = $certificat;
 
         return $this;
     }

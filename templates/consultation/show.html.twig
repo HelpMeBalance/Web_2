@@ -7,16 +7,21 @@
             <div class="card shadow">
                 <div class="card-body p-4">
                     <h2 class="text-center">Consulation</h2>
-                    <a class="w-100 d-flex justify-content-center" href="{{ path('app_rendez_vous_confirm', {"psyid": consultation.Psychiatre.id})
-                }}">Back to all appointments</a>
+                    <a class="w-100 d-flex justify-content-center" href="{{ path('app_rendez_vous_confirm', {"psyid": consultation.Psychiatre.id}) }}">Back to all appointments</a>
+                <center>
+                    <a href="{{ path('app_consultation_delete', {"id": consultation.id}) }}"><i class="fa-solid fa-trash"></i></a>
+                    <a href="{{ path('app_consultation_edit', {"id": consultation.id}) }}" class=""><i class="fa-solid fa-pen-to-square"></i></a>
+                    {% if not(consultation.rendezvous.certificat)  %}
+              <form action="{{ path('app_rendez_vous_edit_certificat', {"id": consultation.rendezvous.id}) }}">
+                <button type="submit" class="btn btn-info" id="newButton">envoyer certificat</button>
+              </form>
+              {% endif %}
+                </center>
                     <hr>
                     <div class="card shadow mt-2 w-100 d-flex justify-content-center">
-                        <p class="text-center ">Note:</br>{{consultation.note}}</p>
+                        <p class="text-center">Note:</br>{{consultation.note}}</p>
                         <p class="text-center">Recommandation for another
                             session:</br>{{consultation.RecommandationSuivi ? 'Recommand' : 'If he wants'}}</p>
-                        <form class="text-center" action="{{ path('app_consultation_edit', {"id": consultation.id}) }}">
-                            <button class="btn btn-primary btn-lg px-4 py-2">Update Consultation</button>
-                        </form>
                     </div>
                 </div>
             </div>

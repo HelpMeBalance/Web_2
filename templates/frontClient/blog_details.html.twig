@@ -310,7 +310,7 @@
                         class="form-control"
                         type="search"
                         name="search"
-                        placeholder="Share Your Thoughts"
+                        placeholder=" Add New Publication "
                         disabled
                       />        
                       <a class="btn-link input_icon" href="{{ path('app_chooseCatClient') }}">
@@ -343,7 +343,7 @@
                         <span class="title_text">Categories</span>
                       </h3>
                       <ul class="post_category_list unordered_list_block">
-                        {% set sortedCategories = categories|sort((a, b) => (a.publications|length) < (b.publications|length)) %}
+                        {% set sortedCategories = categories|filter(c => c.souscategories|length > 0)|sort((a, b) => (a.publications|length) < (b.publications|length)) %}
                         {% for categorie in sortedCategories %}
                         <li  >
                           <a href="{{ path('app_blogCatClient', {'cat': categorie.id, 'page': 1}) }}" >
