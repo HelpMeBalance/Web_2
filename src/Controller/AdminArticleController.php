@@ -105,7 +105,7 @@ class AdminArticleController extends AbstractController
 
     //Partie modification a partir du son id
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(int $id, ArticleRepository $articleRepository, Request $request, EntityManagerInterface $entityManager): Response
+    public function edit(int $id, ArticleRepository $articleRepository, Request $request, EntityManagerInterface $entityManager, CategorieProduitRepository $Crep): Response
     {
         $article = $articleRepository->find($id);
         $formUpdate = $this->createForm(ArticleType::class, $article);
@@ -119,7 +119,16 @@ class AdminArticleController extends AbstractController
         $articleAdd = new Article();
         $form = $this->createForm(ArticleType::class, $articleAdd);
         $form->handleRequest($request);
+        $searchTerm = $request->query->get('search');
+        $sortField = $request->query->get('sort', 'nom');
+        $sortOrder = $request->query->get('order', 'asc');
+        $perPage = 2;
 
+        $currentPage = (int) $request->query->get('page', 1);
+
+        $articles = $this->entityManager->getRepository(Article::class)->search($searchTerm, $sortField, $sortOrder, $currentPage, $perPage);
+        $totalArticles = count($articles);
+        $totalPages = ceil($totalArticles / $perPage);
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($articleAdd);
             $entityManager->flush();
@@ -127,13 +136,17 @@ class AdminArticleController extends AbstractController
             return $this->redirectToRoute('admin_article_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        $articles = $articleRepository->findAll();
+        
 
         return $this->render('admin/article/index.html.twig', [
             'article' => $article,
             'articles' => $articles,
             'formUpdate' => $formUpdate->createView(),
             'form' => $form->createView(),
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
+            "articleStat" => $articleRepository->findAll(),
+            'catigories' => $Crep->findAll(),
         ]);
     }
 
