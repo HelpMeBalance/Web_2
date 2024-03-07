@@ -11,6 +11,11 @@
                 <center>
                     <a href="{{ path('app_consultation_delete', {"id": consultation.id}) }}"><i class="fa-solid fa-trash"></i></a>
                     <a href="{{ path('app_consultation_edit', {"id": consultation.id}) }}" class=""><i class="fa-solid fa-pen-to-square"></i></a>
+                    {% if not(consultation.rendezvous.certificat)  %}
+              <form action="{{ path('app_rendez_vous_edit_certificat', {"id": consultation.rendezvous.id}) }}">
+                <button type="submit" class="btn btn-info" id="newButton">envoyer certificat</button>
+              </form>
+              {% endif %}
                 </center>
                     <hr>
                     <div class="card shadow mt-2 w-100 d-flex justify-content-center">
