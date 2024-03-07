@@ -83,8 +83,7 @@
       {{ form_end(formUpdate) }}
       {% endif %}
    </div>
-{% endif %}
- {% if formAdd is defined %}
+ {% elseif formAdd is defined %}
    <div id="addModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
       <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
          <div class="flex justify-between items-center mb-4">
@@ -141,8 +140,8 @@
         </div>
       {{ form_end(formAdd) }}
    </div>
-{# </div> #}
-{% endif %}
+{% else %}
+
 <form method="get" class="mb-4" action="{{ path('app_blogAdmin') }}" id="searchForm">
     <input type="text"
         class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
@@ -168,6 +167,7 @@
         searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
     });
 </script>
+{% endif %}
 {% if publications|length >0%}
 
 <div class="bg-white shadow-md rounded-lg  mb-8">

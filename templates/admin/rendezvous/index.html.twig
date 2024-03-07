@@ -6,15 +6,31 @@
         <h1 class="text-xl font-semibold">Appointment Management</h1>
 
     </div>
+<form method="get" class="mb-4" action="{{ path('app_rendezvousAdmin') }}" id="searchForm">
+    <input type="text"
+        class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+        name="search" id="searchInput" placeholder="Search (any occurrence)..." value="{{ app.request.query.get('search') }}" />
+    <!-- Remove the submit button -->
+</form>
+<script>
+    // Get the search input element
+    var searchInput = document.getElementById('searchInput');
 
-    <form method="get" class="mb-4" action="{{ path('app_rendezvousAdmin') }}">
-        <input type="text"
-            class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
-            name="search" placeholder="Search users..." value="{{ app.request.query.get('search') }}" />
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            type="submit">Search</button>
-    </form>
-
+    // Add event listener for input change
+    searchInput.addEventListener('input', function() {
+        // Submit the form when the input value changes
+        document.getElementById('searchForm').submit();
+    });
+    // Set focus on the search input after the page loads
+     window.addEventListener('load', function() {
+        searchInput.focus();
+    });
+      // Restore cursor position after form submission
+    window.addEventListener('DOMContentLoaded', function() {
+        // Set cursor position to the end of the input value
+        searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+    });
+</script>
     {% if rendezVou is defined %}
 
     <div id="editModal{{ rendezVou.id }}" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
