@@ -13,10 +13,18 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use App\Form\ArticleType;
 
 class HomeController extends AbstractController
 {
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
     #[Route('/', name: 'app_homeClient')]
     public function index(UserRepository $Urep, Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -74,8 +82,23 @@ class HomeController extends AbstractController
 
     // 3:shop 
     #[Route('/shopClient', name: 'app_shopClient')]
-    public function shopClient(ArticleRepository $articleRepository, CategorieProduitRepository $categorieProduitRepository): Response
+    public function shopClient(CategorieProduitRepository $categorieProduitRepository, Request $request, EntityManagerInterface $entityManager, ArticleRepository $articleRepository): Response
     {
+        $article = new Article();
+        $form = $this->createForm(ArticleType::class, $article);
+        $form->handleRequest($request);
+        $searchTerm = $request->query->get('search');
+        $sortField = $request->query->get('sort', 'nom');
+        $sortOrder = $request->query->get('order', 'asc');
+        $perPage = 2;
+
+        $currentPage = (int) $request->query->get('page', 1);
+
+        $articles = $this->entityManager->getRepository(Article::class)->search($searchTerm, $sortField, $sortOrder, $currentPage, $perPage);
+        $totalArticles = count($articles);
+        $totalPages = ceil($totalArticles / $perPage);
+
+
         return $this->render('frontClient/shop.html.twig', [
             'articles' => $articleRepository->findAll(),
             'categorie_produits' => $categorieProduitRepository->findAll(),
@@ -84,6 +107,9 @@ class HomeController extends AbstractController
             'part' => 3,
             'title' => 'Store',
             'titlepage' => 'Store- ',
+            'articles' => $articles,
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
         ]);
     }
 
@@ -113,11 +139,11 @@ class HomeController extends AbstractController
     #[Route('/shopClient/{id}', name: 'app_article_show', methods: ['GET'])]
     public function show(int $id, ArticleRepository $articleRepository, CategorieProduitRepository $categorieProduitRepository): Response
     {
-    $article = $articleRepository->find($id);
+        $article = $articleRepository->find($id);
 
-    if (!$article) {
-        throw $this->createNotFoundException('No article found for id '.$id);
-    }
+        if (!$article) {
+            throw $this->createNotFoundException('No article found for id ' . $id);
+        }
 
         return $this->render('frontClient/articles_details.html.twig', [
             'article' => $article,
