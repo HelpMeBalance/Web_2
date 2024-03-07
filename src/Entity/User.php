@@ -108,6 +108,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->rendezVousesP = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->roles = ['ROLE_USER'];
+        $this->likes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -404,6 +405,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Like::class)]
+    private Collection $likes;
+
     public function getIsBanned(): bool
     {
         return $this->isBanned;
@@ -434,6 +438,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Like>
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Like $like): static
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes->add($like);
+            $like->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Like $like): static
+    {
+        if ($this->likes->removeElement($like)) {
+            // set the owning side to null (unless already changed)
+            if ($like->getUser() === $this) {
+                $like->setUser(null);
+            }
+        }
 
         return $this;
     }
