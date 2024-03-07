@@ -20,7 +20,7 @@
                         </div>
                         <div class="blog_content">
                           <ul class="post_meta unordered_list">
-                                                  </ul>
+                         </ul>
                           <h3 class="item_title">
                             <a href="{{ path('app_article_show', {'id': article.id,'showmore':0}) }}">
                                 {{ article.nom }}
@@ -104,6 +104,8 @@
                       </ul>
                       {% endfor %}
                     </div>
+
+                    
                     <div class="sidebar_widget">
                       <h3 class="sidebar_widget_title">
                         <span class="title_icon">
@@ -139,24 +141,44 @@
                         {% endfor %}
                       </ul>
                     </div>
-                    <div class="sidebar_widget">
-                      <h3 class="sidebar_widget_title">
-                        <span class="title_icon">
-                          <img
-                            src="{{asset('assets/images/site_logo/favourite_icon.svg')}}"
-                            alt="Talking Minds - Psychotherapist Site Template"
-                          />
-                        </span>
-                        <span class="title_text">Explore Related Topics</span>
-                      </h3>
-                      <ul class="post_tags unordered_list">
-                      </ul>
-                    </div>
+
+
+                   
                   </aside>
                 </div>
               </div>
               
-              <div class="pagination_wrap  section_space_lg col-lg-8">
+            <div class="pagination_wrap  section_space_lg col-lg-8">
+            <ul class="pagination_nav unordered_list justify-content-center">
+            {% if currentPage > 1 %}
+            <li>
+                <a href="{{ path('app_categorie_produit_show', {'id': categorieProduit.id,page: currentPage - 1}) }}">
+                    Previous
+                </a>
+            </li>
+            {% endif %}
+
+            
+           
+            {% for i in 1..totalPages %}
+                <li >
+                <a class="active" href="{{ path('app_categorie_produit_show',{'id': categorieProduit.id, page: i}) }}"  >
+                    {{ i }}
+                </a>
+                 </li>
+                 {% endfor %}
+           
+           
+
+            {% if currentPage < totalPages %}
+            <li>
+                <a href="{{ path('app_categorie_produit_show', {'id': categorieProduit.id,page: currentPage + 1}) }}" >
+                    Next
+                </a>
+          </li>
+            {% endif %}
+        </ul>
+
             </div>
             
             </div>
