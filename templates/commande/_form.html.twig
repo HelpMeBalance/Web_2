@@ -1,0 +1,34 @@
+<div class="flex justify-center items-center h-screen bg-blue-400">
+    <div class="w-full max-w-md bg-gray-200 p-4 rounded-md">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            <div class="mb-4">
+                <label for="{{ form.username.vars.id }}" class="block text-gray-700 text-sm font-bold mb-2">Username</label>
+                {{ form_widget(form.username, {'attr': {'class': 'form-input w-full p-2 rounded-md'}, 'id': form.username.vars.id}) }}
+            </div>
+            {{ form_errors(form.username, {'class': 'text-red-200 bg-red-400'}) }}
+            <div class="mb-4">
+                <label for="{{ form.address.vars.id }}" class="block text-gray-700 text-sm font-bold mb-2">Address</label>
+                {{ form_widget(form.address, {'attr': {'class': 'form-input w-full p-2 rounded-md'}, 'id': form.address.vars.id}) }}
+            </div>
+            {{ form_errors(form.address, {'class': 'text-red-200 bg-red-400'}) }}
+            <div class="mb-4">
+                <label for="{{ form.paymentmethode.vars.id }}" class="block text-gray-700 text-sm font-bold mb-2">Payment Methode</label>
+                {{ form_widget(form.paymentmethode, {'attr': {'class': 'form-input w-full p-2 rounded-md'}, 'id': form.paymentmethode.vars.id}) }}
+            </div>
+            {{ form_errors(form.paymentmethode, {'class': 'text-red-200 bg-red-400'}) }}
+            <div class="mb-4">
+                <label for="{{ form.user.vars.id }}" class="block text-gray-700 text-sm font-bold mb-2">User</label>
+                {{ form_widget(form.user, {'attr': {'class': 'form-input w-full p-2 rounded-md'}, 'id': form.user.vars.id}) }}
+            </div>
+            {{ form_errors(form.user, {'class': 'text-red-200 bg-red-400'}) }}
+            <div class="mb-4">
+                <label for="{{ form.saleCode.vars.id }}" class="block text-gray-700 text-sm font-bold mb-2">SaleCode</label>
+                {{ form_widget(form.saleCode, {'attr': {'class': 'form-input w-full p-2 rounded-md'}, 'id': form.saleCode.vars.id}) }}
+            </div>
+            {{ form_errors(form.saleCode, {'class': 'text-red-200 bg-red-400'}) }}
+            <button type="submit" class="btn btn-primary">
+                {{ button_label|default('Ajouter') }}
+            </button>
+        {{ form_end(form) }}
+    </div>
+</div>

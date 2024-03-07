@@ -26,6 +26,21 @@ class Panier
     #[ORM\ManyToOne]
     private ?Article $article = null;
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'paniers')]
+    private ?User $user;
+    
+    // Getter method for user
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    // Setter method for user
+    public function setUser(?User $user): void
+    {
+        $this->user = $user;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

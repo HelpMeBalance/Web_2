@@ -1,0 +1,11 @@
+{% extends 'frontClient/base.html.twig' %}
+
+{% block title %}Payer la commande{% endblock %}
+
+{% block body %}
+    <h1>Payer la commande</h1>
+
+    {{ include('commande/_form.html.twig', {'form': form}) }}
+
+    <a href="{{ path('app_commande_index') }}"class="btn btn-primary">Back to Commande list</a>
+{% endblock %}
