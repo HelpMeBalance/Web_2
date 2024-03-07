@@ -13,9 +13,6 @@
     {% block javascripts %}
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.css' rel='stylesheet' />
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.js'></script>
-  <link href="https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.css" rel="stylesheet">
-
-<script src="https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.js" integrity="sha256-dHUNnePy81fXq4D/wfu7cPsEIP7zl6MvLb84jtZf+UY=" crossorigin="anonymous"></script>
 {% endblock %}
@@ -38,46 +35,6 @@
     <link rel="stylesheet" href="{{ asset('assets/css/odometer.min.css') }}" type="text/css">
     <!-- Custom - CSS Include -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" type="text/css">
-
-    {% endblock %}
-    {% block stylesheets %}
-    <style>
-#close-btn {
-    padding: 8px 15px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-#open-btn {
-    display: none;
-    padding: 10px 20px;
-    background-color: #4CAF50; /* A pleasant green color */
-    color: white;
-    border: none;
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    transition: all 0.3s; /* Smooth transition for mouse events */
-    position: fixed; /* Fixed position */
-    bottom: 20px; /* 20px from the bottom */
-    right: 20px; /* 20px from the right */
-    font-size: 1em; /* Adequate text size */
-    z-index: 1001; /* Ensures the button stays on top */
-}
-
-.open-btn:hover, .open-btn:focus {
-    background-color: #45a049; /* Darker shade on hover/focus */
-    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-    outline: none; /* Removes the outline */
-}
-#chatbot-iframe {
-    display: none;
-    /* ...rest of your CSS... */
-}
-
-    </style>
 
     {% endblock %}
 </head>
@@ -191,7 +148,7 @@
                   <!-- Login Button for Guests -->
                   <li>
                     <a class="btn btn-primary" href="{{ path('app_login') }}">
-                      <span class="btn_text" data-text="❤️‍🩹">
+                      <span class="btn_text" data-text="🤯">
                       Login
                       </span>
                       <span class="btn_icon">
@@ -362,81 +319,7 @@
       ================================================== -->
     </div>
     <!-- Body Wrap - End -->
-<div id="chatbot-widget-container" style="position: fixed; bottom: 10px; right: 10px; z-index: 1000;">
-    <iframe  id="chatbot-iframe" src="https://www.freeaitherapist.com/" style="width: 350px; height: 500px; border: none; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);"></iframe>
-    <button id="close-btn" style="position: absolute; top: 0; right: 0;">Close</button>
-    <button id="open-btn" class='open-btn'>TALK WITH CHAT BOT</button>
-</div>
 
-
-    <script>
-  const messages = [
-    "You're doing great!",
-    "Keep pushing forward!",
-    "Every step is progress, no matter how small.",
-    "Believe in yourself!",
-    "You are enough!",
-    "You are loved!",
-    "You are not alone!",
-    "You are doing the best you can!",
-    "You are stronger than you think!",
-    "You are capable of amazing things!",
-    "You are worthy of love and respect!",
-    
-  ];
-
-  function showToast() {
-    Toastify({
-      text: messages[Math.floor(Math.random() * messages.length)],
-      duration: 10000, // Toast will display for 10 seconds
-      close: true,
-      gravity: "bottom", // Toast position
-      position: "right", // Toast position
-      backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
-      className: "info",
-    }).showToast();
-  }
-
-  setInterval(showToast, 30000); // Show the toast every 5 minutes (300000 milliseconds)
-document.addEventListener('DOMContentLoaded', function() {
-  // Initially hide the chatbot iframe and show only the 'open-btn'
-  document.getElementById('chatbot-iframe').style.display = 'none';
-  document.getElementById('close-btn').style.display = 'none';
-  document.getElementById('open-btn').style.display = 'block';
-
-  // 'Open' button click event
-  document.getElementById('open-btn').addEventListener('click', function() {
-      document.getElementById('chatbot-iframe').style.display = 'block';
-      this.style.display = 'none'; // Hide 'Open' button
-      document.getElementById('close-btn').style.display = 'block'; // Show 'Close' button
-  });
-
-  // 'Close' button click event
-  document.getElementById('close-btn').addEventListener('click', function() {
-      document.getElementById('chatbot-iframe').style.display = 'none';
-      this.style.display = 'none'; // Hide 'Close' button
-      document.getElementById('open-btn').style.display = 'block'; // Show 'Open' button
-  });
-});
-
-{% for message in app.flashes('success') %}
-<script>
-  window.onload = function() {
-    Toastify({
-      text: "{{ message }}",
-      duration: 3000,
-      close: true,
-      gravity: "top",
-      position: "right",
-      backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
-    }).showToast();
-  };
-</script>
-{% endfor %}
-
-</script>
-
-{# <script src="//code.tidio.co/0ws49juyft0y2yrqrvarphcnr1q8yrvf.js" async></script> #}
     <!-- Fraimwork - Jquery Include -->
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/js/popper.min.js') }}"></script>

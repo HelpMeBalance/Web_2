@@ -44,9 +44,9 @@
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
-                      {# <label class="form-label" for="form3Example4c">Your password</label> #}
+                      <label class="form-label" for="form3Example4c">Your password</label>
                       <div class='text-danger'> {{ form_errors(registrationForm.plainPassword) }}</div>
-                      {{ form_widget(registrationForm.plainPassword)}}
+                      {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'p-2 form-control'}}) }}
                       {# <input type="password" id="form3Example4c" class="form-control" /> #}
                     </div>
                   </div>
