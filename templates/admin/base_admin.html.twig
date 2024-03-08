@@ -104,19 +104,17 @@
           <span class="ml-2"  x-show="menu">Quiz</span>
         </a>
 
-            <button type="button" class="inline-flex items-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg px-2 {% if currentRoute == 'app_blogAdmin' or currentRoute == 'app_blogAdminCom' %}bg-blue-200 text-gray-500{% else %}bg-gray-800 text-gray-500{% endif %}" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
+            <button type="button" class="inline-flex items-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg px-2 {% if currentRoute == 'app_blogAdmin' or currentRoute == 'app_blogAdminCom' or  currentRoute == 'app_blogAdminCat' or currentRoute == 'app_blogAdminSubCat' %}bg-blue-200 text-gray-500{% else %}bg-gray-800 text-gray-500{% endif %}" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
           <i class="fa-regular fa-comments  fa-lg"></i>
-                  <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Blog</span>
-                  <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                  </svg>
+                  <span class="ml-2">Blog</span>
+                 <i class="fa-regular fa-angle-down  fa-lg flex-1 ms-3  whitespace-nowrap"></i>
             </button>
             <ul id="dropdown-example" class="hidden py-2 space-y-2">
-                  <li>
-                     <a href="{{ path('app_blogAdmin') }}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Blogs</a>
+                  <li class="{% if currentRoute == 'app_blogAdmin' or currentRoute == 'app_blogAdminCom' %} bg-gray-700 rounded-lg px-2 {% endif %}">
+                     <a href="{{ path('app_blogAdmin') }}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Publications</a>
                   </li>
-                  <li>
-                     <a href="#" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Categorie</a>
+                  <li class="{% if currentRoute == 'app_blogAdminCat' or currentRoute == 'app_blogAdminSubCat' %} bg-gray-700 rounded-lg px-2 {% endif %}">
+                     <a href="{{ path('app_blogAdminCat') }}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Categories</a>
                   </li>
             </ul>
 

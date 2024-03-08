@@ -130,7 +130,7 @@ class PublicationRepository extends ServiceEntityRepository
         }
 
         // Ensure the sortField is one of the valid fields
-        if (!in_array($sortField, ['titre', 'contenu', 'valide', 'vues', 'dateC', 'dateM', 'comments', 'User'])) {
+        if (!in_array($sortField, ['titre', 'contenu','valide','vues','dateC','dateM','comments'])) {
             $sortField = 'dateM'; // Default field to sort by
         }
 
