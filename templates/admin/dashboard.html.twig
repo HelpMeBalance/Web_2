@@ -73,7 +73,7 @@
         <div class="flex flex-col md:col-span-2 md:row-span-2 bg-white shadow rounded-lg">
           <div class="px-6 py-5 font-semibold border-b border-gray-100">The number of applied and left Patients per month</div>
           <div class="p-4 flex-grow">
-    {# <canvas id="usersChart"></canvas> #}
+            {# <canvas id="usersChart"></canvas> #}
           </div>
         </div>
         <div class="flex items-center p-8 bg-white shadow rounded-lg">
@@ -132,10 +132,59 @@
         <div class="flex flex-col row-span-3 bg-white shadow rounded-lg">
           <div class="px-6 py-5 font-semibold border-b border-gray-100">Patients by type of studying</div>
           <div class="p-4 flex-grow">
-            <div class="flex items-center justify-center h-full px-4 py-24 text-gray-400 text-3xl font-semibold bg-gray-100 border-2 border-gray-200 border-dashed rounded-md">Chart</div>
+            <div class="flex items-center justify-center h-full px-4 py-24 text-gray-400 text-3xl font-semibold bg-gray-100 border-2 border-gray-200 border-dashed rounded-md">
+              <canvas class="p-10" id="chartPie{{ "usersChart" }}"></canvas>
+          </div>
           </div>
         </div>
       </section>
       <section class="text-right font-semibold text-gray-500">
       </section>
-    </main>{% endblock %}
+    </main>
+
+  {% set nbrAdmin = 0 %}
+  {% set nbrPsy = 0 %}
+  {% set nbrUser = 0 %}
+  
+  {% for u in users %}
+      {% if "ROLE_ADMIN" in u.roles %}
+        {% set nbrAdmin = nbrAdmin + 1 %}
+      {% elseif "psy" in u.roles %}
+        {% set nbrPsy = nbrPsy + 1 %}
+      {% elseif "ROLE_USER" in u.roles %}
+        {% set nbrUser = nbrUser + 1 %}
+      {% endif %}
+  {% endfor %}
+  
+  {% set totaleU = users|length %} 
+  
+  <script>
+      const dataPie{{ "usersChart" }} = {
+          labels: ["Admin", "Psychayatrist", "User"], // Adjust labels as needed
+          datasets: [{
+              label: "Rating",
+              data: [
+                  {% if totaleU != 0 %}
+                      {{ (nbrAdmin / totaleU) * 100 }},
+                      {{ (nbrPsy / totaleU) * 100 }},
+                      {{ (nbrUser / totaleU) * 100 }}
+                  {% endif %}
+              ],
+              backgroundColor: [
+                  "rgb(255, 99, 132)",
+                  "rgb(54, 162, 235)",
+                  "rgb(255, 205, 86)"
+              ],
+              hoverOffset: 4,
+          }],
+      };
+  
+      const configPie{{ "usersChart" }} = {
+          type: "pie",
+          data: dataPie{{ "usersChart" }},
+          options: {},
+      };
+      var chartPie{{ "usersChart" }} = new Chart(document.getElementById("chartPie{{ "usersChart" }}"), configPie{{ "usersChart" }});
+  </script>
+
+    {% endblock %}
