@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande List{% endblock %}
+
+{% block body %}
+    <h1>Commande List</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Username</th>
+                <th>Address</th>
+                <th>Payment Method</th>
+                <th>User ID</th>
+                <th>Status</th>
+                <th>Total Price</th> {# Add column for total price #}
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for commande in commandes %}
+                <tr>
+                    <td>{{ commande.id }}</td>
+                    <td>{{ commande.username }}</td>
+                    <td>{{ commande.address }}</td>
+                    <td>{{ commande.paymentmethode }}</td>
+                    <td>{{ commande.user.id }}</td>
+                    <td>{{ commande.status }}</td>
+                    <td>{{ commande.totalPrice }}</td> {# Display total price here #}
+                    <td>
+                        <a href="{{ path('app_commande_show', {'id': commande.id}) }}">show</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="8">no records found</td> {# Update colspan to match the number of columns #}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

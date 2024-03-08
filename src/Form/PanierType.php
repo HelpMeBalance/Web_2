@@ -19,7 +19,9 @@ class PanierType extends AbstractType
             // Assuming 'article' is the property name representing the relationship with Article entity
             ->add('article', EntityType::class, [
                 'class' => Article::class,
-                'choice_label' => 'nom', // Assuming 'nom' is the property to display for the article
+                'choice_label' => function (Article $article) {
+                    return $article->getNom() . ' - ' . $article->getPrix();
+                },
                 'multiple' => false,
                 'expanded' => true,
             ]);

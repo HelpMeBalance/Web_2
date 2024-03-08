@@ -1,0 +1,198 @@
+{% extends 'admin/base_admin.html.twig' %} {% block content %}
+<div class="container mx-auto px-4 py-8">
+  <div class="mb-4">
+    <h1 class="text-xl font-semibold">Commandes Management</h1>
+  </div>
+  <div class="bg-white shadow-md rounded-lg">
+    <table class="min-w-full leading-normal">
+      <thead>
+        <tr>
+          <th
+            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+          >
+            ID
+          </th>
+          <th
+            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+          >
+            Total Price
+          </th>
+          <th
+            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+          >
+            Address
+          </th>
+          <th
+            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+          >
+            Payment Method
+          </th>
+          <th
+            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+          >
+            Status
+          </th>
+          <th
+            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+          >
+            User ID
+          </th>
+          <th
+            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+          >
+            Username
+          </th>
+          <th
+            class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+          >
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for commande in commandes %}
+        <tr>
+          <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+            {{ commande.id }}
+          </td>
+          <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+            {{ commande.totalPrice }}
+          </td>
+          <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+            {{ commande.address }}
+          </td>
+          <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+            {{ commande.paymentmethode }}
+          </td>
+          <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+            {{ commande.status }}
+          </td>
+          <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+            {{ commande.user.id }}
+          </td>
+          <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+            {{ commande.user.username }}
+          </td>
+          <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+            <button class="text-blue-600 hover:text-blue-900">
+              <a
+                href="{{
+                  path('admin_commande_edit', { id: commande.id })
+                }}"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                  />
+                </svg>
+              </a>
+            </button>
+            >
+          </td>
+        </tr>
+
+        {# Edit Modal #}
+        <div
+          id="editModal{{ commande.id }}"
+          class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
+          onclick="closeModal('viewModal{{ commande.id }}')"
+        >
+          <!-- Modal content -->
+          <div
+            class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white"
+            onclick="event.stopPropagation()"
+          >
+            <div class="flex justify-between items-center mb-4">
+              <h4 class="text-lg font-bold">Edit Appointment</h4>
+              <span
+                class="close cursor-pointer"
+                onclick="closeModal('editModal{{ commande.id }}')"
+                >&times;</span
+              >
+            </div>
+            {% if form is defined %}
+            {{ form_start(form) }}
+            <button
+              type="submit"
+              class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Save
+            </button>
+            {{ form_end(form) }}
+            {% endif %}
+          </div>
+        </div>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {# Button to toggle statistics display #}
+  <div class="mt-4">
+    <button
+      id="showStatistics"
+      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    >
+      Show Statistics
+    </button>
+  </div>
+
+  {# Payment Method Statistics Section #}
+  <div id="statisticsSection" class="mt-8" style="display: none">
+    <canvas id="paymentMethodChart" width="400" height="200"></canvas>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const cardPercentage = 60;
+    const cashPercentage = 40;
+
+    const ctx = document.getElementById("paymentMethodChart").getContext("2d");
+    const paymentMethodChart = new Chart(ctx, {
+      type: "pie",
+      data: {
+        labels: ["Card", "Cash"],
+        datasets: [
+          {
+            data: [cardPercentage, cashPercentage],
+            backgroundColor: [
+              "rgba(54, 162, 235, 0.8)", // Blue color for card
+              "rgba(255, 99, 132, 0.8)", // Red color for cash
+            ],
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        legend: {
+          position: "bottom",
+        },
+      },
+    });
+
+    // Show/hide statistics section when button is clicked
+    document
+      .getElementById("showStatistics")
+      .addEventListener("click", function () {
+        const statisticsSection = document.getElementById("statisticsSection");
+        if (statisticsSection.style.display === "none") {
+          statisticsSection.style.display = "block";
+        } else {
+          statisticsSection.style.display = "none";
+        }
+      });
+  });
+</script>
+{% endblock %}

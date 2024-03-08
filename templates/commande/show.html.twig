@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande{% endblock %}
+
+{% block body %}
+    <h1>Commande</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ commande.id }}</td>
+            </tr>
+            <tr>
+                <th>Username</th>
+                <td>{{ commande.username }}</td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>{{ commande.address }}</td>
+            </tr>
+            <tr>
+                <th>Paymentmethode</th>
+                <td>{{ commande.paymentmethode }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>
+                    {% if commande.status == 0 %}
+                        Pending
+                    {% elseif commande.status == 1 %}
+                        Delivered
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Articles</th>
+                <td>
+                    <ul>
+                        {% for article in commande.articles %}
+                            <li>{{ article.nom }} - Prix: {{ article.prix }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th>Total Price</th>
+                <td>
+                    {% set totalPrice = 0 %}
+                    {% for article in commande.articles %}
+                        {% set totalPrice = totalPrice + article.prix %}
+                    {% endfor %}
+                    {{ totalPrice }}
+                </td>
+            </tr>
+            <tr>
+                <th>Discounted Price</th>
+                <td>
+                    {% set saleCode = commande.saleCode %}
+                    {% if saleCode == '20242024' %}
+                        {% set discountedPrice = totalPrice * 0.8 %}
+                        {{ discountedPrice }}
+                    {% else %}
+                        No discount applied
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_commande_index') }}">Back to list</a>
+    <a href="{{ path('commande_pdf', {'id': commande.id}) }}" class="btn btn-primary">Generate PDF</a>
+
+{% endblock %}
