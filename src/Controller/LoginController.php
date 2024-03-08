@@ -22,7 +22,7 @@ class LoginController extends AbstractController
             'last_username' => $lastUsername,
             'error' => $error,
             'service'=>0,
-            'part'=>7,
+            'part'=>69,
             'title'=>'Login',
             'titlepage'=>'Login',
 
