@@ -1,106 +1,33 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Certificat Médical</title>
-    <style>
-        /* Style pour la balise de style h1 */
-        h1.style1 {
-            font-size: 36px; /* Taille de la police */
-            color: #333; /* Couleur du texte */
-            font-weight: bold; /* Gras */
-            text-decoration: underline; /* Souligné */
-        }
-
-        /* Centre le texte */
-        header {
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
- <footer class="site_footer bg_footer ">
-        
-                  <li>
-                    <a href="#!"><i class="fa-brands fa-facebook-f"></i></a>
-                  </li>
-                  <li>
-                    <a href="#!"><i class="fa-brands fa-instagram"></i></a>
-                  </li>
-                  <li>
-                    <a href="#!"><i class="fa-brands fa-twitter"></i></a>
-                  </li>
-                  <li>
-                    <a href="#!"><i class="fa-brands fa-whatsapp"></i></a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="copyright_widget text-center">
-            <p class="copyright_text m-0">
-              <b>BinaryBots</b> © 2024 <b>HelpMeBalance</b> All rights reserved. 
-            </p>
-          </div>
-        </div>
-      </footer>
-      <!-- Site Footer - End
-      ================================================== -->
-    </div>
-    <!-- Body Wrap - End -->
-
-    <!-- Fraimwork - Jquery Include -->
-    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/js/popper.min.js') }}"></script>
-    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('assets/js/bootstrap-dropdown-ml-hack.min.js') }}"></script>
-
-    <!-- animation - jquery include -->
-    <script src="{{ asset('assets/js/cursor.min.js') }}"></script>
-
-    <!-- Carousel - Jquery Include -->
-    <script src="{{ asset('assets/js/slick.min.js') }}"></script>
-
-    <!-- Video & Image Popup - Jquery Include -->
-    <script src="{{ asset('assets/js/magnific-popup.min.js') }}"></script>
-
-    <!-- Counter - Jquery Include -->
-    <script src="{{ asset('assets/js/appear.min.js') }}"></script>
-    <script src="{{ asset('assets/js/odometer.min.js') }}"></script>
-
-    <!-- Custom - Jquery Include -->
-    <script src="{{ asset('assets/js/main.js') }}"></script>
-  
-    <header>
-        <!-- Utilisation de la balise de style h1 -->
-        <h1 class="style1">CERTIFICAT MEDICAL ETABL PAR LE MEDECIN PSYCHIATRE</h1>
-        <p>NOM DU MEDECIN : <strong>{{rv.user.lastname|capitalize}} {{rv.user.firstname|capitalize}}</strong></p>
-        <p>Certifie avoir mené une séance de consultation psychologique en ligne avec :<strong>{{ rv.patient.lastname|capitalize }} {{ rv.patient.firstname|capitalize }}</strong></p>
-        
-        <p>SPECIALISTE EN PSYCHIATRIE</p>
-        <p>Ayant  le : {{ rv.dateR|date('Y-m-d H:i')  }}</p>
-       
-    </header>
-
-    <section>
-        <p>Je, soussigné(e), <strong>{{rv.user.lastname|capitalize}} {{rv.user.firstname|capitalize}}</strong>, psychologue clinicien(ne), atteste par la présente que j'ai mené une séance de consultation psychologique en ligne avec <strong>{{rv.user.lastname|capitalize}} {{rv.user.firstname|capitalize}}</strong> le [Date de la Consultation]. Au cours de cette consultation, j'ai procédé à une évaluation détaillée de la santé mentale et du bien-être psychologique de <strong>{{rv.user.lastname|capitalize}} {{rv.user.firstname|capitalize}}</strong> à travers des moyens de communication virtuels. Basé(e) sur mes observations et les échanges réalisés durant la séance, je confirme que <strong>{{rv.patient.lastname|capitalize}} {{rv.patient.firstname|capitalize}}</strong> ne présente aucun trouble psychologique majeur ou incapacitant qui puisse compromettre ses activités quotidiennes ou professionnelles. Je recommande vivement la poursuite du suivi psychologique en ligne pour soutenir le bien-être émotionnel et mental de <strong>{{rv.patient.lastname|capitalize}} {{rv.patient.firstname|capitalize}}</strong>. Ce certificat est émis à la demande expresse de <strong>{{rv.patient.lastname|capitalize}} {{rv.patient.firstname|capitalize}}</strong> dans le cadre de sa participation à des activités professionnelles ou personnelles.</p>
-    </section>
-
-    <footer>
-         <footer>
-        <!-- Votre pied de page ici -->
-        <p id="date"></p>
-
-        <script>
-            // JavaScript pour obtenir et afficher la date du jour
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Medical Certificate</title>
+   </head>
+   <body>
+      <header>
+         <h1>MEDICAL CERTIFICATE ESTABLISHED BY THE PSYCHIATRIST</h1>
+         <p>DOCTOR'S NAME: <strong>{{rv.user.lastname|capitalize}} {{rv.user.firstname|capitalize}}</strong></p>
+         <p>Certifies having conducted an online psychological consultation session with: <strong>{{ rv.patient.lastname|capitalize }} {{ rv.patient.firstname|capitalize }}</strong></p>
+         <p>PSYCHIATRY SPECIALIST</p>
+         <p>On: {{ rv.dateR|date('Y-m-d H:i') }}</p>
+      </header>
+      <section>
+         <p>I, the undersigned, <strong>{{rv.user.lastname|capitalize}} {{rv.user.firstname|capitalize}}</strong>, clinical psychologist, hereby certify that I conducted an online psychological consultation session with <strong>{{rv.user.lastname|capitalize}} {{rv.user.firstname|capitalize}}</strong> on <strong>{{ rv.dateR|date('Y-m-d H:i') }}</strong>. During this consultation, I conducted a detailed assessment of the mental health and psychological well-being of <strong>{{rv.user.lastname|capitalize}} {{rv.user.firstname|capitalize}}</strong> through virtual communication means. Based on my observations and the exchanges during the session, I confirm that <strong>{{rv.patient.lastname|capitalize}} {{rv.patient.firstname|capitalize}}</strong> does not present any major psychological disorder or disability that could compromise their daily or professional activities. I highly recommend continuing online psychological support to support the emotional and mental well-being of <strong>{{rv.patient.lastname|capitalize}} {{rv.patient.firstname|capitalize}}</strong>. This certificate is issued at the express request of <strong>{{rv.patient.lastname|capitalize}} {{rv.patient.firstname|capitalize}}</strong> for their participation in professional or personal activities.</p>
+      </section>
+      <footer>
+         <!-- Your footer here -->
+         <p id="date"></p>
+         <script>
+            // JavaScript to get and display the current date
             var today = new Date();
             var date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
-            document.getElementById('date').innerHTML = 'Fait le : ' + date;
-        </script>
-   
-        
-        <p>Cachet:</p>
-    </footer>
-</body>
+            document.getElementById('date').innerHTML = 'Issued on: ' + date;
+         </script>
+         <p>Seal:</p>
+         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Autograph_of_Benjamin_Franklin.svg/1200px-Autograph_of_Benjamin_Franklin.svg.png" alt="Benjamin Franklin's Autograph">
+         <p>5559</p>
+      </footer>
+   </body>
 </html>
