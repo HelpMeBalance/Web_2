@@ -20,7 +20,15 @@ class SousCategorieRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, SousCategorie::class);
     }
-
+    public function findAllUnderCategorie(int $cat): array
+    {
+        return $this->createQueryBuilder('c')
+        ->join('c.Categorie','p')
+        ->andWhere('p.id = :val')
+        ->setParameter('val', $cat)
+        ->getQuery()
+        ->getResult();
+    }
 //    /**
 //     * @return SousCategorie[] Returns an array of SousCategorie objects
 //     */

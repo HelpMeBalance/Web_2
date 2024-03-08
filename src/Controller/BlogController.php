@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Publication;
+use App\Entity\Categorie;
 use App\Form\PublicationType;
+use App\Form\CategorieType;
 use App\Entity\SousCategorie;
 use App\Entity\Commentaire;
 use App\Form\CommentaireType;
@@ -321,7 +323,7 @@ class BlogController extends AbstractController
         $searchTerm = $request->query->get('search');
         $sortField = $request->query->get('sort', 'dateM');
         $sortOrder = $request->query->get('order', 'desc');
-        $perPage = 5; // You can make this a parameter or a constant
+        $perPage = 2; // You can make this a parameter or a constant
 
     $currentPage = (int) $request->query->get('page', 1);
 
@@ -338,6 +340,79 @@ class BlogController extends AbstractController
             'totalPages' => $totalPages,
         ]);
     }
+    
+    #[Route('/admin/blog/cat', name: 'app_blogAdminCat')]
+    public function indexAdminCat(Request $request, EntityManagerInterface $entityManager): Response
+    {
+      
+            return $this->render('admin/blog/categories.html.twig', [
+                'controller_name' => 'BlogController',
+                'categories' => $entityManager->getRepository(Categorie::class)->findAll(),
+            ]);
+    }
+    #[Route('/admin/addcatadmin', name: 'app_cat_add__blogAdmin')]
+    public function addcatadmin(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $categorie = new Categorie();
+        $form = $this->createForm(CategorieType::class, $categorie);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($categorie);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_blogAdminCat',[], Response::HTTP_SEE_OTHER);
+        }
+        return $this->render('admin/blog/categories.html.twig', [
+            'controller_name' => 'BlogController',
+            'categories' => $entityManager->getRepository(Categorie::class)->findAll(),
+            'formAdd' => $form->createView(),
+        ]);
+    }
+    #[Route('/cat/{idc}', name: 'admin_cat_delete',  methods: ['POST'])]
+    public function deletecatadmin(Request $request, int $idc, EntityManagerInterface $entityManager): Response
+    { 
+        if ($this->isCsrfTokenValid('delete'.$idc, $request->request->get('_token'))) {
+            $entityManager->remove($entityManager->getRepository(Categorie::class)->find($idc));
+            $entityManager->flush();
+        }
+        return $this->redirectToRoute('app_blogAdminCat',[], Response::HTTP_SEE_OTHER);
+    }
+    #[Route('/admin/blog/subcat', name: 'app_blogAdminSubCat')]
+    public function indexAdminSubCat(Request $request, EntityManagerInterface $entityManager,): Response
+    {
+        return $this->render('admin/blog/subcategories.html.twig', [
+            'controller_name' => 'BlogController',
+            'souscategories' => $entityManager->getRepository(SousCategorie::class)->findAllUnderCategorie($request->query->get('idcat')),
+            'idc'=>$request->query->get('idcat'),
+        ]);
+    }
+    #[Route('/admin/addsouscatadmin', name: 'app_souscat_add__blogAdmin')]
+    public function addsouscatadmin(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $idc = $entityManager->getRepository(SousCategorie::class)->find($request->query->get('idcat'));
+        $souscategorie = new SousCategorie();
+        $souscategorie->setCategorie($entityManager->getRepository(Categorie::class)->find($idc));
+        $form = $this->createForm(SousCategorieType::class, $souscategorie);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($souscategorie);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_blogAdminSubCat',['idcat'=>$idc], Response::HTTP_SEE_OTHER);
+        }
+        return $this->render('admin/blog/subcategories.html.twig', [
+            'controller_name' => 'BlogController',
+            'souscategories' => $entityManager->getRepository(SousCategorie::class)->findAllUnderCategorie($request->query->get('idcat')),
+            'formAdd' => $form->createView(),
+        ]);
+    }
+    // #[Route('/cat/{idc}', name: 'admin_cat_delete',  methods: ['POST'])]
+    // public function deletecatadmin(Request $request, int $idc, EntityManagerInterface $entityManager): Response
+    // { 
+    //     if ($this->isCsrfTokenValid('delete'.$idc, $request->request->get('_token'))) {
+    //         $entityManager->remove($entityManager->getRepository(Categorie::class)->find($idc));
+    //         $entityManager->flush();
+    //     }
+    //     return $this->redirectToRoute('app_blogAdminCat',[], Response::HTTP_SEE_OTHER);
+    // }
     #[Route('/admin/{idp}/coms', name: 'app_blogAdminCom')]
     public function indexAdmincoms(Request $request, PublicationRepository $publicationRepository,int $idp, EntityManagerInterface $entityManager): Response
     {
@@ -390,9 +465,23 @@ class BlogController extends AbstractController
 
             return $this->redirectToRoute('app_blogAdmin');
         }
+        $searchTerm = $request->query->get('search');
+        $sortField = $request->query->get('sort', 'dateM');
+        $sortOrder = $request->query->get('order', 'desc');
+        $perPage = 2; // You can make this a parameter or a constant
+
+    $currentPage = (int) $request->query->get('page', 1);
+
+    $publications = $entityManager->getRepository(Publication::class)->search($searchTerm, $sortField, $sortOrder, $currentPage, $perPage);
+        //$publications = $publicationRepository->findAllsorteddate();
+        $totalPublications = count($publications);
+        $totalPages = ceil($totalPublications / $perPage);
         return $this->render('admin/blog/index.html.twig', [
             'controller_name' => 'BlogController',
-            'publications' => $publicationRepository->findAllsorteddate(),
+            'publications' => $publications,
+             'commentaireRepository'=>$commentaireRepository,
+             'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
             'pub'=>$pub,
             'formUpdate' => $formUpdate->createView(),
              'commentaireRepository'=>$commentaireRepository,
@@ -440,10 +529,23 @@ public function addpubadmin(Request $request, EntityManagerInterface $entityMana
 
         return $this->redirectToRoute('app_blogAdmin'); // Redirect after successful submission
     }
+    $searchTerm = $request->query->get('search');
+    $sortField = $request->query->get('sort', 'dateM');
+    $sortOrder = $request->query->get('order', 'desc');
+    $perPage = 2; // You can make this a parameter or a constant
 
+    $currentPage = (int) $request->query->get('page', 1);
+
+    $publications = $entityManager->getRepository(Publication::class)->search($searchTerm, $sortField, $sortOrder, $currentPage, $perPage);
+    //$publications = $publicationRepository->findAllsorteddate();
+    $totalPublications = count($publications);
+    $totalPages = ceil($totalPublications / $perPage);
     return $this->render('admin/blog/index.html.twig', [
         'controller_name' => 'BlogController',
-        'publications' => $publicationRepository->findAllsorteddate(),
+        'publications' => $publications,
+        'commentaireRepository'=>$commentaireRepository,
+        'currentPage' => $currentPage,
+       'totalPages' => $totalPages,
         'formAdd'=> $formAdd->createView(),
         'commentaireRepository'=>$commentaireRepository,
     ]);
