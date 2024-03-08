@@ -18,6 +18,15 @@
     function closeModal(modalId) {
         document.getElementById(modalId).style.display = 'none';
     }
+    document.addEventListener('DOMContentLoaded', function () {
+  const dropdownToggle = document.querySelector('[data-collapse-toggle="dropdown-example"]');
+  const dropdownMenu = document.getElementById('dropdown-example');
+
+  dropdownToggle.addEventListener('click', function () {
+    dropdownMenu.classList.toggle('hidden');
+  });
+});
+
         {# const ctx = document.getElementById('usersChart').getContext('2d');
     const usersStats = {{ usersStats|json_encode|raw }};
 
@@ -94,10 +103,23 @@
           <i class="fa-solid fa-comments-question-check fa-lg"></i>
           <span class="ml-2"  x-show="menu">Quiz</span>
         </a>
-        <a href="{{ path('app_blogAdmin') }}" class="inline-flex items-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg px-2 {% if currentRoute == 'app_blogAdmin' or currentRoute == 'app_blogAdminCom' %}bg-blue-200 text-gray-500{% else %}bg-gray-800 text-gray-500{% endif %}">
+
+            <button type="button" class="inline-flex items-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg px-2 {% if currentRoute == 'app_blogAdmin' or currentRoute == 'app_blogAdminCom' %}bg-blue-200 text-gray-500{% else %}bg-gray-800 text-gray-500{% endif %}" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
           <i class="fa-regular fa-comments  fa-lg"></i>
-          <span class="ml-2"  x-show="menu">Blog</span>
-        </a>
+                  <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Blog</span>
+                  <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                  </svg>
+            </button>
+            <ul id="dropdown-example" class="hidden py-2 space-y-2">
+                  <li>
+                     <a href="{{ path('app_blogAdmin') }}" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Blogs</a>
+                  </li>
+                  <li>
+                     <a href="#" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Categorie</a>
+                  </li>
+            </ul>
+
         <a href="{{ path('app_rendezvousAdmin') }}" class="inline-flex items-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg px-2 {% if currentRoute == 'app_rendezvousAdmin' %}bg-blue-200 text-gray-500{% else %}bg-gray-800 text-gray-500{% endif %}">
           <i class="fa-solid fa-calendar-check fa-lg"></i>
           <span class="ml-2"  x-show="menu">appointements</span>
