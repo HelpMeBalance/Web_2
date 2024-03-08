@@ -71,6 +71,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     
     private ?File $profilePictureFile = null;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $googleId;
+
+    public function getGoogleId(): ?string
+    {
+        return $this->googleId;
+    }
+
+    public function setGoogleId(?string $googleId): self
+    {
+        $this->googleId = $googleId;
+
+        return $this;
+    }
+
+
     public function getProfilePicture(): ?string
     {
         return $this->profilePicture;

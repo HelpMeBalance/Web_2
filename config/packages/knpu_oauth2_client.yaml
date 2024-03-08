@@ -1,9 +1,15 @@
 knpu_oauth2_client:
     clients:
+        # configures your Google OAuth client
         google:
+            # must be "google" - it activates that type!
             type: google
+            # add and set these environment variables in your .env file
             client_id: '%env(OAUTH_GOOGLE_CLIENT_ID)%'
             client_secret: '%env(OAUTH_GOOGLE_CLIENT_SECRET)%'
+            # the route that you're redirected to after
+            # see the controller example below
             redirect_route: connect_google_check
             redirect_params: {}
-            hosted_domain: YOUR_DOMAIN  # Optional: to restrict to a specific domain
+            # optional value for sending access_type parameter to Google
+            access_type: offline

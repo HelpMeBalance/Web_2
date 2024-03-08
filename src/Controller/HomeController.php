@@ -38,10 +38,10 @@ class HomeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $rendezVou->setStatut(false);
-            //$rendezVou->setPatient($Urep->find(?????????));
+
             $entityManager->persist($rendezVou);
             $entityManager->flush();
-            // Check if the selected date is before today
+
             if ($rendezVou->getDateR() < new \DateTime('today')) {
                 $form->get('dateR')->addError(new \Symfony\Component\Form\FormError('Please select a date equal to or after today.'));
                 $errordate = "Please select a date equal to or after today.";
@@ -99,7 +99,6 @@ class HomeController extends AbstractController
 
 
         return $this->render('frontClient/shop.html.twig', [
-            'articles' => $articleRepository->findAll(),
             'categorie_produits' => $categorieProduitRepository->findAll(),
             'controller_name' => 'HomeController',
             'service' => 0,
@@ -138,7 +137,7 @@ class HomeController extends AbstractController
             'titlepage' => 'Store - ',
             'currentPage' => $currentPage,
             'totalPages' => $totalPages,
-            'categorieProduit' => $categorieProduit, // Include categorieProduit variable
+            'categorieProduit' => $categorieProduit,
 
         ]);
     }
