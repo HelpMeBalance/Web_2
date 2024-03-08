@@ -16,7 +16,7 @@ class SousCategorie
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'sousCategories', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'sousCategories')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Categorie $Categorie = null;
 
