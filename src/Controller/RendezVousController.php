@@ -13,6 +13,8 @@ use App\Repository\RendezVousRepository;
 use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
@@ -220,6 +222,35 @@ class RendezVousController extends AbstractController
 
         $entityManager->persist($consultation);
         $entityManager->flush();
+
+        $mail = new PHPMailer(true);
+
+                // Send an email with the reset token
+                try {
+                // Server settings
+                $mail->isSMTP();
+                $mail->Host       = 'smtp-relay.brevo.com';
+                $mail->SMTPAuth   = true;
+                $mail->Username   = 'fares2business@gmail.com';
+                $mail->Password   = 's8qHyjANkQ9DUO7W'; // replace with your password
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port       = 587;
+
+                // Recipients
+                $mail->setFrom('fares2business@gmail.com', 'Mailer');
+                $mail->addAddress($rendezVou->getPatient()->getEmail(), $rendezVou->getPatient()->getFirstname()); // Add a recipient
+
+                // Content
+                $mail->isHTML(true); // Set email format to HTML
+                $mail->Subject = 'Appointment confirmation';
+                $mail->Body    = '<p>Your appointment has been approuved by : <a href="http://localhost:8000/rendez/vous">view appointment</a></p>';
+                $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+                $mail->send();
+                $message = 'Message has been sent';
+            } catch (Exception $e) {
+                $message = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            }
+
 
         return $this->redirectToRoute('app_rendez_vous_confirm', ['psyid' => $rendezVou->getUser()->getId()]);
     }

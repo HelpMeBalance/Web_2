@@ -2,6 +2,7 @@
 {% set stars = 0 %}
 {% set idC = 0 %}
 {% block body %}
+{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 <section class="testimonial_section section_space_lg">
   <div class="container">
     <div class="section_heading text-center">
@@ -172,5 +173,6 @@
   calendar.render();
   });</script>
 {% endblock script %}
-
+{% endif %}
+<center><b>Please make sure to Login in or Sign in</b></center>
 {% endblock %}
