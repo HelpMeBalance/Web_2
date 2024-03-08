@@ -8,12 +8,20 @@
                 <div class="col-lg-8">
                   
                   <div class="details_content">
- 
+                    <div class="d-flex justify-content-center items-align-center">
+                           <img
+                                {% set url='uploads/profile_pictures/'~article.articlePicture %}
+                                src="{{ asset(url)  }}" 
+                                alt="HelpMeBalance"
+                                style='height: 300px; width: 400px;'
+                                />
+                     </div>   
                     <h3 class="item_title">
                            <mark>  {{ article.nom }} <i class="fa-solid "></i></mark>
                       </h3>
 
                     <ul class="post_meta unordered_list mb-4">
+                    
                       <li> <span style="font-size: 30px;">{{ article.prix }} <i class="fa-solid fa-dollar-sign"></i></li>
                     </ul>
                     <p>

@@ -13,9 +13,12 @@
                       <div class="blog_item">
                         <div class="blog_image">
                           <a class="blog_image_wrap" href="{{ path('app_article_show', {'id': article.id,'showmore':0}) }}">
-                            <img
-                              alt="HelpMeBalance"
-                            />
+                          <img
+                                {% set url='uploads/profile_pictures/'~article.articlePicture %}
+                                src="{{ asset(url)  }}" 
+                                alt="HelpMeBalance"
+                                style='height: 200px; width: 400px;'
+                                />
                           </a>
                         </div>
                         <div class="blog_content">
@@ -123,6 +126,9 @@
                             <div class="blog_image">
                               <a class="blog_image_wrap" href="{{ path('app_article_show', {'id': article.id,'showmore':0}) }}">
                                 <img
+                                {% set url='uploads/profile_pictures/'~article.articlePicture %}
+                                src="{{ asset(url)  }}" 
+
                                 alt="HelpMeBalance"
                                 />
                               </a>
