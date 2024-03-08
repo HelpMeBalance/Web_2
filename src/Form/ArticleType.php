@@ -101,7 +101,7 @@ class ArticleType extends AbstractType
                 'choice_label' => 'nom',
             ])
             ->add('articlePictureFile', FileType::class, [
-                                'label' => 'Profile Picture',
+                'label' => 'Profile Picture',
                 'mapped' => false, // This field is not mapped to any entity property
                 'required' => false,
 

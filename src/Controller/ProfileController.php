@@ -34,7 +34,7 @@ class ProfileController extends AbstractController
             'user' => $user,
             'FirstName' => $user->getFirstName(),
             'LastName' => $user->getLastName(),
-            
+
         ]);
     }
 
@@ -49,69 +49,67 @@ class ProfileController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-        // Handle file upload
-        $profilePictureFile = $form->get('profilePictureFile')->getData(); // Ensure 'profilePictureFile' matches your form field name
-        if ($profilePictureFile) {
-            $originalFilename = pathinfo($profilePictureFile->getClientOriginalName(), PATHINFO_FILENAME);
-            $safeFilename = $slugger->slug($originalFilename);
-            $newFilename = $safeFilename.'-'.uniqid().'.'.$profilePictureFile->guessExtension();
+            // Handle file upload
+            $profilePictureFile = $form->get('profilePictureFile')->getData(); // Ensure 'profilePictureFile' matches your form field name
+            if ($profilePictureFile) {
+                $originalFilename = pathinfo($profilePictureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $profilePictureFile->guessExtension();
 
-            try {
-                $profilePictureFile->move(
-                    $params->get('profile_pictures_directory'), // Make sure this parameter is defined in your services.yaml
-                    $newFilename
-                );
-                $user->setProfilePicture($newFilename); // Update the entity with the new filename
-            } catch (FileException $e) {
-                // Handle exception if something happens during file upload
+                try {
+                    $profilePictureFile->move(
+                        $params->get('profile_pictures_directory'), // Make sure this parameter is defined in your services.yaml
+                        $newFilename
+                    );
+                    $user->setProfilePicture($newFilename); // Update the entity with the new filename
+                } catch (FileException $e) {
+                    // Handle exception if something happens during file upload
+                }
             }
-        }
 
-        $entityManager->flush();
-        $this->addFlash('message', 'Profile updated successfully.');
-        return $this->redirectToRoute('app_homeClient');
+            $entityManager->flush();
+            $this->addFlash('message', 'Profile updated successfully.');
+            return $this->redirectToRoute('app_homeClient');
         }
 
 
         return $this->render('profile/edit.html.twig', [
             'form' => $form->createView(),
             'profilePictureUrl' => '/uploads/profile_pictures/' . $user->getProfilePicture(), // Adjust the path as necessary
-            'service'=>0,
-            'part'=>0,
-            'title'=>'Edit Profile',
-            'titlepage'=>'Edit Profile -',        
+            'service' => 0,
+            'part' => 0,
+            'title' => 'Edit Profile',
+            'titlepage' => 'Edit Profile -',
         ]);
-        
     }
 
-        #[Route(path: '/change-password', name: 'profile_change_password')]
-        public function changePassword(Request $request, EntityManagerInterface $entityManager): Response
-        {
-            $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-            
-            /** @var \App\Entity\User $user */
-            $user = $this->getUser();
-            $form = $this->createForm(ChangePasswordFormType::class);
-            $form->handleRequest($request);
-            $passwordForm = $form->get('plainPassword');
+    #[Route(path: '/change-password', name: 'profile_change_password')]
+    public function changePassword(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-            
-            if ($form->isSubmitted() && $form->isValid()) {
-                $newPassword = $passwordForm->getData();
-                $user->setPassword(password_hash($newPassword, PASSWORD_DEFAULT));
-                $entityManager->persist($user);
-                $entityManager->flush();
-                $this->addFlash('message', 'Mot de passe mis à jour');
-                return $this->redirectToRoute('profile');
-            }
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        $form = $this->createForm(ChangePasswordFormType::class);
+        $form->handleRequest($request);
+        $passwordForm = $form->get('plainPassword');
 
-            return $this->render('profile/change_password.html.twig', [
-                'form' => $form->createView(),
-                'service'=>0,
-                'part'=>0,
-                'title'=>'Change Password',
-                'titlepage'=>'Change Password -',  
-            ]);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $newPassword = $passwordForm->getData();
+            $user->setPassword(password_hash($newPassword, PASSWORD_DEFAULT));
+            $entityManager->persist($user);
+            $entityManager->flush();
+            $this->addFlash('message', 'Mot de passe mis à jour');
+            return $this->redirectToRoute('profile');
         }
-    
+
+        return $this->render('profile/change_password.html.twig', [
+            'form' => $form->createView(),
+            'service' => 0,
+            'part' => 0,
+            'title' => 'Change Password',
+            'titlepage' => 'Change Password -',
+        ]);
+    }
 }

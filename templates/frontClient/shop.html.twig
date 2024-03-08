@@ -1,5 +1,6 @@
 {% extends 'frontClient/base.html.twig' %}
 {% block body %} 
+
 <!-- Blog Section - Start
         ================================================== -->
         <section class="blog_section ">
@@ -12,20 +13,15 @@
                       <div class="blog_item">
                         <div class="blog_image">
                           <a class="blog_image_wrap" href="{{ path('app_article_show', {'id': article.id}) }}">
-                            {#<img
-                              src="{{ asset(article.image) }}"
-                              alt="HelpMeBalance"
-                            />#}
+                          <img
+                                {% set url='uploads/profile_pictures/'~article.articlePicture %}
+                                src="{{ asset(url)  }}" 
+                                alt="HelpMeBalance"
+                                style='height: 200px; width: 400px;'
+                                />
                           </a>
                         </div>
                         <div class="blog_content">
-                          <ul class="post_category unordered_list">
-                            <li><a href="{{ path('app_blogCatClient', {'cat': article.categorie.id, 'page': 1}) }}">{{ article.categorie.nom }}</a></li>
-                          </ul>
-                          <ul class="post_meta unordered_list">
-                            <li>
-                               
-                            </li>
                         </ul>
                           <h3 class="item_title text-center">
                             <a href="{{ path('app_article_show', {'id': article.id}) }}">
@@ -117,13 +113,29 @@
                 <div class="col-lg-4">
                   <aside class="sidebar ps-lg-4">
                     <div class="form-group">
-                      <input
-                        id="sidebar_search"
-                        class="form-control"
-                        type="search"
-                        name="search"
-                        placeholder="Search"
-                      />
+<form method="get" class="mb-4" action="{{ path('app_shopClient') }}" id="searchForm">
+    <input type="text" class="form-control" name="search" id="searchInput" placeholder="Search (any occurrence)..." value="{{ app.request.query.get('search') }}" />
+</form>
+
+<script>
+    // Sélectionner l'élément d'entrée de recherche
+    const searchInput = document.getElementById('searchInput');
+
+    // Ajouter un écouteur d'événements de saisie pour le champ de recherche
+    searchInput.addEventListener('input', function(event) {
+        // Empêcher le comportement par défaut du formulaire
+        event.preventDefault();
+
+        // Sélectionner le formulaire
+        const form = document.getElementById('searchForm');
+
+        // Soumettre le formulaire automatiquement
+        form.submit();
+
+        // Mettre automatiquement le focus sur le champ de recherche après la soumission du formulaire
+        searchInput.focus();
+    });
+</script>
                       <button type="submit" class="input_icon">
                         <i class="fa-regular fa-magnifying-glass"></i>
                       </button>
@@ -167,11 +179,15 @@
                           <div class="blog_item_small">
                             <div class="blog_image">
                               <a class="blog_image_wrap" href="{{ path('app_shopClient', {'id': article.id,'showmore':0}) }}">
-                                {# <img
-                                {% set url='uploads/pub_pictures/'~article.image %} 
+    {# <div class="user-profile-picture">
+        <img src="{{  {% set url='uploads/profile_pictures/'~article.articlePicture %}  }}"  />
+    </div> #}
+                                    <img
+                                {% set url='uploads/profile_pictures/'~article.articlePicture %}
                                 src="{{ asset(url)  }}" 
-                                alt="HelpMeBalance""
-                                /> #}
+                                alt="HelpMeBalance"
+                                />
+
                               </a>
                             </div>
                             <div class="blog_content">
