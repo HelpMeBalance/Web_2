@@ -104,6 +104,7 @@ class FormulaireController extends AbstractController
     {
         $question = $questionRepository->findAll()[$idq];
         $formulaire = new Formulaire();
+        $formulaire->setUser($this->getUser());
         $formulaire->setRendezVous($rendezVousRepository->find($idr));
 //        $form = $this->createForm(QuizType::class, $formulaire, ['question' => $question]);
         $rv=$rendezVousRepository->find($idr);

@@ -58,8 +58,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: RendezVous::class, mappedBy: 'patient')]
     private Collection $rendezVousesP;
 
-    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
-    private ?Formulaire $formulaire = null;
+    
   
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $profilePicture = null;
@@ -109,6 +108,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->createdAt = new \DateTimeImmutable();
         $this->roles = ['ROLE_USER'];
         $this->likes = new ArrayCollection();
+        $this->formulaires = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -284,27 +284,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getFormulaire(): ?Formulaire
-    {
-        return $this->formulaire;
-    }
-
-    public function setFormulaire(?Formulaire $formulaire): static
-    {
-        // unset the owning side of the relation if necessary
-        if ($formulaire === null && $this->formulaire !== null) {
-            $this->formulaire->setUser(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($formulaire !== null && $formulaire->getUser() !== $this) {
-            $formulaire->setUser($this);
-        }
-
-        $this->formulaire = $formulaire;
-
-        return $this;
-    }
+  
 
 
     /**
@@ -408,6 +388,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Like::class)]
     private Collection $likes;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Formulaire::class)]
+    private Collection $formulaires;
+
     public function getIsBanned(): bool
     {
         return $this->isBanned;
@@ -466,6 +449,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($like->getUser() === $this) {
                 $like->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Formulaire>
+     */
+    public function getFormulaires(): Collection
+    {
+        return $this->formulaires;
+    }
+
+    public function addFormulaire(Formulaire $formulaire): static
+    {
+        if (!$this->formulaires->contains($formulaire)) {
+            $this->formulaires->add($formulaire);
+            $formulaire->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFormulaire(Formulaire $formulaire): static
+    {
+        if ($this->formulaires->removeElement($formulaire)) {
+            // set the owning side to null (unless already changed)
+            if ($formulaire->getUser() === $this) {
+                $formulaire->setUser(null);
             }
         }
 

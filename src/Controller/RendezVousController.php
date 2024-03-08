@@ -43,6 +43,16 @@ class RendezVousController extends AbstractController
     #[Route('/rendez/vous/rating/{idr}', name: 'app_rendez_vous_rating')]
     public function editRating(RendezVousRepository $rendezVousRepository, Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer, ConsultationRepository $Conrep, $idr): Response
     {
+        $email = (new Email())
+            ->from('no-reply@nftun.com')
+            ->to('abdelbaki.kacem.2023@gmail.com')
+            ->subject('Time for Symfony Mailer!')
+            ->text('Sending emails is fun again!')
+            ->html('<p>See Twig integration for better HTML integration!</p>');
+
+        $mailer->send($email);
+
+        // $cons = new Consultation();
         $form = $this->createForm(RatingType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -309,38 +319,38 @@ class RendezVousController extends AbstractController
         ]);
     }
 
-    #[Route('/exportpdf/{id}', name: 'app_generer_pdf_historique')]
-    public function exportPdf(RendezVousRepository $rev, $id): Response
-    {
-        $rend = $rev->find($id);
+#[Route('/exportpdf/{id}', name: 'app_generer_pdf_historique')]
+public function exportPdf(RendezVousRepository $rev, $id): Response
+{
+    $rend = $rev->find($id);
 
-        // $users = $userRepository->findAll();
+    // Load your template and data
+    $html = $this->renderView('rendez_vous/show.html.twig', ['rv' => $rend]);
 
-        // Créez une instance de Dompdf avec les options nécessaires
+    // Create new PDF document
+    $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
-        $pdfOptions = new Options();
-        $pdfOptions->set('defaultFont', 'Arial');
+    // Set document information
+    $pdf->SetCreator(PDF_CREATOR);
+    $pdf->SetAuthor('Your Name');
+    $pdf->SetTitle('Your Title');
+    $pdf->SetSubject('Your Subject');
 
-        $dompdf = new Dompdf($pdfOptions);
+    // Add a page
+    $pdf->AddPage();
 
-        // Générez le HTML pour représenter la table d'utilisateurs
-        $html = $this->renderView('rendez_vous/show.html.twig', ['rv' => $rend]);
+    // Output the HTML content
+    $pdf->writeHTML($html, true, false, true, false, '');
 
-        // Chargez le HTML dans Dompdf et générez le PDF
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait');
-        $dompdf->render();
+    // Define filename
+    $filename = 'certificat.pdf';
 
-        // Générer un nom de fichier pour le PDF
-        $filename = 'user_list.pdf';
+    // Close and output PDF document
+    // This method has several options, check the source code documentation for more information.
+$pdf->Output($filename, 'D');
 
-        // Streamer le PDF vers le navigateur
-        $response = new Response($dompdf->output());
-        $response->headers->set('Content-Type', 'application/pdf');
-        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
-
-        // Retournez la réponse
-        return $response;
-    }
+    // Ensure that Symfony sends a response object
+    return new Response('', Response::HTTP_OK, ['content-type' => 'application/pdf']);
+}
 
 }
