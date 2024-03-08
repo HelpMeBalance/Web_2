@@ -58,7 +58,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: RendezVous::class, mappedBy: 'patient')]
     private Collection $rendezVousesP;
 
-    
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Commande::class)]
     private Collection $commandes;
 
@@ -116,8 +115,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->createdAt = new \DateTimeImmutable();
         $this->roles = ['ROLE_USER'];
         $this->likes = new ArrayCollection();
-        $this->commandes = new ArrayCollection();
         $this->paniers = new ArrayCollection();
+        $this->commandes = new ArrayCollection();
     }
 
     public function getId(): ?int
