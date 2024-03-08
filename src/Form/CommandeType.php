@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 
 class CommandeType extends AbstractType
@@ -27,15 +28,33 @@ class CommandeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('username')
-            ->add('address')
+            ->add('username', TextType::class, [
+                'label' => 'Username',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter a username',
+                    ]),
+                ],
+            ])
+            ->add('address', TextType::class, [
+                'label' => 'Address',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter an address',
+                    ]),
+                ],
+            ])
             ->add('paymentmethode', ChoiceType::class, [
                 'choices' => [
-                    'Card' => 'Card',
                     'Cash' => 'Cash',
+                    'Credit Card' => 'Credit Card',
                 ],
-                'placeholder' => 'Choose payment method',
-                'required' => true,
+                'placeholder' => 'Choose an option',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please choose a payment method',
+                    ]),
+                ],
             ])
             ->add('user', ChoiceType::class, [
                 'choices' => $this->getUserChoices(),

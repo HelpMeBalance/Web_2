@@ -4,6 +4,12 @@
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Medical Certificate</title>
+   <script>
+            // JavaScript to get and display the current date
+            var today = new Date();
+            var date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
+            document.getElementById('date').innerHTML = 'Issued on: ' + date;
+         </script>
    </head>
    <body>
       <header>
@@ -19,15 +25,9 @@
       <footer>
          <!-- Your footer here -->
          <p id="date"></p>
-         <script>
-            // JavaScript to get and display the current date
-            var today = new Date();
-            var date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
-            document.getElementById('date').innerHTML = 'Issued on: ' + date;
-         </script>
+         
          <p>Seal:</p>
-         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Autograph_of_Benjamin_Franklin.svg/1200px-Autograph_of_Benjamin_Franklin.svg.png" alt="Benjamin Franklin's Autograph">
-         <p>5559</p>
+         <img style="width: 200px ; height: auto;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Autograph_of_Benjamin_Franklin.svg/1200px-Autograph_of_Benjamin_Franklin.svg.png" alt="Benjamin Franklin's Autograph">
       </footer>
    </body>
 </html>

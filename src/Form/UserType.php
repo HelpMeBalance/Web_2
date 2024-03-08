@@ -22,6 +22,7 @@ class UserType extends AbstractType
                 'choices' => [
                     'User' => 'ROLE_USER',
                     'Admin' => 'ROLE_ADMIN',
+                    'Psychiatre' => 'psy',
                     // Add other roles as needed
                 ],
                 'expanded' => true, // for checkboxes

@@ -192,6 +192,7 @@ class RendezVousController extends AbstractController
             'controller_name' => 'RendezVousController',
             'service' => 1,
             'part' => 69,
+            'idrv' => $id,   
         ]);
     }
 

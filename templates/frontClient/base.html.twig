@@ -181,6 +181,8 @@
                       </a>
                       <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                           <li><a class="dropdown-item" href="{{ path('profile_edit') }}">Edit Profile</a></li>
+                          {# add path to see your consultations #}
+                          <li><a class="dropdown-item" href="{{ path('app_rendez_vous_index') }}">My Consultations</a></li>
                           <li><a class="dropdown-item" href="{{ path('profile_change_password') }}">Change Password</a></li>
                           <li><a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a></li>
                       </ul>
@@ -394,7 +396,7 @@
     }).showToast();
   }
   setInterval(showToast, 30000); // Show the toast every 5 minutes (300000 milliseconds)
-document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function() {
   // Initially hide the chatbot iframe and show only the 'open-btn'
   document.getElementById('chatbot-iframe').style.display = 'none';
   document.getElementById('close-btn').style.display = 'none';

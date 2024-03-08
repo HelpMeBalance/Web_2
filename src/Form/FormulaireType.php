@@ -28,6 +28,9 @@ class FormulaireType extends AbstractType
                         ->andWhere('r.question = :question')
                         ->setParameter('question', $question);
                 },
+                'attr' => [
+                    'class' => 'form-check-input',
+                ],
             ])
         ;
     }

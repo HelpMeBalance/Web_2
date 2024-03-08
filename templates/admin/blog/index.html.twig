@@ -84,10 +84,10 @@
       {% endif %}
    </div>
  {% elseif formAdd is defined %}
-   <div id="addModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+   <div id="addModal" class="fixed z-99 inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
       <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
          <div class="flex justify-between items-center mb-4">
-            <h4 class="text-lg font-bold">Add Comment</h4>
+            <h4 class="text-lg font-bold">Add Publication</h4>
             <span class="close cursor-pointer" onclick="window.location.href='{{ path('app_blogAdmin', {'page': currentPage}) }}';">&times;</span>
          </div>
          {{ form_start(formAdd, {'attr': {'novalidate': 'novalidate'}}) }}       
@@ -283,7 +283,7 @@
                   <p class="border-r ">
                      {{ publication.dateC|date('j F Y ') }} <i class="fa-regular fa-calendar-days"></i> 
                   </p>
-                  <p class="border-r ">
+                  <p class="border-r z-0 ">
                      {% set commentCount = commentaireRepository.findAllUnderPublication(publication)|length %}
                      {% if publication.comOuvert %}
                      {% if commentCount > 0 %}

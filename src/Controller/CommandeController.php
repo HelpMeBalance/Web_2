@@ -28,6 +28,10 @@ class CommandeController extends AbstractController
 
         return $this->render('commande/index.html.twig', [
             'commandes' => $commandes,
+            'service'=>0,
+            'part'=>69,
+            'title'=>'Commande',
+            'titlepage'=>'Commande',
         ]);
     }
 
@@ -120,6 +124,11 @@ public function show(int $id, CommandeRepository $commandeRepository): Response
         'commande' => $commande,
         'paniers' => $paniers,
         'totalPrice' => $totalPrice,
+        'title' => 'Commande',
+        'titlepage' => 'Commande',
+        'controller_name' => 'CommandeController',
+        'service' => 1,
+        'part' => 59,
     ]);
 }
 
