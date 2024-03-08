@@ -7,6 +7,7 @@ use App\Entity\Categorie;
 use App\Form\PublicationType;
 use App\Form\CategorieType;
 use App\Entity\SousCategorie;
+use App\Form\SousCategorieType;
 use App\Entity\Commentaire;
 use App\Form\CommentaireType;
 use App\Form\EditPublicationType;
@@ -385,25 +386,52 @@ class BlogController extends AbstractController
             'idc'=>$request->query->get('idcat'),
         ]);
     }
-    #[Route('/admin/addsouscatadmin', name: 'app_souscat_add__blogAdmin')]
-    public function addsouscatadmin(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $idc = $entityManager->getRepository(SousCategorie::class)->find($request->query->get('idcat'));
-        $souscategorie = new SousCategorie();
-        $souscategorie->setCategorie($entityManager->getRepository(Categorie::class)->find($idc));
-        $form = $this->createForm(SousCategorieType::class, $souscategorie);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($souscategorie);
-            $entityManager->flush();
-            return $this->redirectToRoute('app_blogAdminSubCat',['idcat'=>$idc], Response::HTTP_SEE_OTHER);
-        }
-        return $this->render('admin/blog/subcategories.html.twig', [
-            'controller_name' => 'BlogController',
-            'souscategories' => $entityManager->getRepository(SousCategorie::class)->findAllUnderCategorie($request->query->get('idcat')),
-            'formAdd' => $form->createView(),
-        ]);
+#[Route('/admin/addsouscatadmin/{idcat}', name: 'app_souscat_add__blogAdmin')]
+public function addsouscatadmin(int $idcat, Request $request, EntityManagerInterface $entityManager): Response
+{
+    $souscategorie = new SousCategorie();
+    $categorie = $entityManager->getRepository(Categorie::class)->find($idcat);
+    
+    if (!$categorie) {
+        throw $this->createNotFoundException('No category found for id '.$idcat);
     }
+
+    // Ensure that you have a SousCategorieType form that corresponds to the SousCategorie entity
+    $form = $this->createForm(SousCategorieType::class, $souscategorie);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $souscategorie->setCategorie($categorie);
+        $entityManager->persist($souscategorie);
+        $entityManager->flush();
+        return $this->redirectToRoute('app_blogAdminSubCat', ['idcat' => $idcat], Response::HTTP_SEE_OTHER);
+    }
+
+    return $this->render('admin/blog/subcategories.html.twig', [
+        'controller_name' => 'BlogController',
+        'souscategories' => $entityManager->getRepository(SousCategorie::class)->findAllUnderCategorie($idcat),
+        'idc' => $idcat,
+        'formAdd' => $form->createView(),
+    ]);
+}
+#[Route('/admin/souscat/delete/{id}', name: 'admin_souscat_delete', methods: ['POST'])]
+public function deleteSousCat(int $id, Request $request, EntityManagerInterface $entityManager): Response
+{
+    $sousCategorie = $entityManager->getRepository(SousCategorie::class)->find($id);
+
+    if (!$sousCategorie) {
+        throw $this->createNotFoundException('No subcategory found for id '.$id);
+    }
+
+    if ($this->isCsrfTokenValid('delete'.$sousCategorie->getId(), $request->request->get('_token'))) {
+        $entityManager->remove($sousCategorie);
+        $entityManager->flush();
+    }
+
+    return $this->redirectToRoute('app_blogAdminSubCat', ['idcat' => $sousCategorie->getCategorie()->getId()]);
+}
+
+
     // #[Route('/cat/{idc}', name: 'admin_cat_delete',  methods: ['POST'])]
     // public function deletecatadmin(Request $request, int $idc, EntityManagerInterface $entityManager): Response
     // { 
