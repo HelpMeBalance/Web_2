@@ -35,7 +35,7 @@ class RendezVousType extends AbstractType
                 'choices' => [
                     'Individuel' => 'Individuel',
                     'Couple' => 'Couple',
-                    'Groupe' => 'Groupe',
+                    'Child' => 'Child',
                 ]
             ])
             ->add('user', EntityType::class, [

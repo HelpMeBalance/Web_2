@@ -7,6 +7,7 @@ use App\Entity\SousCategorie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+
 /**
  * @extends ServiceEntityRepository<Publication>
  *
@@ -21,10 +22,10 @@ class PublicationRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Publication::class);
     }
-    public function findPaginatedbycat(int $page, int $perPage,int $cat)
+    public function findPaginatedbycat(int $page, int $perPage, int $cat)
     {
-        $query =$this->createQueryBuilder('c')
-            ->join('c.Categorie','p')
+        $query = $this->createQueryBuilder('c')
+            ->join('c.Categorie', 'p')
             ->andWhere('p.id = :val')
             ->setParameter('val', $cat)
             ->andWhere('c.valide = :valide') // Filter by the valide status
@@ -38,7 +39,7 @@ class PublicationRepository extends ServiceEntityRepository
     public function findbycat(int $cat)
     {
         return $this->createQueryBuilder('c')
-            ->join('c.Categorie','p')
+            ->join('c.Categorie', 'p')
             ->andWhere('p.id = :val')
             ->setParameter('val', $cat)
             ->andWhere('c.valide = :valide') // Filter by the valide status
@@ -48,10 +49,10 @@ class PublicationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-    public function findPaginatedbysouscat(int $page, int $perPage,int $souscat)
+    public function findPaginatedbysouscat(int $page, int $perPage, int $souscat)
     {
-        $query =$this->createQueryBuilder('c')
-            ->join('c.SousCategorie','p')
+        $query = $this->createQueryBuilder('c')
+            ->join('c.SousCategorie', 'p')
             ->andWhere('p.id = :val')
             ->setParameter('val', $souscat)
             ->andWhere('c.valide = :valide') // Filter by the valide status
@@ -90,7 +91,7 @@ class PublicationRepository extends ServiceEntityRepository
     public function findbysouscat(int $souscat)
     {
         return $this->createQueryBuilder('c')
-            ->join('c.SousCategorie','p')
+            ->join('c.SousCategorie', 'p')
             ->andWhere('p.id = :val')
             ->setParameter('val', $souscat)
             ->andWhere('c.valide = :valide') // Add this line to filter by valide status
@@ -129,7 +130,7 @@ class PublicationRepository extends ServiceEntityRepository
         }
 
         // Ensure the sortField is one of the valid fields
-        if (!in_array($sortField, ['titre', 'contenu','valide','vues','dateC','dateM','comments','User'])) {
+        if (!in_array($sortField, ['titre', 'contenu','valide','vues','dateC','dateM','comments'])) {
             $sortField = 'dateM'; // Default field to sort by
         }
 
@@ -139,46 +140,43 @@ class PublicationRepository extends ServiceEntityRepository
         }
         if ($sortField === 'comments') {
             $qb->leftJoin('p.commentaires', 'c')
-            ->addGroupBy('p.id') // Group by publication to count comments per publication
-            ->addSelect('COUNT(c) AS HIDDEN comment_count') // Select the count of comments
-            ->orderBy('p.comOuvert', 'DESC') // Order by comOuvert field in descending order
-            ->addOrderBy('comment_count', $sortOrder); // Then order by the count of comments
-        }
-         else 
-      
-         {
+                ->addGroupBy('p.id') // Group by publication to count comments per publication
+                ->addSelect('COUNT(c) AS HIDDEN comment_count') // Select the count of comments
+                ->orderBy('p.comOuvert', 'DESC') // Order by comOuvert field in descending order
+                ->addOrderBy('comment_count', $sortOrder); // Then order by the count of comments
+        } else {
             // Sort by other fields
             $qb->orderBy('p.' . $sortField, $sortOrder);
         }
 
         $query =  $qb->getQuery()
-                 ->setFirstResult(($currentPage - 1) * $perPage)
-                 ->setMaxResults($perPage);
-         return new Paginator($query, true);
+            ->setFirstResult(($currentPage - 1) * $perPage)
+            ->setMaxResults($perPage);
+        return new Paginator($query, true);
     }
-    
-//    /**
-//     * @return Publication[] Returns an array of Publication objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
 
-//    public function findOneBySomeField($value): ?Publication
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    /**
+    //     * @return Publication[] Returns an array of Publication objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('p.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+
+    //    public function findOneBySomeField($value): ?Publication
+    //    {
+    //        return $this->createQueryBuilder('p')
+    //            ->andWhere('p.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

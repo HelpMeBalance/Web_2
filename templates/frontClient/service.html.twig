@@ -23,7 +23,7 @@
                         <p style="text-align:center;">
                             <b>Personalized therapy</b> for overcoming depression.
                         </p>
-                        <a class="btn-link" href="{{ path('app_rendez_vous_new', {'idp':app.user.id}) }}">
+                        <a class="btn-link" href="{{ path('app_rendez_vous_new', {type: "Individuel"}) }}">
                             <span class="btn_text">Start Your <b>Healing</b> Journey</span>
                             <span class="btn_icon"><i class="fa-solid fa-arrow-up-right"></i></span>
                         </a>
@@ -42,7 +42,7 @@
                         <p style="text-align:center;">
                             <b>Strengthen bonds</b> with our couple therapy.
                         </p>
-                        <a class="btn-link" href="{{ path('app_rendez_vous_new', {'idp':app.user.id}) }}">
+                        <a class="btn-link" href="{{ path('app_rendez_vous_new', {type: "Couple"}) }}">
                             <span class="btn_text">Rekindle Your <b>Connection</b></span>
                             <span class="btn_icon"><i class="fa-solid fa-arrow-up-right"></i></span>
                         </a>
@@ -61,23 +61,13 @@
                         <p style="text-align:center;">
                             Tailored therapy to nurture <b>young minds</b>.
                         </p>
-                        <a class="btn-link" href="{{ path('app_rendez_vous_new', {'idp':app.user.id}) }}">
+                        <a class="btn-link" href="{{ path('app_rendez_vous_new', {type: "Child"}) }}">
                             <span class="btn_text">Support Your <b>Child</b>'s Growth</span>
                             <span class="btn_icon"><i class="fa-solid fa-arrow-up-right"></i></span>
                         </a>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="btn_wrap pb-2 text-center">
-            <a class="btn btn-primary" href="{{ path('app_serviceClient') }}">
-                <span class="btn_text" data-text="All Services">
-                    All Services
-                </span>
-                <span class="btn_icon">
-                    <i class="fa-solid fa-arrow-up-right"></i>
-                </span>
-            </a>
         </div>
     </div>
 </section>

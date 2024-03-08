@@ -24,7 +24,12 @@
 
             <ul class="btns_group unordered_list">
               <li>
-                <a class="btn btn-primary" href="{{ path('app_login') }}">
+                {% if ('IS_AUTHENTICATED_REMEMBERED')  %}
+                <a class="btn btn-primary" href="{{ path('app_serviceClient') }}">
+                  {% else %}
+                  <a class="btn btn-primary" href="{{ path('app_login') }}">
+                {% endif %}
+                
                   <span class="btn_text" data-text="Join Us">
                     Get Started
                   </span>
@@ -174,7 +179,7 @@
               Tailored therapy to nurture <b>young minds</b>.
             </p>
             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-              <a class="btn-link" href="{{ path('app_rendez_vous_new', {type: "Groupe"}) }}">
+              <a class="btn-link" href="{{ path('app_rendez_vous_new', {type: "Child"}) }}">
             {% else %}
               <a class="btn-link" href="{{ path('app_login') }}">
             {% endif %}

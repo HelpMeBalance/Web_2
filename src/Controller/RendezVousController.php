@@ -13,6 +13,8 @@ use App\Repository\RendezVousRepository;
 use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
@@ -28,14 +30,24 @@ class RendezVousController extends AbstractController
     #[Route('/rendez/vous/', name: 'app_rendez_vous_index')]
     public function index(RendezVousRepository $rendezVousRepository, Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer, ConsultationRepository $Conrep): Response
     {
+        return $this->render('frontClient/viewRendezVous.html.twig', [
+            'consultation' => $Conrep->findAll(),
+            "rendezvous" => $rendezVousRepository->findAll(),
+            'title' => 'RendezVous',
+            'titlepage' => 'RendezVous',
+            'controller_name' => 'RendezVousController',
+            'service' => 1,
+            'part' => 69,
+            'rendez_vouses' => $rendezVousRepository->findAll(),
+        ]);
+    }
 
+    #[Route('/rendez/vous/rating/{idr}', name: 'app_rendez_vous_rating')]
+    public function editRating(RendezVousRepository $rendezVousRepository, Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer, ConsultationRepository $Conrep, $idr): Response
+    {
         $email = (new Email())
-            ->from('hello@example.com')
-            ->to('yabdelbakikacem2015@gmail.com')
-            //->cc('cc@example.com')
-            //->bcc('bcc@example.com')
-            //->replyTo('fabien@example.com')
-            //->priority(Email::PRIORITY_HIGH)
+            ->from('no-reply@nftun.com')
+            ->to('abdelbaki.kacem.2023@gmail.com')
             ->subject('Time for Symfony Mailer!')
             ->text('Sending emails is fun again!')
             ->html('<p>See Twig integration for better HTML integration!</p>');
@@ -46,9 +58,7 @@ class RendezVousController extends AbstractController
         $form = $this->createForm(RatingType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $formData = $form->getData(); // Get submitted data as an array
-
-            // Access individual form data attributes
+            $formData = $form->getData(); 
             $idrv = $formData['idrv'];
             $rating = $formData['rating'];
             $cons = $Conrep->findOneBy(['rendezvous' => $rendezVousRepository->find($idrv)]);
@@ -67,6 +77,8 @@ class RendezVousController extends AbstractController
             'service' => 1,
             'part' => 69,
             'rendez_vouses' => $rendezVousRepository->findAll(),
+            'rendezVou' => $rendezVousRepository->find($idr),
+            'idr' => $idr,
         ]);
     }
 
@@ -107,9 +119,14 @@ class RendezVousController extends AbstractController
             if ($rendezVou->getDateR() < new \DateTime('today')) {
                 $form->get('dateR')->addError(new \Symfony\Component\Form\FormError('Please select a date equal to or after today.'));
                 $errordate = "Please select a date equal to or after today.";
-                return $this->render('rendez_vous/new.html.twig', [
+                return $this->render('frontClient/rendezvous.html.twig', [
                     'rendez_vou' => $rendezVou,
                     'form' => $form->createView(),
+                    'title' => 'RendezVous',
+                    'titlepage' => 'RendezVous',
+                    'controller_name' => 'RendezVousController',
+                    'service' => 1,
+                    'part' => 69,
                     'errordate' => $errordate,
                 ]);
             }
@@ -206,6 +223,35 @@ class RendezVousController extends AbstractController
         $entityManager->persist($consultation);
         $entityManager->flush();
 
+        $mail = new PHPMailer(true);
+
+                // Send an email with the reset token
+                try {
+                // Server settings
+                $mail->isSMTP();
+                $mail->Host       = 'smtp-relay.brevo.com';
+                $mail->SMTPAuth   = true;
+                $mail->Username   = 'fares2business@gmail.com';
+                $mail->Password   = 's8qHyjANkQ9DUO7W'; // replace with your password
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port       = 587;
+
+                // Recipients
+                $mail->setFrom('fares2business@gmail.com', 'Mailer');
+                $mail->addAddress($rendezVou->getPatient()->getEmail(), $rendezVou->getPatient()->getFirstname()); // Add a recipient
+
+                // Content
+                $mail->isHTML(true); // Set email format to HTML
+                $mail->Subject = 'Appointment confirmation';
+                $mail->Body    = '<p>Your appointment has been approuved by : <a href="http://localhost:8000/rendez/vous">view appointment</a></p>';
+                $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+                $mail->send();
+                $message = 'Message has been sent';
+            } catch (Exception $e) {
+                $message = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            }
+
+
         return $this->redirectToRoute('app_rendez_vous_confirm', ['psyid' => $rendezVou->getUser()->getId()]);
     }
 
@@ -276,47 +322,66 @@ class RendezVousController extends AbstractController
 
             return $this->redirectToRoute('app_rendezvousAdmin', [], Response::HTTP_SEE_OTHER);
         }
+        $searchTerm = $request->query->get('search');
+        $sortField = $request->query->get('sort', 'firstname');
+        $sortOrder = $request->query->get('order', 'asc');
+        //$perPage = 2; // You can make this a parameter or a constant
+
+        //$currentPage = (int) $request->query->get('page', 1);
+        $rvs = $entityManager->getRepository(RendezVous::class)->search($searchTerm, $sortField, $sortOrder);
+        $perPage = 4; // Or another suitable default value
+        $currentPage = max(1, $request->query->getInt('page', 1));
+        $totalrendezvous = count($rvs);
+        $totalPages = ceil($totalrendezvous / $perPage);
+
+        // Calculate the slice parameters
+        $offset = ($currentPage - 1) * $perPage;
+        $length = $perPage;
+        // Slice the array to get only the items for the current page
+        $rvsForCurrentPage = array_slice($rvs, $offset, $length);
 
         return $this->render('admin/rendezvous/index.html.twig', [
             'rendezVou' => $rendezVou,
             'form' => $form->createView(),
-            "rendezvouses" => $RVrep->findall(),
+            "rendezvouses" => $rvsForCurrentPage,
             "consultations" => $Crep->findAll(),
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
         ]);
     }
 
-    #[Route('/exportpdf/{id}', name: 'app_generer_pdf_historique')]
-    public function exportPdf(RendezVousRepository $rev, $id): Response
-    {
-        $rend = $rev->find($id);
+#[Route('/exportpdf/{id}', name: 'app_generer_pdf_historique')]
+public function exportPdf(RendezVousRepository $rev, $id): Response
+{
+    $rend = $rev->find($id);
 
-        // $users = $userRepository->findAll();
+    // Load your template and data
+    $html = $this->renderView('rendez_vous/show.html.twig', ['rv' => $rend]);
 
-        // Créez une instance de Dompdf avec les options nécessaires
+    // Create new PDF document
+    $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
-        $pdfOptions = new Options();
-        $pdfOptions->set('defaultFont', 'Arial');
+    // Set document information
+    $pdf->SetCreator(PDF_CREATOR);
+    $pdf->SetAuthor('Your Name');
+    $pdf->SetTitle('Your Title');
+    $pdf->SetSubject('Your Subject');
 
-        $dompdf = new Dompdf($pdfOptions);
+    // Add a page
+    $pdf->AddPage();
 
-        // Générez le HTML pour représenter la table d'utilisateurs
-        $html = $this->renderView('rendez_vous/show.html.twig', ['rv' => $rend]);
+    // Output the HTML content
+    $pdf->writeHTML($html, true, false, true, false, '');
 
-        // Chargez le HTML dans Dompdf et générez le PDF
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait');
-        $dompdf->render();
+    // Define filename
+    $filename = 'certificat.pdf';
 
-        // Générer un nom de fichier pour le PDF
-        $filename = 'user_list.pdf';
+    // Close and output PDF document
+    // This method has several options, check the source code documentation for more information.
+$pdf->Output($filename, 'D');
 
-        // Streamer le PDF vers le navigateur
-        $response = new Response($dompdf->output());
-        $response->headers->set('Content-Type', 'application/pdf');
-        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
-
-        // Retournez la réponse
-        return $response;
-    }
+    // Ensure that Symfony sends a response object
+    return new Response('', Response::HTTP_OK, ['content-type' => 'application/pdf']);
+}
 
 }

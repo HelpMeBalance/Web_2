@@ -2,6 +2,7 @@
 {% set stars = 0 %}
 {% set idC = 0 %}
 {% block body %}
+{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 <section class="testimonial_section section_space_lg">
   <div class="container">
     <div class="section_heading text-center">
@@ -22,50 +23,27 @@
         </div>
         {% if form is defined %}
         <div class="flex justify-center">
-          {{ form_start(form) }}
-          {{ form_row(form.dateR, {
-          'label': 'Date Appointment:',
-          'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm
-          border-gray-300 rounded-md'}
-          }) }}
-          </br>
-
-          {{ form_row(form.nomService, {
-          'label': 'Service Name:',
-          'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm
-          border-gray-300 rounded-md'}
-          }) }}
-          </br>
-
-          <div class="d-none">
-            {{ form_row(form.statut, {
-            'label': 'Status:',
-            'attr': {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm
-            border-gray-300 rounded-md'}
-            }) }}
-            </br>
-          </div>
-
-          <div class="d-none">
-            {{ form_row(form.patient, {
-            'label': 'Patient:',
-            'attr': {'class': 'mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none
-            focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md'}
-            }) }}
-            </br>
-          </div>
-
-          {{ form_row(form.user, {
-          'label': 'Psy:',
-          'attr': {'class': 'mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none
-          focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md'}
-          }) }}
-          </br>
-          <button type="submit"
-            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-            Save
-          </button>
-          {{ form_end(form) }}
+          {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+              <div class="d-none">
+                <label for="select_therapy">idrendezvous</label>
+                {{ form_widget(form.idrv, {'attr': {'class': 'form-select'}, 'value':idr}) }}
+              </div>
+              <div class="form-group">
+                <label for="select_therapy">rating</label>
+                {{ form_widget(form.rating, {'attr': {'class': 'form-control form-control-sm'}}) }}
+                {{ form_errors(form.rating, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
+              </div>
+              
+              <button type="submit" style="background-color: white;
+              color: #a9cd71;" >
+                <span class="btn_text" data-text="Get A Consultation">
+                  {{ button_label|default('Save') }}
+                </span>
+                <span class="btn_icon">
+                  <i class="fa-solid fa-arrow-up-right"></i>
+                </span>
+              </button>
+              {{ form_end(form) }}
         </div>
         {% endif %}
       </div>
@@ -88,25 +66,7 @@
             {% endfor %}
             {% if stars is null %}
             <ul class="rating_star unordered_list">
-              {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-              <div class="d-none">
-                <label for="select_therapy">idrendezvous</label>
-                {{ form_widget(form.idrv, {'attr': {'class': 'form-select'}, 'value':rv.id}) }}
-              </div>
-              <div class="form-group">
-                <label for="select_therapy">rating</label>
-                {{ form_widget(form.rating, {'attr': {'class': 'form-control p-1'}}) }}
-                {{ form_errors(form.rating, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
-              </div>
-              <button type="submit" class="btn btn-primary">
-                <span class="btn_text" data-text="Get A Consultation">
-                  {{ button_label|default('Save') }}
-                </span>
-                <span class="btn_icon">
-                  <i class="fa-solid fa-arrow-up-right"></i>
-                </span>
-              </button>
-              {{ form_end(form) }}
+              <a href="{{ path('app_rendez_vous_rating', {'idr': rv.id}) }}">give rating</a>
             </ul>
             {% else %}
             <ul class="rating_star unordered_list">
@@ -213,5 +173,6 @@
   calendar.render();
   });</script>
 {% endblock script %}
-
+{% endif %}
+<center><b>Please make sure to Login in or Sign in</b></center>
 {% endblock %}

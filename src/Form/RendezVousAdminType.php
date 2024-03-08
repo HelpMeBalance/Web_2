@@ -28,7 +28,7 @@ class RendezVousAdminType extends AbstractType
                 'choices' => [
                     'Individuel' => 'Individuel',
                     'Couple' => 'Couple',
-                    'Groupe' => 'Groupe',
+                    'Child' => 'Child',
                 ]
             ])
             ->add('statut')

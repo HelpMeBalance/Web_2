@@ -5,7 +5,7 @@
    <div  class="flex justify-center items-center mb-4">
       <h1 class="text-xl font-semibold">Blog Management 
       <button class="text-blue-600 hover:text-blue-900" onclick="openModal('addModal')">
-      <a class="text-sky-700"href="{{ path('app_publication_add__blogAdmin') }}"> <i class="fa-regular fa-square-plus fa-lg"></i></a>
+      <a class="text-sky-700"href="{{ path('app_publication_add__blogAdmin', {'page': currentPage}) }}"> <i class="fa-regular fa-square-plus fa-lg"></i></a>
       </button>
       </h1>
    </div>
@@ -14,8 +14,8 @@
    <div id="editModal{{ pub.id }}" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
       <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
          <div class="flex justify-between items-center mb-4">
-            <h4 class="text-lg font-bold">Edit Publication</h4>
-            <span class="close cursor-pointer" onclick="window.location.href='{{ path('app_blogAdmin') }}';">&times;</span>
+            <h4 class="text-lg font-bold">Edit Publication </h4>
+            <span class="close cursor-pointer" onclick="window.location.href='{{ path('app_blogAdmin', {'page': currentPage}) }}';">&times;</span>
          </div>
          {% if formUpdate is defined %}
          {{ form_start(formUpdate, {'attr': {'novalidate': 'novalidate'}}) }}
@@ -88,7 +88,7 @@
       <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
          <div class="flex justify-between items-center mb-4">
             <h4 class="text-lg font-bold">Add Comment</h4>
-            <span class="close cursor-pointer" onclick="window.location.href='{{ path('app_blogAdmin') }}';">&times;</span>
+            <span class="close cursor-pointer" onclick="window.location.href='{{ path('app_blogAdmin', {'page': currentPage}) }}';">&times;</span>
          </div>
          {{ form_start(formAdd, {'attr': {'novalidate': 'novalidate'}}) }}       
          <div class="row">
@@ -174,14 +174,14 @@
    <table class="min-w-full leading-normal">
       <thead>
          <tr>
-            <th onclick="sortTable(0)" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdmin', {sort: 'titre', order: app.request.query.get('sort') == 'titre' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">Title   <i class="fa-solid fa-sort"></i></a></th>
+            <th onclick="sortTable(0)" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdmin', {sort: 'titre' , order: app.request.query.get('sort') == 'titre' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">Title   <i class="fa-solid fa-sort"></i></a></th>
             <th onclick="sortTable(1)" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdmin', {sort: 'contenu', order: app.request.query.get('sort') == 'contenu' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">Content<i class="fa-solid fa-sort"></i></a></th>
-            <th onclick="sortTable(2)"  class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdmin', {sort: 'User', order: app.request.query.get('sort') == 'User' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">Posted By<i class="fa-solid fa-sort"></i></a></th>
-            <th onclick="sortTable(3)" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdmin', {sort: 'valide', order: app.request.query.get('sort') == 'valide' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">State <i class="fa-solid fa-sort"></i></a></th>
-            <th onclick="sortTable(4)" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdmin', {sort: 'vues', order: app.request.query.get('sort') == 'vues' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">Views <i class="fa-solid fa-sort"></i></a></th>
-            <th onclick="sortTable(5)"  class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdmin', {sort: 'comments', order: app.request.query.get('sort') == 'comments' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">Comments <i class="fa-solid fa-sort"></i></a></th>
-            <th onclick="sortTable(6)" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdmin', {sort: 'dateC', order: app.request.query.get('sort') == 'dateC' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">Posted At <i class="fa-solid fa-sort"></i></a></th>
-            <th onclick="sortTable(7)" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdmin', {sort: 'dateM', order: app.request.query.get('sort') == 'dateM' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">Updated At <i class="fa-solid fa-sort"></i></a></th>
+            <th                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Posted By</a></th>
+            <th onclick="sortTable(2)" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdmin', {sort: 'valide', order: app.request.query.get('sort') == 'valide' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">State <i class="fa-solid fa-sort"></i></a></th>
+            <th onclick="sortTable(3)" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdmin', {sort: 'vues', order: app.request.query.get('sort') == 'vues' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">Views <i class="fa-solid fa-sort"></i></a></th>
+            <th onclick="sortTable(4)" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdmin', {sort: 'comments', order: app.request.query.get('sort') == 'comments' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">Comments <i class="fa-solid fa-sort"></i></a></th>
+            <th onclick="sortTable(5)" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdmin', {sort: 'dateC', order: app.request.query.get('sort') == 'dateC' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">Posted At <i class="fa-solid fa-sort"></i></a></th>
+            <th onclick="sortTable(6)" class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"><a href="{{ path('app_blogAdmin', {sort: 'dateM', order: app.request.query.get('sort') == 'dateM' and app.request.query.get('order') == 'asc' ? 'desc' : 'asc'}) }}">Updated At <i class="fa-solid fa-sort"></i></a></th>
             <th                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100"></th>
          </tr>
       </thead>
@@ -238,7 +238,7 @@
                   </svg>
                </button>
                <button class="text-blue-600 hover:text-blue-900" onclick="openModal('editModal{{ publication.id }}')">
-                  <a href="{{ path('app_publication_update__blogAdmin', {'idp': publication.id}) }}">
+                  <a href="{{ path('app_publication_update__blogAdmin', {'idp': publication.id, 'page': currentPage}) }}">
                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                      </svg>
@@ -350,7 +350,7 @@
                   <span class="close cursor-pointer" onclick="closeModal('deleteModal{{ publication.id }}')">&times;</span>
                </div>
                <p class="mb-4">Are you sure you want to delete {{ publication.titre }} ?</p>
-               <form action="{{ path('admin_pub_delete', {'id': publication.id}) }}" method="post">
+               <form action="{{ path('admin_pub_delete', {'id': publication.id , 'page': currentPage}) }}" method="post">
                      <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ publication.id) }}">
                      <div class="flex justify-end">
                         <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">

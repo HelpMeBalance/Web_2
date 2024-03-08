@@ -25,11 +25,13 @@ class Formulaire
     //#[Assert\Collection(allowMissingFields: false)]
     private Collection $Reponse;
 
-    #[ORM\OneToOne(inversedBy: 'formulaire', cascade: ['persist', 'remove'])]
-    private ?User $user = null;
+   
 
     #[ORM\ManyToOne(inversedBy: 'formulaires')]
     private ?RendezVous $RendezVous = null;
+
+    #[ORM\ManyToOne(inversedBy: 'formulaires')]
+    private ?User $user = null;
 
     public function __construct()
     {
@@ -90,17 +92,7 @@ class Formulaire
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
-
-        return $this;
-    }
+   
 
     public function getRendezVous(): ?RendezVous
     {
@@ -110,6 +102,18 @@ class Formulaire
     public function setRendezVous(?RendezVous $RendezVous): static
     {
         $this->RendezVous = $RendezVous;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

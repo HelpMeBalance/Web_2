@@ -37,6 +37,9 @@
               <div class="form-group">
                 <label for="input_calendar">Date</label>
                 {{ form_widget(form.dateR, {'attr': {'class': 'form-control'}}) }}
+                {% if errordate != null %}
+                {{ form_errors(form.dateR, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
+                {% endif %}
               </div>
             </div>
           </div>

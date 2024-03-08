@@ -1,0 +1,145 @@
+{% extends 'admin/base_admin.html.twig' %}
+{# templates/admin/user/index.html.twig #}
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+   <div  class="flex justify-center items-center mb-4">
+      <h1 class="text-xl font-semibold">Categorie Management 
+      <button class="text-blue-600 hover:text-blue-900" onclick="openModal('addModal')">
+      <a class="text-sky-700"href="{{ path('app_cat_add__blogAdmin') }}"> <i class="fa-regular fa-square-plus fa-lg"></i></a>
+      </button>
+      </h1>
+   </div>
+ {% if formAdd is defined %}
+   <div id="addModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+      <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+         <div class="flex justify-between items-center mb-4">
+            <h4 class="text-lg font-bold">Add Categorie </h4>
+            <span class="close cursor-pointer" onclick="window.location.href='{{ path('app_blogAdminCat')}}';">&times;</span>
+         </div>
+         {{ form_start(formAdd, {'attr': {'novalidate': 'novalidate'}}) }}       
+         <div class="row">
+            <div class="col-md-6">
+               <div class="form-group">
+                  <label for="input_name">Title</label>
+                  {{ form_widget(formAdd.nom,{'attr' : {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm
+            border-gray-300 rounded-md'}})}}
+                  {{ form_errors(formAdd.nom, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
+               </div>
+               <div class="form-group">
+                  <label for="input_name">Description</label>
+                  {{ form_widget(formAdd.description,{'attr' : {'class': 'mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm
+            border-gray-300 rounded-md'}})}}
+                  {{ form_errors(formAdd.description, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
+               </div>
+                <button type="submit"
+                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Add Categorie 
+            </button>
+            </div>
+         </div>
+        </div>
+      {{ form_end(formAdd) }}
+   </div>
+ {% endif %}  
+{% if categories|length >0%}
+
+<div class="bg-white shadow-md rounded-lg  mb-8">
+   <table class="min-w-full leading-normal">
+      <thead>
+         <tr>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Title   </th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Description </th>           
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">SubCategories</th>           
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100"></th>
+         </tr>
+      </thead>
+      <tbody>
+         {% for cat in categories %}
+         <tr>
+            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{cat.nom}}</td>
+            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ cat.description|slice(0, 10) ~ (cat.description|length > 30 ? '...' : '') }}</td>
+            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+             <a class="text-sky-700"href="{{ path('app_blogAdminSubCat', {'idcat': cat.id}) }}">{{ cat.souscategories|length }} <i class="fas fa-list-alt fa-flip-horizontal fa-lg"></i> </a>
+            </td>
+            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
+               <button class="text-red-600 hover:text-red-900" onclick="openModal('deleteModal{{ cat.id }}')">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+               </button>
+            </td>
+         </tr>
+         {# Modals for each cat #}
+         {# View Modal #}
+        
+         {# Edit Modal - Simplified for demonstration #}
+         {# <div id="editModal{{ cat.id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onclick="closeModal('viewModal{{ cat.id }}')">
+            <!-- Modal content -->
+            <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                           <div class="flex justify-center mb-2">
+                  <img
+                  src="{{ asset('assets/images/gallery/loading.png')  }}" 
+                  alt="HelpMeBalance"
+                  style="width: 200px; height: 200px; "
+                  />
+               </div>
+               {% if formUpdate is defined %}
+               {{ form_start(formUpdate) }}
+               {{ form_end(formUpdate) }}
+               {% endif %}
+            </div>
+         </div> #}
+          {# Add Modal - Simplified for demonstration #}
+         {# <div id="addModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onclick="closeModal('viewModal')">
+            <!-- Modal content -->
+            <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                           <div class="flex justify-center mb-2">
+                  <img
+                  src="{{ asset('assets/images/gallery/loading.png')  }}" 
+                  alt="HelpMeBalance"
+                  style="width: 200px; height: 200px; "
+                  />
+               </div>
+               {% if formAdd is defined %}
+               {{ form_start(formAdd) }}
+               {{ form_end(formAdd) }}
+               {% endif %}
+            </div>
+         </div> #}
+         {# Delete Modal #}
+         <div id="deleteModal{{ cat.id }}" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto justify-center items-center h-full w-full" onclick="closeModal('deleteModal{{ cat.id }}')">
+            <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white" onclick="event.stopPropagation()">
+               <div class="flex justify-between items-center mb-4">
+                  <h4 class="text-lg font-bold">Confirm Delete</h4>
+                  <span class="close cursor-pointer" onclick="closeModal('deleteModal{{ cat.id }}')">&times;</span>
+               </div>
+               <p class="mb-4">Are you sure you want to delete {{ cat.nom }} ?</p>
+               <form action="{{ path('admin_cat_delete', {'idc': cat.id}) }}" method="post">
+                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ cat.id) }}">
+                     <div class="flex justify-end">
+                        <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                              Delete
+                        </button>
+                     </div>
+                  </form>
+            </div>
+         </div>
+         {% endfor %}
+      </tbody>
+   </table>
+</div>
+ {% else %}
+        <div class="flex justify-center">
+            <img width="600" height="500"
+            src="{{asset('assets/images/gallery/Search.png')}}"
+            alt="Talking Minds - Psychotherapist Site Template"
+            />
+        </div>
+        <div class="section_heading text-center">
+            <h2 class="text-lg font-bold text-sky-700">Ups!... no Categories found</h2>
+        </div>
+       
+    {% endif %}
+</div>
+
+{% endblock %}

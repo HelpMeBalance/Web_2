@@ -57,13 +57,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(targetEntity: RendezVous::class, mappedBy: 'patient')]
     private Collection $rendezVousesP;
-
      #[ORM\OneToMany(mappedBy: 'user', targetEntity: Commande::class)]
     private Collection $commandes;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Panier::class)]
     private Collection $paniers;
-
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $profilePicture = null;
@@ -130,6 +128,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->roles = ['ROLE_USER'];
         $this->paniers = new ArrayCollection();
         $this->commandes = new ArrayCollection();
+        $this->likes = new ArrayCollection();
+        $this->formulaires = new ArrayCollection();
     }
 
     public function getId(): ?int
