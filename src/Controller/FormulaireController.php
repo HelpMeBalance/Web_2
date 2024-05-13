@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Formulaire;
+use App\Entity\Formulairej;
 use App\Form\FormulaireType;
 use App\Form\QuizType;
 use App\Repository\FormulaireRepository;
@@ -47,12 +48,20 @@ class FormulaireController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $formulaire = new Formulaire();
+        $formulairej = new Formulairej();
+
+        
         $form = $this->createForm(FormulaireType::class, $formulaire);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($formulaire);
             $entityManager->flush();
+          
+            
+           
+
+
 
             return $this->redirectToRoute('app_formulaire_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -104,6 +113,8 @@ class FormulaireController extends AbstractController
     {
         $question = $questionRepository->findAll()[$idq];
         $formulaire = new Formulaire();
+        $formulairej = new Formulairej();
+
         $formulaire->setUser($this->getUser());
         $formulaire->setRendezVous($rendezVousRepository->find($idr));
 //        $form = $this->createForm(QuizType::class, $formulaire, ['question' => $question]);
@@ -114,6 +125,20 @@ class FormulaireController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $formulaire->addQuestion($question);
             $entityManager->persist($formulaire);
+            $entityManager->flush();
+            $reponses = $formulaire->getReponse();
+
+            // Example: Iterating over the collection
+            foreach ($reponses as $reponse) {
+                $formulairej->setReponse($reponse->getReponse());
+            }
+
+            $formulairej->setIdf($formulaire->getId());
+            $question=
+            $formulairej->setQuestion($question-> getQuestion());
+           
+            $formulairej->setIdr($idr); 
+            $entityManager->persist($formulairej);
             $entityManager->flush();
 
             if ($idq >= sizeof($questionRepository->findAll()) - 1)
