@@ -17,7 +17,7 @@ class Consultation
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
-    #[Assert\NotBlank(message: 'Please select time')]
+    // #[Assert\NotBlank(message: 'Please select time')]
     private ?\DateTimeInterface $duree = null;
 
     #[ORM\Column(length: 255)]
@@ -25,8 +25,8 @@ class Consultation
     private ?string $note = null;
 
     #[ORM\Column(nullable: true)]
-    //#[Assert\NotBlank(message: 'Please enter avisPatient')]
-    //#[Assert\Range(min:0, max:5, notInRangeMessage:'Please enter a number between 0 and 5')]
+    // #[Assert\NotBlank(message: 'Please enter avisPatient')]
+    // #[Assert\Range(min:0, max:5, notInRangeMessage:'Please enter a number between 0 and 5')]
     private ?float $avisPatient = null;
 
     #[ORM\Column]
