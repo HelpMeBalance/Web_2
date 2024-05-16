@@ -8,38 +8,37 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\EditProfileType;
-use App\Form\ChangePasswordFormType;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 #[Route('/profile')]
 class ProfileController extends AbstractController
 {
+    private $kernel;
+
+    public function __construct(KernelInterface $kernel)
+    {
+        $this->kernel = $kernel;
+    }
+
     #[Route(path: '', name: 'profile')]
     public function index(): Response
     {
-        // usually you'll want to make sure the user is authenticated first,
-        // see "Authorization" below
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        // returns your User object, or null if the user is not authenticated
-        // use inline documentation to tell your editor your exact User class
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
-        // Call whatever methods you've added to your User class
-        // For example, if you added a getFirstName() method, you can use that.
-        // return new Response('Well hi there '.$user->getFirstName());
         return $this->render('profile/index.html.twig', [
             'user' => $user,
             'FirstName' => $user->getFirstName(),
             'LastName' => $user->getLastName(),
-
         ]);
     }
 
     #[Route(path: '/edit', name: 'profile_edit')]
-    public function edit(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, ParameterBagInterface $params): Response
+    public function edit(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -48,20 +47,24 @@ class ProfileController extends AbstractController
         $form = $this->createForm(EditProfileType::class, $user);
         $form->handleRequest($request);
 
+        $profilePictureFile = str_replace('\\', '/', $this->stripProjectDir($user->getProfilePicture()));
+
         if ($form->isSubmitted() && $form->isValid()) {
-            // Handle file upload
-            $profilePictureFile = $form->get('profilePictureFile')->getData(); // Ensure 'profilePictureFile' matches your form field name
+            $profilePictureFile = $form->get('profilePictureFile')->getData();
             if ($profilePictureFile) {
                 $originalFilename = pathinfo($profilePictureFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename . '-' . uniqid() . '.' . $profilePictureFile->guessExtension();
 
                 try {
+                    $projectDir = $this->kernel->getProjectDir();
+                    $uploadDirectory = $projectDir . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'profile_pictures';
                     $profilePictureFile->move(
-                        $params->get('profile_pictures_directory'), // Make sure this parameter is defined in your services.yaml
+                        $uploadDirectory,
                         $newFilename
                     );
-                    $user->setProfilePicture($newFilename); // Update the entity with the new filename
+                    $fullPath = $uploadDirectory . DIRECTORY_SEPARATOR . $newFilename;
+                    $user->setProfilePicture($fullPath);
                 } catch (FileException $e) {
                     // Handle exception if something happens during file upload
                 }
@@ -72,10 +75,9 @@ class ProfileController extends AbstractController
             return $this->redirectToRoute('app_homeClient');
         }
 
-
         return $this->render('profile/edit.html.twig', [
             'form' => $form->createView(),
-            'profilePictureUrl' => '/uploads/profile_pictures/' . $user->getProfilePicture(), // Adjust the path as necessary
+            'profilePictureUrl' => $profilePictureFile,
             'service' => 0,
             'part' => 0,
             'title' => 'Edit Profile',
@@ -94,14 +96,13 @@ class ProfileController extends AbstractController
         $form->handleRequest($request);
         $passwordForm = $form->get('plainPassword');
 
-
         if ($form->isSubmitted() && $form->isValid()) {
             $newPassword = $passwordForm->getData();
             $user->setPassword(password_hash($newPassword, PASSWORD_DEFAULT));
             $entityManager->persist($user);
             $entityManager->flush();
             $this->addFlash('message', 'Mot de passe mis à jour');
-            return $this->redirectToRoute('profile');
+            return $this->redirectToRoute('app_homeClient');
         }
 
         return $this->render('profile/change_password.html.twig', [
@@ -111,5 +112,11 @@ class ProfileController extends AbstractController
             'title' => 'Change Password',
             'titlepage' => 'Change Password -',
         ]);
+    }
+
+    private function stripProjectDir(string $fullPath): string
+    {
+        $projectDir = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . 'public';
+        return str_replace($projectDir, '', $fullPath);
     }
 }
