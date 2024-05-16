@@ -22,7 +22,7 @@ class PasswordResetController extends AbstractController
     public function request(Request $request, EntityManagerInterface $entityManager, TokenGeneratorInterface $tokenGenerator): Response
     {
         $email = $request->request->get('email');
-
+        
         // If the form was submitted, find the user by email
         if ($email) {
             $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
@@ -51,7 +51,7 @@ class PasswordResetController extends AbstractController
 
                 // Recipients
                 $mail->setFrom('fares2business@gmail.com', 'Mailer');
-                $mail->addAddress('faresbrayek2@gmail.com', 'Joe User'); // Add a recipient
+                $mail->addAddress($email, 'Joe User'); // Add a recipient
 
                 // Content
                 $mail->isHTML(true); // Set email format to HTML
