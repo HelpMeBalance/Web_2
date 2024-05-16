@@ -96,7 +96,7 @@
             {% set idC = c.id %}
             {% endif %}
             {% endfor %}
-            {% if stars is null %}
+            {% if stars is null or stars ==-1 %}
             <ul class="rating_star unordered_list">
               <a href="{{ path('app_rendez_vous_rating', {'idr': rv.id}) }}">give rating</a>
             </ul>
