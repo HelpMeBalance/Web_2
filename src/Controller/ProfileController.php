@@ -47,8 +47,11 @@ class ProfileController extends AbstractController
         $form = $this->createForm(EditProfileType::class, $user);
         $form->handleRequest($request);
 
+        if ($user->getProfilePicture()){ 
         $profilePictureFile = str_replace('\\', '/', $this->stripProjectDir($user->getProfilePicture()));
-
+    }else{
+        $profilePictureFile = NULL;
+    }
         if ($form->isSubmitted() && $form->isValid()) {
             $profilePictureFile = $form->get('profilePictureFile')->getData();
             if ($profilePictureFile) {
