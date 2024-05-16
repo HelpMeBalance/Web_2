@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class RatingType extends AbstractType
 {
@@ -21,6 +22,14 @@ class RatingType extends AbstractType
             ])
             ->add('rating', IntegerType::class, [
                 'label' => 'AvisPatient',
+                'constraints' => [
+                    new Assert\NotBlank(['message' => 'Please enter avisPatient']),
+                    new Assert\Range([
+                        'min' => 0,
+                        'max' => 5,
+                        'notInRangeMessage' => 'Please enter a number between 0 and 5',
+                    ]),
+                ],
             ])
         ;
     }

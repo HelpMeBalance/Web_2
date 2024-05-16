@@ -45,15 +45,6 @@ class RendezVousController extends AbstractController
     #[Route('/rendez/vous/rating/{idr}', name: 'app_rendez_vous_rating')]
     public function editRating(RendezVousRepository $rendezVousRepository, Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer, ConsultationRepository $Conrep, $idr): Response
     {
-        $email = (new Email())
-            ->from('no-reply@nftun.com')
-            ->to('abdelbaki.kacem.2023@gmail.com')
-            ->subject('Time for Symfony Mailer!')
-            ->text('Sending emails is fun again!')
-            ->html('<p>See Twig integration for better HTML integration!</p>');
-
-        $mailer->send($email);
-
         // $cons = new Consultation();
         $form = $this->createForm(RatingType::class);
         $form->handleRequest($request);
@@ -68,7 +59,7 @@ class RendezVousController extends AbstractController
             return $this->redirectToRoute('app_rendez_vous_index');
         }
         return $this->render('frontClient/viewRendezVous.html.twig', [
-            'form' => $form->createView(),
+            'Ratingform' => $form->createView(),
             'consultation' => $Conrep->findAll(),
             "rendezvous" => $rendezVousRepository->findAll(),
             'title' => 'RendezVous',
@@ -172,7 +163,7 @@ class RendezVousController extends AbstractController
     }
 
     #[Route('/rendez/vous/{id}/edit', name: 'app_rendez_vous_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, RendezVousRepository $RVrep, EntityManagerInterface $entityManager, $id): Response
+    public function edit(Request $request, RendezVousRepository $RVrep, EntityManagerInterface $entityManager, ConsultationRepository $Conrep, $id): Response
     {
         $rendezVou = $RVrep->find($id);
         $form = $this->createForm(RendezVousAdminType::class, $rendezVou);
@@ -186,13 +177,14 @@ class RendezVousController extends AbstractController
         return $this->render('frontClient/viewRendezVous.html.twig', [
             'rendezVou' => $rendezVou,
             'form' => $form->createView(),
-            "rendezvous" => $RVrep->findall(),
+            'rendezvous' => $RVrep->findall(),
             'title' => 'RendezVous',
             'titlepage' => 'RendezVous',
             'controller_name' => 'RendezVousController',
             'service' => 1,
             'part' => 69,
             'idrv' => $id,   
+            'consultation' => $Conrep->findAll(),
         ]);
     }
 
@@ -217,7 +209,7 @@ class RendezVousController extends AbstractController
         $consultation->setPsychiatre($rendezVou->getUser());
         $consultation->setPatient($rendezVou->getPatient());
         $consultation->setRendezvous($rendezVou);
-        $consultation->setDuree(new \DateTime());
+        // $consultation->setDuree(new \DateTime());
         $consultation->setNote('');
         $consultation->setRecommandationSuivi(false);
 
@@ -225,20 +217,17 @@ class RendezVousController extends AbstractController
         $entityManager->flush();
 
         $mail = new PHPMailer(true);
-
-                // Send an email with the reset token
                 try {
-                // Server settings
                 $mail->isSMTP();
                 $mail->Host       = 'smtp-relay.brevo.com';
                 $mail->SMTPAuth   = true;
-                $mail->Username   = 'fares2business@gmail.com';
-                $mail->Password   = 's8qHyjANkQ9DUO7W'; // replace with your password
+                $mail->Username   = 'abdelbakikacem2015@gmail.com';
+                $mail->Password   = 'nSbT8QjgaHd5kmhK';
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                 $mail->Port       = 587;
 
                 // Recipients
-                $mail->setFrom('fares2business@gmail.com', 'Mailer');
+                $mail->setFrom('HelpMeBalance@gmail.com', 'HelpMeBalance');
                 $mail->addAddress($rendezVou->getPatient()->getEmail(), $rendezVou->getPatient()->getFirstname()); // Add a recipient
 
                 // Content
@@ -310,7 +299,7 @@ class RendezVousController extends AbstractController
                 $consultation->setPatient($rendezVou->getPatient());
                 $consultation->setPsychiatre($rendezVou->getUser());
                 $consultation->setRendezvous($rendezVou);
-                $consultation->setDuree(new DateTime());
+                // $consultation->setDuree(new DateTime());
                 $consultation->setNote('');
                 $consultation->setRecommandationSuivi(false);
                 $entityManager->persist($consultation);
@@ -364,9 +353,9 @@ public function exportPdf(RendezVousRepository $rev, $id): Response
 
     // Set document information
     $pdf->SetCreator(PDF_CREATOR);
-    $pdf->SetAuthor('Your Name');
-    $pdf->SetTitle('Your Title');
-    $pdf->SetSubject('Your Subject');
+    $pdf->SetAuthor('HelpMeBalanceTeam');
+    $pdf->SetTitle('Certificat');
+    $pdf->SetSubject('Certificat');
 
     // Add a page
     $pdf->AddPage();

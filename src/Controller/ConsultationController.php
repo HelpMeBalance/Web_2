@@ -26,7 +26,7 @@ class ConsultationController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $consultation = new Consultation();
-        $consultation->setDuree(new \DateTime());
+        // $consultation->setDuree(new \DateTime());
         $form = $this->createForm(ConsultationType::class, $consultation);
         $form->handleRequest($request);
 

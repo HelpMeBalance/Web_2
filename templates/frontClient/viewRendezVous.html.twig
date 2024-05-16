@@ -24,14 +24,23 @@
         {% if form is defined %}
         <div class="flex justify-center">
           {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-              <div class="d-none">
+              <div {# class="d-none"#}> 
                 <label for="select_therapy">idrendezvous</label>
-                {{ form_widget(form.idrv, {'attr': {'class': 'form-select'}, 'value':idr}) }}
+                {{ form_widget(form.dateR, {'attr': {'class': 'form-select'}}) }}
               </div>
               <div class="form-group">
-                <label for="select_therapy">rating</label>
-                {{ form_widget(form.rating, {'attr': {'class': 'form-control form-control-sm'}}) }}
-                {{ form_errors(form.rating, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
+                <label for="select_therapy">Service</label>
+                {{ form_widget(form.nomService, {'attr': {'class': 'form-control form-control-sm'}}) }}
+                {{ form_errors(form.nomService, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
+              </div>
+              <div class="form-group">
+                <label for="select_therapy">Psy</label>
+                {{ form_widget(form.user, {'attr': {'class': 'form-control form-control-sm'}}) }}
+                {{ form_errors(form.user, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
+              </div>
+              <div class="d-none">
+                {{ form_widget(form.statut, {'attr': {'class': 'form-control form-control-sm'}}) }}
+                {{ form_widget(form.patient, {'attr': {'class': 'form-control form-control-sm'}}) }}
               </div>
               
               <button type="submit" style="background-color: white;
@@ -44,6 +53,29 @@
                 </span>
               </button>
               {{ form_end(form) }}
+        </div>
+        {% endif %}
+        {% if Ratingform is defined %}
+        <div class="flex justify-center">
+          {{ form_start(Ratingform, {'attr': {'novalidate': 'novalidate'}}) }}
+              <div class="d-none"> 
+                <label for="select_therapy">idrendezvous</label>
+                {{ form_widget(Ratingform.idrv, {'attr': {'class': 'form-select'}, 'value': idr}) }}
+              </div>
+              <div class="form-group">
+                <label for="select_therapy">Rating</label>
+                {{ form_widget(Ratingform.rating, {'attr': {'class': 'form-control form-control-sm'}}) }}
+                {{ form_errors(Ratingform.rating, {'attr': {'class': 'text-red-200 bg-red-400'}}) }}
+              </div>
+              <button type="submit" style="background-color: white; color: #a9cd71;" >
+                <span class="btn_text" data-text="Get A Consultation">
+                  {{ button_label|default('Save') }}
+                </span>
+                <span class="btn_icon">
+                  <i class="fa-solid fa-arrow-up-right"></i>
+                </span>
+              </button>
+          {{ form_end(Ratingform) }}
         </div>
         {% endif %}
       </div>
@@ -173,6 +205,7 @@
   calendar.render();
   });</script>
 {% endblock script %}
-{% endif %}
+{% else %}
 <center><b>Please make sure to Login in or Sign in</b></center>
+{% endif %}
 {% endblock %}
