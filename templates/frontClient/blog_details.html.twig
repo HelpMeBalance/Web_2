@@ -6,12 +6,13 @@
 {% block body %}
 {% set role = publication.user.roles[0]|lower %}
 
-                      {% if role == 'role_user' %}
-                          {% set designation = 'patient' %}
-                      {% elseif role == 'role_psy' %}
+                     
+                      {% if role == 'psy' %}
                           {% set designation = 'psychologist' %}
                       {% elseif role == 'role_admin' %}
                           {% set designation = 'administration' %}
+                           {% elseif role == 'role_user' %}
+                          {% set designation = 'patient' %}
                       {% endif %}
  <!-- Blog Details Section - Start
         ================================================== -->
